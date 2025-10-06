@@ -93,7 +93,7 @@ export function Navbar() {
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link href={`/profile/${username}`}>
+                <Link href="/dashboard">
                   <UserIcon className="w-4 h-4 mr-2" />
                   {username || "Profile"}
                 </Link>

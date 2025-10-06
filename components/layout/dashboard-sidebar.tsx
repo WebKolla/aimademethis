@@ -84,7 +84,10 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          // Exact match for dashboard home, otherwise check if path starts with the href
+          const isActive = item.href === "/dashboard"
+            ? pathname === "/dashboard"
+            : pathname === item.href || pathname.startsWith(item.href + "/");
           return (
             <Link
               key={item.href}
