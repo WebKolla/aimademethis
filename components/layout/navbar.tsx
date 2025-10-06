@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { signOut } from "@/lib/auth/actions";
 import { LogOut, User as UserIcon } from "lucide-react";
 
@@ -91,8 +90,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <ThemeToggle />
-
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>
