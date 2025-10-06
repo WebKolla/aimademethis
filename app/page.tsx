@@ -14,7 +14,7 @@ export default function HomePage() {
         <section className="container mx-auto px-4 py-20 md:py-32">
           <div className="max-w-4xl mx-auto text-center space-y-8">
             <div className="inline-block">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 text-sm font-medium">
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300 text-sm font-medium">
                 <Sparkles className="w-4 h-4" />
                 Community-Driven AI Discovery
               </span>
