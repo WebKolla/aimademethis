@@ -108,10 +108,11 @@ export async function submitProduct(data: ProductSubmissionData) {
     // Get or create tags
     const tagIds = await getOrCreateTags(supabase, validatedData.tags);
 
-    // Insert product
+    // Insert product with all fields
     const { data: product, error: productError } = await supabase
       .from("products")
       .insert({
+        // Basic fields
         name: validatedData.name,
         slug: uniqueSlug,
         tagline: validatedData.tagline,
@@ -125,6 +126,31 @@ export async function submitProduct(data: ProductSubmissionData) {
         github_url: validatedData.github_url || null,
         twitter_handle: validatedData.twitter_handle || null,
         user_id: user.id,
+        // Media URLs
+        video_url: validatedData.video_url || null,
+        demo_video_url: validatedData.demo_video_url || null,
+        // Development Tools (arrays)
+        ide_used: validatedData.ide_used || null,
+        ai_models_used: validatedData.ai_models_used || null,
+        ai_tools_used: validatedData.ai_tools_used || null,
+        voice_tools_used: validatedData.voice_tools_used || null,
+        // Development Process
+        development_approach: validatedData.development_approach || null,
+        project_management_method: validatedData.project_management_method || null,
+        agentic_workflow_used: validatedData.agentic_workflow_used ?? null,
+        // Technical Stack
+        tech_stack: validatedData.tech_stack || null,
+        ui_framework: validatedData.ui_framework || null,
+        mcps_used: validatedData.mcps_used || null,
+        cursor_rules: validatedData.cursor_rules || null,
+        commands_used: validatedData.commands_used || null,
+        // Cost & Metrics
+        total_token_cost: validatedData.total_token_cost ?? null,
+        total_cost_usd: validatedData.total_cost_usd ?? null,
+        development_time_hours: validatedData.development_time_hours ?? null,
+        // Workflow & Prompts
+        workflow_description: validatedData.workflow_description || null,
+        key_prompts: validatedData.key_prompts || null,
       })
       .select()
       .single();

@@ -5,6 +5,8 @@ import { ProductDescription } from "@/components/products/product-description";
 import { ProductCreatorCard } from "@/components/products/product-creator-card";
 import { ProductTags } from "@/components/products/product-tags";
 import { RelatedProducts } from "@/components/products/related-products";
+import { VideoSection } from "@/components/products/display/video-section";
+import { DevelopmentDetailsTabs } from "@/components/products/display/development-details-tabs";
 import { incrementProductView } from "@/lib/products/view-actions";
 import type { Metadata } from "next";
 
@@ -173,6 +175,41 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             <ProductTags tags={tags} />
+
+            {/* Media Section */}
+            <VideoSection
+              videoUrl={product.video_url}
+              demoVideoUrl={product.demo_video_url}
+            />
+
+            {/* Development Details */}
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Development Details</h2>
+              <DevelopmentDetailsTabs
+                // Tools
+                ideUsed={product.ide_used}
+                aiModelsUsed={product.ai_models_used}
+                aiToolsUsed={product.ai_tools_used}
+                voiceToolsUsed={product.voice_tools_used}
+                // Stack
+                techStack={product.tech_stack}
+                uiFramework={product.ui_framework}
+                mcpsUsed={product.mcps_used}
+                cursorRules={product.cursor_rules}
+                commandsUsed={product.commands_used}
+                // Process
+                developmentApproach={product.development_approach}
+                projectManagementMethod={product.project_management_method}
+                agenticWorkflowUsed={product.agentic_workflow_used}
+                workflowDescription={product.workflow_description}
+                // Prompts
+                keyPrompts={product.key_prompts as { title: string; prompt: string; description: string }[] | null}
+                // Metrics
+                totalTokenCost={product.total_token_cost}
+                totalCostUsd={product.total_cost_usd}
+                developmentTimeHours={product.development_time_hours}
+              />
+            </div>
           </div>
 
           {/* Right Column - Creator Card */}
