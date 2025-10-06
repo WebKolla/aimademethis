@@ -52,9 +52,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .limit(1000); // Limit to prevent large sitemaps
 
     if (products && Array.isArray(products)) {
-      productRoutes = products.map((product: { slug: string; updated_at: string }) => ({
+      productRoutes = products.map((product: { slug: string; updated_at: string | null }) => ({
         url: `${baseUrl}/products/${product.slug}`,
-        lastModified: new Date(product.updated_at),
+        lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.7,
       }));
