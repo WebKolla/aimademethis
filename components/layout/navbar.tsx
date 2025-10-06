@@ -12,9 +12,10 @@ import { LogOut, User as UserIcon } from "lucide-react";
 export function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+
     // Get initial user
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
@@ -26,7 +27,7 @@ export function Navbar() {
           .eq("id", user.id)
           .single()
           .then(({ data }) => {
-            if (data) setUsername(data.username);
+            if (data) setUsername((data as { username: string }).username);
           });
       }
     });
@@ -43,7 +44,7 @@ export function Navbar() {
           .eq("id", session.user.id)
           .single()
           .then(({ data }) => {
-            if (data) setUsername(data.username);
+            if (data) setUsername((data as { username: string }).username);
           });
       } else {
         setUsername(null);

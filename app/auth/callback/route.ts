@@ -34,9 +34,9 @@ export async function GET(request: Request) {
           await supabase.from("profiles").insert({
             id: user.id,
             username: username,
-            full_name: user.user_metadata.full_name || user.user_metadata.name || "",
-            avatar_url: user.user_metadata.avatar_url || user.user_metadata.picture || "",
-          });
+            full_name: (user.user_metadata.full_name || user.user_metadata.name || "") as string,
+            avatar_url: (user.user_metadata.avatar_url || user.user_metadata.picture || "") as string,
+          } as never);
         }
       }
 

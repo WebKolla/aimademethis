@@ -48,8 +48,9 @@ export default function SignUpPage() {
           router.refresh();
         }, 2000);
       }
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred. Please try again.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred. Please try again.";
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +62,7 @@ export default function SignUpPage() {
 
     try {
       const supabase = createClient();
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -73,8 +74,9 @@ export default function SignUpPage() {
         setOauthLoading(null);
       }
       // Browser will redirect to OAuth provider
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred. Please try again.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "An unexpected error occurred. Please try again.";
+      setError(message);
       setOauthLoading(null);
     }
   };
