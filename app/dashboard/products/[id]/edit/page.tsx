@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { getProductForEdit } from "@/lib/products/edit-actions";
 import { getCategories } from "@/lib/products/actions";
@@ -70,7 +70,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         <div className="max-w-4xl">
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
             <ProductEditForm
-              product={result.product}
+              product={result.product as never}
               categories={categories}
             />
           </div>

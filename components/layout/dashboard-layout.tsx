@@ -29,7 +29,7 @@ export async function DashboardLayout({ children }: { children: React.ReactNode 
     <div className="flex h-screen overflow-hidden bg-gray-950">
       <DashboardSidebar
         username={profile.username}
-        avatarUrl={profile.avatar_url}
+        _avatarUrl={profile.avatar_url}
       />
       <main className="flex-1 overflow-y-auto">
         {children}

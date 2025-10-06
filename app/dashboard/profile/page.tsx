@@ -1,4 +1,3 @@
-import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 

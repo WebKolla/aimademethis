@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Plus, Edit, Eye, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Edit, Eye, ExternalLink } from "lucide-react";
 import Image from "next/image";
 
 export default async function MyProductsPage() {

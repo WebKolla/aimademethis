@@ -17,7 +17,7 @@ import { signOut } from "@/lib/auth/actions";
 
 interface DashboardSidebarProps {
   username: string;
-  avatarUrl?: string | null;
+  _avatarUrl?: string | null; // Reserved for future avatar display (prefixed with _ to suppress unused warning)
 }
 
 const navItems = [
@@ -48,7 +48,7 @@ const navItems = [
   },
 ];
 
-export function DashboardSidebar({ username, avatarUrl }: DashboardSidebarProps) {
+export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps) {
   const pathname = usePathname();
 
   const handleSignOut = async () => {

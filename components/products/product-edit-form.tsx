@@ -35,8 +35,45 @@ interface Category {
   slug: string;
 }
 
+interface Product {
+  id: string;
+  name: string | null;
+  tagline: string | null;
+  description: string | null;
+  website_url: string | null;
+  pricing_type: string | null;
+  pricing_details?: string | null;
+  category_id: string | null;
+  status: string | null;
+  demo_url?: string | null;
+  github_url?: string | null;
+  twitter_handle?: string | null;
+  image_url?: string | null;
+  tags?: string[];
+  video_url?: string | null;
+  demo_video_url?: string | null;
+  ide_used?: string[] | null;
+  ai_models_used?: string[] | null;
+  ai_tools_used?: string[] | null;
+  voice_tools_used?: string[] | null;
+  development_approach?: string | null;
+  project_management_method?: string | null;
+  agentic_workflow_used?: boolean | null;
+  tech_stack?: string[] | null;
+  ui_framework?: string | null;
+  mcps_used?: string[] | null;
+  cursor_rules?: string | null;
+  commands_used?: string[] | null;
+  total_token_cost?: number | null;
+  total_cost_usd?: number | null;
+  development_time_hours?: number | null;
+  workflow_description?: string | null;
+  key_prompts?: KeyPrompt[] | null;
+  created_at: string | null;
+}
+
 interface ProductEditFormProps {
-  product: any;
+  product: Product;
   categories: Category[];
 }
 
@@ -47,7 +84,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
   const [tags, setTags] = useState<string[]>(product.tags || []);
   const [tagInput, setTagInput] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(product.image_url);
+  const [imagePreview, setImagePreview] = useState<string | null>(product.image_url || null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -73,9 +110,9 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
   const [mcpsUsed, setMcpsUsed] = useState<string[]>(product.mcps_used || []);
   const [cursorRules, setCursorRules] = useState(product.cursor_rules || "");
   const [commandsUsed, setCommandsUsed] = useState<string[]>(product.commands_used || []);
-  const [totalTokens, setTotalTokens] = useState<number | null>(product.total_token_cost);
-  const [totalCost, setTotalCost] = useState<number | null>(product.total_cost_usd);
-  const [devTime, setDevTime] = useState<number | null>(product.development_time_hours);
+  const [totalTokens, setTotalTokens] = useState<number | null>(product.total_token_cost ?? null);
+  const [totalCost, setTotalCost] = useState<number | null>(product.total_cost_usd ?? null);
+  const [devTime, setDevTime] = useState<number | null>(product.development_time_hours ?? null);
   const [workflowDescription, setWorkflowDescription] = useState(product.workflow_description || "");
   const [keyPrompts, setKeyPrompts] = useState<KeyPrompt[]>(product.key_prompts || []);
 
@@ -88,17 +125,17 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
   } = useForm({
     resolver: zodResolver(productSubmissionSchema),
     defaultValues: {
-      name: product.name,
-      tagline: product.tagline,
-      description: product.description,
-      website_url: product.website_url,
-      pricing_type: product.pricing_type,
-      pricing_details: product.pricing_details,
-      category_id: product.category_id,
-      status: product.status,
-      demo_url: product.demo_url,
-      github_url: product.github_url,
-      twitter_handle: product.twitter_handle,
+      name: product.name || "",
+      tagline: product.tagline || "",
+      description: product.description || "",
+      website_url: product.website_url || "",
+      pricing_type: (product.pricing_type || "free") as "free" | "freemium" | "paid" | "subscription",
+      pricing_details: product.pricing_details || "",
+      category_id: product.category_id || "",
+      status: (product.status || "draft") as "draft" | "published",
+      demo_url: product.demo_url || "",
+      github_url: product.github_url || "",
+      twitter_handle: product.twitter_handle || "",
       tags: product.tags || [],
     },
   });
@@ -226,7 +263,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
       } else {
         setError(result.error || "Failed to delete product");
       }
-    } catch (err) {
+    } catch {
       setError("An unexpected error occurred");
     } finally {
       setIsDeleting(false);
@@ -303,7 +340,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
 
       <div>
         <Label htmlFor="category_id" className="text-gray-300">Category *</Label>
-        <Select onValueChange={(value) => setValue("category_id", value)} defaultValue={product.category_id}>
+        <Select onValueChange={(value) => setValue("category_id", value)} defaultValue={product.category_id || undefined}>
           <SelectTrigger className="mt-1 bg-gray-800 border-gray-700 text-white">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
@@ -326,7 +363,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
           onValueChange={(value) =>
             setValue("pricing_type", value as "free" | "freemium" | "paid" | "subscription")
           }
-          defaultValue={product.pricing_type}
+          defaultValue={product.pricing_type || undefined}
         >
           <SelectTrigger className="mt-1 bg-gray-800 border-gray-700 text-white">
             <SelectValue placeholder="Select pricing type" />
@@ -668,7 +705,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
       <div>
         <Label htmlFor="status" className="text-gray-300">Status *</Label>
         <Select
-          defaultValue={product.status}
+          defaultValue={product.status || undefined}
           onValueChange={(value) => setValue("status", value as "draft" | "published")}
         >
           <SelectTrigger className="mt-1 bg-gray-800 border-gray-700 text-white">
