@@ -210,73 +210,130 @@ export type Database = {
       }
       products: {
         Row: {
+          agentic_workflow_used: boolean | null
+          ai_models_used: string[] | null
+          ai_tools_used: string[] | null
           category_id: string | null
+          commands_used: string[] | null
           created_at: string | null
+          cursor_rules: string | null
           demo_url: string | null
+          demo_video_url: string | null
           description: string
+          development_approach: string | null
+          development_time_hours: number | null
           featured: boolean | null
           github_url: string | null
           id: string
+          ide_used: string[] | null
           image_url: string | null
+          key_prompts: Json | null
+          mcps_used: string[] | null
           metadata: Json | null
           name: string
           pricing_details: string | null
           pricing_type: string | null
+          project_management_method: string | null
           slug: string
           status: string | null
           tagline: string
+          tech_stack: string[] | null
+          total_cost_usd: number | null
+          total_token_cost: number | null
           twitter_handle: string | null
+          ui_framework: string | null
           updated_at: string | null
           upvotes_count: number | null
           user_id: string
+          video_url: string | null
           views_count: number | null
+          voice_tools_used: string[] | null
           website_url: string | null
+          workflow_description: string | null
         }
         Insert: {
+          agentic_workflow_used?: boolean | null
+          ai_models_used?: string[] | null
+          ai_tools_used?: string[] | null
           category_id?: string | null
+          commands_used?: string[] | null
           created_at?: string | null
+          cursor_rules?: string | null
           demo_url?: string | null
+          demo_video_url?: string | null
           description: string
+          development_approach?: string | null
+          development_time_hours?: number | null
           featured?: boolean | null
           github_url?: string | null
           id?: string
+          ide_used?: string[] | null
           image_url?: string | null
+          key_prompts?: Json | null
+          mcps_used?: string[] | null
           metadata?: Json | null
           name: string
           pricing_details?: string | null
           pricing_type?: string | null
+          project_management_method?: string | null
           slug: string
           status?: string | null
           tagline: string
+          tech_stack?: string[] | null
+          total_cost_usd?: number | null
+          total_token_cost?: number | null
           twitter_handle?: string | null
+          ui_framework?: string | null
           updated_at?: string | null
           upvotes_count?: number | null
           user_id: string
+          video_url?: string | null
           views_count?: number | null
+          voice_tools_used?: string[] | null
           website_url?: string | null
+          workflow_description?: string | null
         }
         Update: {
+          agentic_workflow_used?: boolean | null
+          ai_models_used?: string[] | null
+          ai_tools_used?: string[] | null
           category_id?: string | null
+          commands_used?: string[] | null
           created_at?: string | null
+          cursor_rules?: string | null
           demo_url?: string | null
+          demo_video_url?: string | null
           description?: string
+          development_approach?: string | null
+          development_time_hours?: number | null
           featured?: boolean | null
           github_url?: string | null
           id?: string
+          ide_used?: string[] | null
           image_url?: string | null
+          key_prompts?: Json | null
+          mcps_used?: string[] | null
           metadata?: Json | null
           name?: string
           pricing_details?: string | null
           pricing_type?: string | null
+          project_management_method?: string | null
           slug?: string
           status?: string | null
           tagline?: string
+          tech_stack?: string[] | null
+          total_cost_usd?: number | null
+          total_token_cost?: number | null
           twitter_handle?: string | null
+          ui_framework?: string | null
           updated_at?: string | null
           upvotes_count?: number | null
           user_id?: string
+          video_url?: string | null
           views_count?: number | null
+          voice_tools_used?: string[] | null
           website_url?: string | null
+          workflow_description?: string | null
         }
         Relationships: [
           {
