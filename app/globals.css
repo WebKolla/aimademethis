@@ -57,3 +57,37 @@
     font-family: var(--font-inter), sans-serif;
   }
 }
+
+/* Markdown code block styling */
+.prose pre {
+  @apply bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto;
+}
+
+.prose code {
+  @apply text-sm;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-8 mb-4;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold mt-6 mb-3;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 ml-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose a {
+  @apply text-purple-600 dark:text-purple-400 hover:underline;
+}
