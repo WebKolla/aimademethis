@@ -141,6 +141,36 @@ The middleware (`middleware.ts`) runs on all routes except static assets. It:
 
 Protected routes are explicitly listed in `lib/supabase/middleware.ts:42`.
 
+## Post-Implementation Workflow
+
+**IMPORTANT**: After completing each feature implementation or bug fix, you MUST follow this workflow:
+
+1. **Run Project-Specific Agents** (in order):
+   - `git-commit-helper` - Create a conventional commit with proper type, scope, and message
+   - `requirements-tracker` - Verify implementation against requirements and update tracking status
+
+2. **Agent Execution Rules**:
+   - Always run these agents proactively, even if the user doesn't explicitly request it
+   - Run them in sequence: commit first, then verify requirements
+   - These agents are defined in `.claude/agents/` folder
+   - This ensures code quality, proper version control, and requirement traceability
+
+3. **When to Trigger**:
+   - After completing any feature implementation
+   - After fixing bugs or issues
+   - After making significant refactors
+   - Before ending a development session
+   - When user indicates work is complete ("done", "finished", "that's it", etc.)
+
+Example workflow:
+```
+User: "The dropdown fix looks good now"
+Assistant:
+1. Uses git-commit-helper agent to commit changes
+2. Uses requirements-tracker agent to verify and track completion
+3. Confirms to user that changes are committed and tracked
+```
+
 ## Current Project Status
 
 From git status, recent work includes:
