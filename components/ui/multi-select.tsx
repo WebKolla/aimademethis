@@ -86,7 +86,7 @@ export function MultiSelect({
         <PopoverPrimitive.Content
           className={cn(
             "w-[var(--radix-popover-trigger-width)] p-0",
-            "z-50 rounded-md border bg-popover text-popover-foreground shadow-md outline-none",
+            "z-50 rounded-md border bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-lg outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
             "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
@@ -112,9 +112,9 @@ export function MultiSelect({
                     }}
                     className={cn(
                       "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-                      "hover:bg-accent hover:text-accent-foreground",
+                      "hover:bg-gray-100 dark:hover:bg-gray-800",
                       isDisabled && "cursor-not-allowed opacity-50",
-                      isSelected && "bg-accent"
+                      isSelected && "bg-gray-100 dark:bg-gray-800"
                     )}
                   >
                     <div
