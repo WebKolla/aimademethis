@@ -100,17 +100,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Check if user has voted
+  // Check if user has voted and bookmarked
   let userVoted = false;
+  let userBookmarked = false;
   if (user) {
-    const { data: userVote } = await supabase
-      .from("votes")
-      .select("id")
-      .eq("product_id", product.id)
-      .eq("user_id", user.id)
-      .single();
+    const [voteResult, bookmarkResult] = await Promise.all([
+      supabase
+        .from("votes")
+        .select("id")
+        .eq("product_id", product.id)
+        .eq("user_id", user.id)
+        .single(),
+      supabase
+        .from("bookmarks")
+        .select("id")
+        .eq("product_id", product.id)
+        .eq("user_id", user.id)
+        .single(),
+    ]);
 
-    userVoted = !!userVote;
+    userVoted = !!voteResult.data;
+    userBookmarked = !!bookmarkResult.data;
   }
 
   // Fetch product stats
@@ -190,7 +200,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-12">
-          <ProductHeader product={product} voteCount={voteCount} bookmarkCount={bookmarkCount} userVoted={userVoted} />
+          <ProductHeader
+            product={product}
+            voteCount={voteCount}
+            bookmarkCount={bookmarkCount}
+            userVoted={userVoted}
+            userBookmarked={userBookmarked}
+          />
         </div>
       </div>
 

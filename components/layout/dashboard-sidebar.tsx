@@ -9,7 +9,8 @@ import {
   User,
   Settings,
   LogOut,
-  Home
+  Home,
+  Bookmark
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -35,6 +36,11 @@ const navItems = [
     title: "Add Product",
     href: "/dashboard/products/new",
     icon: Plus,
+  },
+  {
+    title: "Bookmarks",
+    href: "/dashboard/bookmarks",
+    icon: Bookmark,
   },
   {
     title: "Profile",

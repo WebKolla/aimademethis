@@ -5,6 +5,7 @@ import { ExternalLinkIcon, GithubIcon, PlayCircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Database } from "@/types/database.types";
 import { VoteButton } from "./vote-button";
+import { BookmarkButton } from "./bookmark-button";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -13,9 +14,10 @@ interface ProductHeaderProps {
   voteCount: number;
   bookmarkCount: number;
   userVoted: boolean;
+  userBookmarked: boolean;
 }
 
-export function ProductHeader({ product, voteCount, bookmarkCount, userVoted }: ProductHeaderProps) {
+export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, userBookmarked }: ProductHeaderProps) {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800 pb-8">
       <div className="grid gap-8 lg:grid-cols-2">
@@ -85,6 +87,14 @@ export function ProductHeader({ product, voteCount, bookmarkCount, userVoted }: 
                 initialVoted={userVoted}
                 initialCount={voteCount}
                 variant="default"
+              />
+
+              {/* Bookmark Button */}
+              <BookmarkButton
+                productId={product.id}
+                initialBookmarked={userBookmarked}
+                initialCount={bookmarkCount}
+                showCount={false}
               />
 
               {product.website_url && (
