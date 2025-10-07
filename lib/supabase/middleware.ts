@@ -38,13 +38,17 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Development mode bypass for auth checks
+  // Set NEXT_PUBLIC_BYPASS_AUTH=true in .env.local to skip auth checks in development
+  const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
+
   // Protected routes
   const protectedRoutes = ['/products/new', '/profile/settings']
   const isProtectedRoute = protectedRoutes.some(route =>
     request.nextUrl.pathname.startsWith(route)
   )
 
-  if (isProtectedRoute && !user) {
+  if (isProtectedRoute && !user && !bypassAuth) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     url.searchParams.set('redirectTo', request.nextUrl.pathname)
@@ -55,7 +59,7 @@ export async function updateSession(request: NextRequest) {
   const authRoutes = ['/login', '/signup']
   const isAuthRoute = authRoutes.includes(request.nextUrl.pathname)
 
-  if (isAuthRoute && user) {
+  if (isAuthRoute && user && !bypassAuth) {
     const url = request.nextUrl.clone()
     url.pathname = '/'
     return NextResponse.redirect(url)

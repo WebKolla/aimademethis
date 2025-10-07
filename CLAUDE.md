@@ -39,8 +39,9 @@ npm run lint
 - Server actions in `@/lib/auth/actions.ts` handle sign up, sign in, sign out
 - Zod schemas validate auth inputs (`signUpSchema`, `signInSchema`)
 - User profiles extend Supabase `auth.users` with username and metadata
-- Protected routes defined in `lib/supabase/middleware.ts:42-52` (e.g., `/products/new`, `/profile/settings`)
-- Auth routes automatically redirect logged-in users to home (line 54-62)
+- Protected routes defined in `lib/supabase/middleware.ts:46-50` (e.g., `/products/new`, `/profile/settings`)
+- Auth routes automatically redirect logged-in users to home (line 58-66)
+- **Development bypass**: Set `NEXT_PUBLIC_BYPASS_AUTH=true` in `.env.local` to skip auth checks (never use in production)
 
 ### State Management
 - **React Query** (`@tanstack/react-query`) configured in `components/providers.tsx`
@@ -106,6 +107,9 @@ Required environment variables (see `.env.local.example`):
 NEXT_PUBLIC_SUPABASE_URL=your-project-url.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Development
+NEXT_PUBLIC_BYPASS_AUTH=false        # Set to 'true' to bypass auth in local dev (NEVER in production!)
 
 # Optional
 NEXT_PUBLIC_GA_MEASUREMENT_ID=       # Google Analytics
