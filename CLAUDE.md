@@ -109,7 +109,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
 # Development
-NEXT_PUBLIC_BYPASS_AUTH=false        # Set to 'true' to bypass auth in local dev (NEVER in production!)
+NEXT_PUBLIC_BYPASS_AUTH=false        # Set to 'true' to bypass auth in local dev (only works when NODE_ENV=development)
 
 # Optional
 NEXT_PUBLIC_GA_MEASUREMENT_ID=       # Google Analytics
