@@ -1,4 +1,4 @@
-import { ProductCard } from "./product-card";
+import { ProductCardWithVote } from "./product-card-with-vote";
 import type { Database } from "@/types/database.types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
@@ -31,7 +31,7 @@ export function ProductList({ products, emptyMessage }: ProductListProps) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCardWithVote key={product.id} product={product} />
       ))}
     </div>
   );

@@ -83,6 +83,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const tags =
     productTags?.map((pt) => pt.tags as { id: string; name: string; slug: string }).filter(Boolean) || [];
 
+  // Get current user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Check if user has voted
+  let userVoted = false;
+  if (user) {
+    const { data: userVote } = await supabase
+      .from("votes")
+      .select("id")
+      .eq("product_id", product.id)
+      .eq("user_id", user.id)
+      .single();
+
+    userVoted = !!userVote;
+  }
+
   // Fetch product stats
   const [votesResult, bookmarksResult] = await Promise.all([
     supabase
@@ -160,7 +178,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-12">
-          <ProductHeader product={product} voteCount={voteCount} bookmarkCount={bookmarkCount} />
+          <ProductHeader product={product} voteCount={voteCount} bookmarkCount={bookmarkCount} userVoted={userVoted} />
         </div>
       </div>
 

@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpIcon, MessageCircleIcon } from "lucide-react";
+import { MessageCircleIcon } from "lucide-react";
 import type { Database } from "@/types/database.types";
+import { VoteButton } from "./vote-button";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
   categories: { name: string; slug: string } | null;
@@ -13,10 +16,12 @@ type Product = Database["public"]["Tables"]["products"]["Row"] & {
 interface ProductCardProps {
   product: Product;
   showVotes?: boolean;
+  userVoted?: boolean;
 }
 
-export function ProductCard({ product, showVotes = true }: ProductCardProps) {
+export function ProductCard({ product, showVotes = true, userVoted = false }: ProductCardProps) {
   const {
+    id,
     slug,
     name,
     tagline,
@@ -24,13 +29,28 @@ export function ProductCard({ product, showVotes = true }: ProductCardProps) {
     pricing_type,
     categories,
     profiles,
-    votes_count = 0,
+    upvotes_count = 0,
     comments_count = 0,
   } = product;
 
   return (
-    <Link href={`/products/${slug}`}>
-      <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-6 transition-all hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg">
+    <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg">
+      {/* Vote Button - Outside card for click handling */}
+      <div className="flex gap-4 p-6">
+        {showVotes && (
+          <div onClick={(e) => e.stopPropagation()}>
+            <VoteButton
+              productId={id}
+              initialVoted={userVoted}
+              initialCount={upvotes_count}
+              variant="default"
+            />
+          </div>
+        )}
+
+        {/* Product Content */}
+        <Link href={`/products/${slug}`} className="flex-1">
+          <div>
         {/* Product Image */}
         <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900">
           {image_url ? (
@@ -83,12 +103,6 @@ export function ProductCard({ product, showVotes = true }: ProductCardProps) {
 
             {/* Stats */}
             <div className="flex items-center gap-3">
-              {showVotes && (
-                <span className="inline-flex items-center gap-1">
-                  <ArrowUpIcon className="h-4 w-4" />
-                  {votes_count}
-                </span>
-              )}
               <span className="inline-flex items-center gap-1">
                 <MessageCircleIcon className="h-4 w-4" />
                 {comments_count}
@@ -116,7 +130,9 @@ export function ProductCard({ product, showVotes = true }: ProductCardProps) {
             </div>
           )}
         </div>
+          </div>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }

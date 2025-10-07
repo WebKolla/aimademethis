@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import { ExternalLinkIcon, GithubIcon, PlayCircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Database } from "@/types/database.types";
+import { VoteButton } from "./vote-button";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -9,9 +12,10 @@ interface ProductHeaderProps {
   product: Product;
   voteCount: number;
   bookmarkCount: number;
+  userVoted: boolean;
 }
 
-export function ProductHeader({ product, voteCount, bookmarkCount }: ProductHeaderProps) {
+export function ProductHeader({ product, voteCount, bookmarkCount, userVoted }: ProductHeaderProps) {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800 pb-8">
       <div className="grid gap-8 lg:grid-cols-2">
@@ -74,19 +78,29 @@ export function ProductHeader({ product, voteCount, bookmarkCount }: ProductHead
 
           {/* Action Buttons */}
           <div className="space-y-3">
-            {product.website_url && (
-              <a
-                href={product.website_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
-                <Button className="w-full" size="lg">
-                  <ExternalLinkIcon className="mr-2 h-5 w-5" />
-                  Visit Website
-                </Button>
-              </a>
-            )}
+            <div className="flex gap-3">
+              {/* Vote Button */}
+              <VoteButton
+                productId={product.id}
+                initialVoted={userVoted}
+                initialCount={voteCount}
+                variant="default"
+              />
+
+              {product.website_url && (
+                <a
+                  href={product.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1"
+                >
+                  <Button className="w-full" size="lg">
+                    <ExternalLinkIcon className="mr-2 h-5 w-5" />
+                    Visit Website
+                  </Button>
+                </a>
+              )}
+            </div>
 
             <div className="grid gap-2 grid-cols-2">
               {product.demo_url && (
