@@ -1,16 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { signOut } from "@/lib/auth/actions";
-import { LogOut, User as UserIcon } from "lucide-react";
+import { LogOut, User as UserIcon, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -57,6 +61,13 @@ export function Navbar() {
     await signOut();
   };
 
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -74,20 +85,22 @@ export function Navbar() {
             >
               Explore
             </Link>
-            <Link
-              href="/categories"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Categories
-            </Link>
-            <Link
-              href="/trending"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Trending
-            </Link>
           </nav>
         </div>
+
+        {/* Search Bar - Desktop */}
+        <form onSubmit={handleSearch} className="hidden lg:block flex-1 max-w-md mx-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="pl-10"
+            />
+          </div>
+        </form>
 
         <div className="flex items-center gap-4">
           {user ? (
