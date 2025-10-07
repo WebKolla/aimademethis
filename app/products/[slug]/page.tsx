@@ -7,6 +7,7 @@ import { ProductTags } from "@/components/products/product-tags";
 import { RelatedProducts } from "@/components/products/related-products";
 import { VideoSection } from "@/components/products/display/video-section";
 import { DevelopmentDetailsTabs } from "@/components/products/display/development-details-tabs";
+import { CommentsSection } from "@/components/comments/comments-section";
 import { incrementProductView } from "@/lib/products/view-actions";
 import type { Metadata } from "next";
 
@@ -250,6 +251,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               />
             )}
           </div>
+        </div>
+
+        {/* Comments Section */}
+        <div className="mt-12">
+          <CommentsSection productId={product.id} />
         </div>
 
         {/* Related Products */}
