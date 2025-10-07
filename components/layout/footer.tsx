@@ -7,11 +7,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              AIMadeThis
+            <h3 className="text-lg font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent tracking-tight">
+              AIMMT
             </h3>
             <p className="text-sm text-muted-foreground">
-              Discover and share AI products built by innovators worldwide.
+              AI Made Me This - Discover and share AI products built by innovators worldwide.
             </p>
           </div>
 
@@ -88,7 +88,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} AIMadeThis. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AIMMT (AI Made Me This). All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 
   return {
-    title: `${product.name} | AIMadeThis`,
+    title: `${product.name} | AIMMT`,
     description: product.tagline,
     openGraph: {
       title: product.name,

@@ -19,8 +19,8 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: {
-    default: "AIMadeThis - Discover AI Products Built by the Community",
-    template: "%s | AIMadeThis"
+    default: "AIMMT - AI Made Me This | Discover AI Products Built by the Community",
+    template: "%s | AIMMT"
   },
   description: "Explore, share, and discover AI products created by innovators worldwide. A community-driven platform for AI tools, applications, and innovations.",
   keywords: [
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     "AI marketplace",
     "AI product discovery"
   ],
-  authors: [{ name: "AIMadeThis" }],
-  creator: "AIMadeThis",
-  publisher: "AIMadeThis",
+  authors: [{ name: "AIMMT" }],
+  creator: "AIMMT",
+  publisher: "AIMMT",
   robots: {
     index: true,
     follow: true,
@@ -53,21 +53,21 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com',
-    title: 'AIMadeThis - Discover AI Products Built by the Community',
+    title: 'AIMMT - AI Made Me This | Discover AI Products Built by the Community',
     description: 'Explore, share, and discover AI products created by innovators worldwide.',
-    siteName: 'AIMadeThis',
+    siteName: 'AIMMT',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'AIMadeThis - AI Product Directory',
+        alt: 'AIMMT - AI Product Directory',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AIMadeThis - Discover AI Products Built by the Community',
+    title: 'AIMMT - AI Made Me This | Discover AI Products Built by the Community',
     description: 'Explore, share, and discover AI products created by innovators worldwide.',
     creator: '@aimademethis',
     images: ['/og-image.png'],
@@ -100,7 +100,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebSite',
-              name: 'AIMadeThis',
+              name: 'AIMMT (AI Made Me This)',
               description: 'Community-driven platform for discovering and sharing AI products',
               url: process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com',
               potentialAction: {
@@ -124,7 +124,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
-              name: 'AIMadeThis',
+              name: 'AIMMT (AI Made Me This)',
               description: 'Community platform for AI product discovery and sharing',
               url: process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com',
               logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'}/logo.png`,
