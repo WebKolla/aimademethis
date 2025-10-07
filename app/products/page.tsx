@@ -13,8 +13,11 @@ import {
   searchProducts,
   getCategories,
   getPopularTags,
+  getAvailableAIModels,
+  getAvailableAITools,
   type SearchFilters,
 } from "@/lib/products/search-actions";
+import { FilterBadges } from "@/components/products/filter-badges";
 import type { Database } from "@/types/database.types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
@@ -32,6 +35,8 @@ function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [tags, setTags] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [aiModels, setAIModels] = useState<string[]>([]);
+  const [aiTools, setAITools] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -42,16 +47,24 @@ function ProductsPageContent() {
   const [selectedTags, setSelectedTags] = useState<string[]>(
     searchParams.get("tags")?.split(",").filter(Boolean) || []
   );
-  const [sortBy, setSortBy] = useState<"newest" | "votes" | "reviews" | "views">(
-    (searchParams.get("sort") as "newest" | "votes" | "reviews" | "views") || "newest"
+  const [selectedAIModels, setSelectedAIModels] = useState<string[]>(
+    searchParams.get("aiModels")?.split(",").filter(Boolean) || []
+  );
+  const [selectedAITools, setSelectedAITools] = useState<string[]>(
+    searchParams.get("aiTools")?.split(",").filter(Boolean) || []
+  );
+  const [sortBy, setSortBy] = useState<"newest" | "votes" | "reviews" | "views" | "trending">(
+    (searchParams.get("sort") as "newest" | "votes" | "reviews" | "views" | "trending") || "trending"
   );
 
-  // Load categories and tags on mount
+  // Load categories, tags, AI models, and AI tools on mount
   useEffect(() => {
     async function loadFilters() {
-      const [categoriesResult, tagsResult] = await Promise.all([
+      const [categoriesResult, tagsResult, modelsResult, toolsResult] = await Promise.all([
         getCategories(),
         getPopularTags(20),
+        getAvailableAIModels(),
+        getAvailableAITools(),
       ]);
 
       if (categoriesResult.categories) {
@@ -59,6 +72,12 @@ function ProductsPageContent() {
       }
       if (tagsResult.tags) {
         setTags(tagsResult.tags);
+      }
+      if (modelsResult.aiModels) {
+        setAIModels(modelsResult.aiModels);
+      }
+      if (toolsResult.aiTools) {
+        setAITools(toolsResult.aiTools);
       }
     }
 
@@ -73,11 +92,13 @@ function ProductsPageContent() {
     if (category !== "all") params.set("category", category);
     if (pricing !== "all") params.set("pricing", pricing);
     if (selectedTags.length > 0) params.set("tags", selectedTags.join(","));
-    if (sortBy !== "newest") params.set("sort", sortBy);
+    if (selectedAIModels.length > 0) params.set("aiModels", selectedAIModels.join(","));
+    if (selectedAITools.length > 0) params.set("aiTools", selectedAITools.join(","));
+    if (sortBy !== "trending") params.set("sort", sortBy);
 
     const newURL = params.toString() ? `/products?${params.toString()}` : "/products";
     router.push(newURL, { scroll: false });
-  }, [query, category, pricing, selectedTags, sortBy, router]);
+  }, [query, category, pricing, selectedTags, selectedAIModels, selectedAITools, sortBy, router]);
 
   // Search products when filters change
   useEffect(() => {
@@ -89,6 +110,8 @@ function ProductsPageContent() {
         category: category !== "all" ? category : undefined,
         pricingType: pricing !== "all" ? pricing : undefined,
         tags: selectedTags.length > 0 ? selectedTags : undefined,
+        aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
+        aiTools: selectedAITools.length > 0 ? selectedAITools : undefined,
         sortBy,
       };
 
@@ -106,18 +129,48 @@ function ProductsPageContent() {
 
     performSearch();
     updateURL();
-  }, [query, category, pricing, selectedTags, sortBy, updateURL]);
+  }, [query, category, pricing, selectedTags, selectedAIModels, selectedAITools, sortBy, updateURL]);
 
   const handleClearFilters = () => {
     setQuery("");
     setCategory("all");
     setPricing("all");
     setSelectedTags([]);
-    setSortBy("newest");
+    setSelectedAIModels([]);
+    setSelectedAITools([]);
+    setSortBy("trending");
+  };
+
+  const handleRemoveFilter = (type: string, value?: string) => {
+    switch (type) {
+      case "query":
+        setQuery("");
+        break;
+      case "category":
+        setCategory("all");
+        break;
+      case "pricing":
+        setPricing("all");
+        break;
+      case "tag":
+        if (value) setSelectedTags(selectedTags.filter((id) => id !== value));
+        break;
+      case "aiModel":
+        if (value) setSelectedAIModels(selectedAIModels.filter((m) => m !== value));
+        break;
+      case "aiTool":
+        if (value) setSelectedAITools(selectedAITools.filter((t) => t !== value));
+        break;
+    }
   };
 
   const hasActiveFilters =
-    query || category !== "all" || pricing !== "all" || selectedTags.length > 0;
+    query ||
+    category !== "all" ||
+    pricing !== "all" ||
+    selectedTags.length > 0 ||
+    selectedAIModels.length > 0 ||
+    selectedAITools.length > 0;
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -155,6 +208,20 @@ function ProductsPageContent() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <SortDropdown value={sortBy} onChange={(value) => setSortBy(value as typeof sortBy)} />
         </div>
+
+        {/* Active Filter Badges */}
+        <FilterBadges
+          filters={{
+            query: query || undefined,
+            category: category !== "all" ? categories.find((c) => c.id === category) : undefined,
+            pricing: pricing !== "all" ? pricing : undefined,
+            tags: tags.filter((t) => selectedTags.includes(t.id)),
+            aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
+            aiTools: selectedAITools.length > 0 ? selectedAITools : undefined,
+          }}
+          onRemoveFilter={handleRemoveFilter}
+          onClearAll={handleClearFilters}
+        />
       </div>
 
       {/* Main Content with Sidebar */}
@@ -164,12 +231,18 @@ function ProductsPageContent() {
           <FilterSidebar
             categories={categories}
             tags={tags}
+            aiModels={aiModels}
+            aiTools={aiTools}
             selectedCategory={category}
             selectedPricing={pricing}
             selectedTags={selectedTags}
+            selectedAIModels={selectedAIModels}
+            selectedAITools={selectedAITools}
             onCategoryChange={setCategory}
             onPricingChange={setPricing}
             onTagsChange={setSelectedTags}
+            onAIModelsChange={setSelectedAIModels}
+            onAIToolsChange={setSelectedAITools}
             onClearFilters={handleClearFilters}
           />
         </aside>

@@ -22,24 +22,36 @@ interface Tag {
 interface FilterSidebarProps {
   categories: Category[];
   tags: Tag[];
+  aiModels?: string[];
+  aiTools?: string[];
   selectedCategory?: string;
   selectedPricing?: string;
   selectedTags: string[];
+  selectedAIModels?: string[];
+  selectedAITools?: string[];
   onCategoryChange: (categoryId: string) => void;
   onPricingChange: (pricing: string) => void;
   onTagsChange: (tagIds: string[]) => void;
+  onAIModelsChange?: (models: string[]) => void;
+  onAIToolsChange?: (tools: string[]) => void;
   onClearFilters: () => void;
 }
 
 export function FilterSidebar({
   categories,
   tags,
+  aiModels = [],
+  aiTools = [],
   selectedCategory = "all",
   selectedPricing = "all",
   selectedTags,
+  selectedAIModels = [],
+  selectedAITools = [],
   onCategoryChange,
   onPricingChange,
   onTagsChange,
+  onAIModelsChange,
+  onAIToolsChange,
   onClearFilters,
 }: FilterSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,13 +59,33 @@ export function FilterSidebar({
   const hasActiveFilters =
     selectedCategory !== "all" ||
     selectedPricing !== "all" ||
-    selectedTags.length > 0;
+    selectedTags.length > 0 ||
+    selectedAIModels.length > 0 ||
+    selectedAITools.length > 0;
 
   const handleTagToggle = (tagId: string) => {
     if (selectedTags.includes(tagId)) {
       onTagsChange(selectedTags.filter((id) => id !== tagId));
     } else {
       onTagsChange([...selectedTags, tagId]);
+    }
+  };
+
+  const handleAIModelToggle = (model: string) => {
+    if (!onAIModelsChange) return;
+    if (selectedAIModels.includes(model)) {
+      onAIModelsChange(selectedAIModels.filter((m) => m !== model));
+    } else {
+      onAIModelsChange([...selectedAIModels, model]);
+    }
+  };
+
+  const handleAIToolToggle = (tool: string) => {
+    if (!onAIToolsChange) return;
+    if (selectedAITools.includes(tool)) {
+      onAIToolsChange(selectedAITools.filter((t) => t !== tool));
+    } else {
+      onAIToolsChange([...selectedAITools, tool]);
     }
   };
 
@@ -179,6 +211,54 @@ export function FilterSidebar({
                     className="font-normal cursor-pointer text-sm"
                   >
                     {tag.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* AI Models Filter */}
+        {aiModels.length > 0 && (
+          <div className="space-y-3 pt-6 border-t">
+            <Label className="text-base font-semibold">AI Models</Label>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {aiModels.map((model) => (
+                <div key={model} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`model-${model}`}
+                    checked={selectedAIModels.includes(model)}
+                    onCheckedChange={() => handleAIModelToggle(model)}
+                  />
+                  <Label
+                    htmlFor={`model-${model}`}
+                    className="font-normal cursor-pointer text-sm"
+                  >
+                    {model}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* AI Tools Filter */}
+        {aiTools.length > 0 && (
+          <div className="space-y-3 pt-6 border-t">
+            <Label className="text-base font-semibold">AI Tools</Label>
+            <div className="space-y-2 max-h-60 overflow-y-auto">
+              {aiTools.map((tool) => (
+                <div key={tool} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={`tool-${tool}`}
+                    checked={selectedAITools.includes(tool)}
+                    onCheckedChange={() => handleAIToolToggle(tool)}
+                  />
+                  <Label
+                    htmlFor={`tool-${tool}`}
+                    className="font-normal cursor-pointer text-sm"
+                  >
+                    {tool}
                   </Label>
                 </div>
               ))}

@@ -23,10 +23,11 @@ export function SortDropdown({ value, onChange }: SortDropdownProps) {
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="newest">Newest First</SelectItem>
-          <SelectItem value="votes">Most Voted</SelectItem>
-          <SelectItem value="views">Most Viewed</SelectItem>
-          <SelectItem value="reviews">Most Reviewed</SelectItem>
+          <SelectItem value="trending">🔥 Trending</SelectItem>
+          <SelectItem value="newest">⏰ Newest First</SelectItem>
+          <SelectItem value="votes">👍 Most Voted</SelectItem>
+          <SelectItem value="views">👀 Most Viewed</SelectItem>
+          <SelectItem value="reviews">⭐ Most Reviewed</SelectItem>
         </SelectContent>
       </Select>
     </div>

@@ -7,7 +7,9 @@ export interface SearchFilters {
   category?: string;
   pricingType?: string;
   tags?: string[];
-  sortBy?: "newest" | "votes" | "reviews" | "views";
+  aiModels?: string[];
+  aiTools?: string[];
+  sortBy?: "newest" | "votes" | "reviews" | "views" | "trending";
 }
 
 export async function searchProducts(filters: SearchFilters = {}) {
@@ -44,16 +46,31 @@ export async function searchProducts(filters: SearchFilters = {}) {
     query = query.eq("pricing_type", filters.pricingType);
   }
 
+  // Filter by AI models (array contains)
+  if (filters.aiModels && filters.aiModels.length > 0) {
+    query = query.containedBy("ai_models_used", filters.aiModels);
+  }
+
+  // Filter by AI tools (array contains)
+  if (filters.aiTools && filters.aiTools.length > 0) {
+    query = query.containedBy("ai_tools_used", filters.aiTools);
+  }
+
   // Sorting
   switch (filters.sortBy) {
     case "votes":
-      query = query.order("votes_count", { ascending: false });
+      query = query.order("upvotes_count", { ascending: false });
       break;
     case "reviews":
       query = query.order("created_at", { ascending: false }); // TODO: Add reviews_count column
       break;
     case "views":
       query = query.order("views_count", { ascending: false });
+      break;
+    case "trending":
+      // Trending: combination of recent + votes + views
+      // We'll sort by created_at first, then votes (client-side calculation)
+      query = query.order("created_at", { ascending: false });
       break;
     case "newest":
     default:
@@ -98,6 +115,27 @@ export async function searchProducts(filters: SearchFilters = {}) {
         matchingProductIds.includes(p.id)
       );
     }
+  }
+
+  // Apply trending sort if selected (client-side)
+  if (filters.sortBy === "trending" && filteredProducts.length > 0) {
+    const now = Date.now();
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    filteredProducts = filteredProducts
+      .map((product) => {
+        const createdAt = new Date(product.created_at || "").getTime();
+        const daysOld = (now - createdAt) / DAY_MS;
+        const ageWeight = Math.max(0, 1 - daysOld / 30); // Decay over 30 days
+        const votesWeight = (product.upvotes_count || 0) * 2;
+        const viewsWeight = (product.views_count || 0) * 0.1;
+
+        return {
+          ...product,
+          trendingScore: ageWeight * 100 + votesWeight + viewsWeight,
+        };
+      })
+      .sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0));
   }
 
   return {
@@ -170,4 +208,50 @@ export async function getPopularTags(limit: number = 10) {
     .in("id", topTagIds);
 
   return { tags: tags || [] };
+}
+
+export async function getAvailableAIModels() {
+  const supabase = await createClient();
+
+  const { data: products } = await supabase
+    .from("products")
+    .select("ai_models_used")
+    .eq("status", "published")
+    .not("ai_models_used", "is", null);
+
+  if (!products) return { aiModels: [] };
+
+  // Extract unique AI models
+  const modelsSet = new Set<string>();
+  products.forEach((product) => {
+    if (product.ai_models_used && Array.isArray(product.ai_models_used)) {
+      product.ai_models_used.forEach((model: string) => modelsSet.add(model));
+    }
+  });
+
+  const aiModels = Array.from(modelsSet).sort();
+  return { aiModels };
+}
+
+export async function getAvailableAITools() {
+  const supabase = await createClient();
+
+  const { data: products } = await supabase
+    .from("products")
+    .select("ai_tools_used")
+    .eq("status", "published")
+    .not("ai_tools_used", "is", null);
+
+  if (!products) return { aiTools: [] };
+
+  // Extract unique AI tools
+  const toolsSet = new Set<string>();
+  products.forEach((product) => {
+    if (product.ai_tools_used && Array.isArray(product.ai_tools_used)) {
+      product.ai_tools_used.forEach((tool: string) => toolsSet.add(tool));
+    }
+  });
+
+  const aiTools = Array.from(toolsSet).sort();
+  return { aiTools };
 }
