@@ -41,7 +41,7 @@ npm run lint
 - User profiles extend Supabase `auth.users` with username and metadata
 - Protected routes defined in `lib/supabase/middleware.ts:46-50` (e.g., `/products/new`, `/profile/settings`)
 - Auth routes automatically redirect logged-in users to home (line 58-66)
-- **Development bypass**: Set `NEXT_PUBLIC_BYPASS_AUTH=true` in `.env.local` to skip auth checks (never use in production)
+- **Development bypass**: Set `NEXT_PUBLIC_BYPASS_AUTH=true` in `.env.local` to skip auth checks (only works in NODE_ENV=development)
 
 ### State Management
 - **React Query** (`@tanstack/react-query`) configured in `components/providers.tsx`

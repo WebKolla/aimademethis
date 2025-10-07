@@ -40,7 +40,13 @@ export async function updateSession(request: NextRequest) {
 
   // Development mode bypass for auth checks
   // Set NEXT_PUBLIC_BYPASS_AUTH=true in .env.local to skip auth checks in development
-  const bypassAuth = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
+  // Only works in development mode - production is always protected
+  const bypassAuth = process.env.NODE_ENV === 'development'
+    && process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
+
+  if (bypassAuth) {
+    console.warn('⚠️ AUTH BYPASS ENABLED - Development Mode Only')
+  }
 
   // Protected routes
   const protectedRoutes = ['/products/new', '/profile/settings']
