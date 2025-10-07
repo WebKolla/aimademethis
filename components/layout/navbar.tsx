@@ -9,6 +9,7 @@ import { LogOut, Search, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 
 export function Navbar() {
   const router = useRouter();
@@ -105,6 +106,7 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           {user ? (
             <>
+              <NotificationBell />
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/dashboard">
                   <UserIcon className="w-4 h-4 mr-2" />
