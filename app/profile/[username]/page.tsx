@@ -4,6 +4,7 @@ import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
 import { UserProducts } from "@/components/profile/user-products";
 import type { Metadata } from "next";
+import type { Database } from "@/types/database.types";
 
 interface ProfilePageProps {
   params: {
@@ -73,8 +74,15 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   const { data: products } = await productsQuery;
 
+  // Type assertion for products with categories relation
+  const typedProducts = (products || []) as unknown as Array<
+    Database["public"]["Tables"]["products"]["Row"] & {
+      categories: { name: string; slug: string } | null;
+    }
+  >;
+
   // Get product count
-  const productCount = products?.length || 0;
+  const productCount = typedProducts?.length || 0;
 
   return (
     <div className="min-h-screen">
@@ -103,7 +111,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           )}
         </div>
 
-        <UserProducts products={products || []} />
+        <UserProducts products={typedProducts} />
       </div>
     </div>
   );

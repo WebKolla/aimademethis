@@ -6,6 +6,7 @@ import { ProductControls } from "@/components/products/product-controls";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { Metadata } from "next";
+import type { Database } from "@/types/database.types";
 
 export const metadata: Metadata = {
   title: "Discover AI Products | AIMadeThis",
@@ -88,6 +89,11 @@ async function ProductListWrapper({ sort, page }: { sort?: string; page?: string
         ...product,
         votes_count: votesResult.count || 0,
         comments_count: commentsResult.count || 0,
+      } as unknown as Database["public"]["Tables"]["products"]["Row"] & {
+        categories: { name: string; slug: string } | null;
+        profiles: { username: string; avatar_url: string | null } | null;
+        votes_count: number;
+        comments_count: number;
       };
     })
   );

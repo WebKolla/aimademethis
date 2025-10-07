@@ -74,14 +74,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // Fetch product tags
-  const { data: productTags } = await supabase
+  // Fetch product tags - get tag IDs first, then fetch tag details
+  const { data: productTagsData } = await supabase
     .from("product_tags")
-    .select("tags (id, name, slug)")
+    .select("tag_id")
     .eq("product_id", product.id);
 
-  const tags =
-    productTags?.map((pt) => pt.tags as { id: string; name: string; slug: string }).filter(Boolean) || [];
+  const tagIds = productTagsData?.map((pt) => pt.tag_id) || [];
+
+  type TagType = { id: string; name: string; slug: string };
+  let tags: TagType[] = [];
+
+  if (tagIds.length > 0) {
+    const { data: tagsData } = await supabase
+      .from("tags")
+      .select("id, name, slug")
+      .in("id", tagIds);
+
+    tags = tagsData || [];
+  }
 
   // Get current user
   const {

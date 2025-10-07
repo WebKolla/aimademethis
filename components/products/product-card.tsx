@@ -42,7 +42,7 @@ export function ProductCard({ product, showVotes = true, userVoted = false }: Pr
             <VoteButton
               productId={id}
               initialVoted={userVoted}
-              initialCount={upvotes_count}
+              initialCount={upvotes_count || 0}
               variant="default"
             />
           </div>

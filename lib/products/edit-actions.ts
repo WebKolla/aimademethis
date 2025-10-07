@@ -39,13 +39,23 @@ export async function getProductForEdit(productId: string) {
       };
     }
 
-    // Get product tags
-    const { data: productTags } = await supabase
+    // Get product tags - fetch tag IDs first, then tag names
+    const { data: productTagsData } = await supabase
       .from("product_tags")
-      .select("tags (name)")
+      .select("tag_id")
       .eq("product_id", productId);
 
-    const tags = productTags?.map((pt) => (pt.tags as { name: string })?.name).filter(Boolean) || [];
+    const tagIds = productTagsData?.map((pt) => pt.tag_id) || [];
+
+    let tags: string[] = [];
+    if (tagIds.length > 0) {
+      const { data: tagsData } = await supabase
+        .from("tags")
+        .select("name")
+        .in("id", tagIds);
+
+      tags = tagsData?.map((t) => t.name) || [];
+    }
 
     return {
       success: true,
