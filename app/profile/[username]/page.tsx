@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
 import { UserProducts } from "@/components/profile/user-products";
+import { getFollowerCount, getFollowingCount, isFollowing } from "@/lib/follows/actions";
 import type { Metadata } from "next";
 import type { Database } from "@/types/database.types";
 
@@ -86,6 +87,17 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   // Get product count
   const productCount = typedProducts?.length || 0;
 
+  // Get follower/following counts
+  const [followerCountResult, followingCountResult, followingStatus] = await Promise.all([
+    getFollowerCount(profile.id),
+    getFollowingCount(profile.id),
+    isFollowing(profile.id),
+  ]);
+
+  const followerCount = followerCountResult.count;
+  const followingCount = followingCountResult.count;
+  const userIsFollowing = followingStatus.isFollowing;
+
   return (
     <div className="min-h-screen">
       {/* Profile Navigation */}
@@ -97,6 +109,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           <ProfileHeader
             profile={profile}
             productCount={productCount}
+            followerCount={followerCount}
+            followingCount={followingCount}
+            isFollowing={userIsFollowing}
             isOwnProfile={isOwnProfile}
           />
         </div>

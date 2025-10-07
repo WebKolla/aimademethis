@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { FollowButton } from "@/components/follows/follow-button";
 import type { Database } from "@/types/database.types";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -8,10 +9,20 @@ type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 interface ProfileHeaderProps {
   profile: Profile;
   productCount: number;
+  followerCount: number;
+  followingCount: number;
+  isFollowing: boolean;
   isOwnProfile: boolean;
 }
 
-export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHeaderProps) {
+export function ProfileHeader({
+  profile,
+  productCount,
+  followerCount,
+  followingCount,
+  isFollowing,
+  isOwnProfile,
+}: ProfileHeaderProps) {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800 pb-8">
       <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
@@ -26,7 +37,7 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
               className="rounded-full"
             />
           ) : (
-            <div className="h-[120px] w-[120px] rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-4xl">
+            <div className="h-[120px] w-[120px] rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-4xl">
               👤
             </div>
           )}
@@ -42,10 +53,16 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
               <p className="text-gray-600 dark:text-gray-400">@{profile.username}</p>
             </div>
 
-            {isOwnProfile && (
+            {isOwnProfile ? (
               <Link href="/profile/settings">
                 <Button variant="outline">Edit Profile</Button>
               </Link>
+            ) : (
+              <FollowButton
+                userId={profile.id}
+                initialIsFollowing={isFollowing}
+                variant="default"
+              />
             )}
           </div>
 
@@ -62,6 +79,22 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
                 {productCount === 1 ? "Product" : "Products"}
               </span>
             </div>
+            <Link
+              href={`/profile/${profile.username}/followers`}
+              className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              <span className="font-semibold text-gray-900 dark:text-white">{followerCount}</span>
+              <span className="text-gray-600 dark:text-gray-400 ml-1">
+                {followerCount === 1 ? "Follower" : "Followers"}
+              </span>
+            </Link>
+            <Link
+              href={`/profile/${profile.username}/following`}
+              className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              <span className="font-semibold text-gray-900 dark:text-white">{followingCount}</span>
+              <span className="text-gray-600 dark:text-gray-400 ml-1">Following</span>
+            </Link>
           </div>
 
           {/* Social Links */}
