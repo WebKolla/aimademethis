@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Database } from "@/types/database.types";
 import { VoteButton } from "./vote-button";
 import { BookmarkButton } from "./bookmark-button";
+import { StarRating } from "@/components/reviews/star-rating";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
 
@@ -15,9 +16,11 @@ interface ProductHeaderProps {
   bookmarkCount: number;
   userVoted: boolean;
   userBookmarked: boolean;
+  averageRating?: number;
+  totalReviews?: number;
 }
 
-export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, userBookmarked }: ProductHeaderProps) {
+export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, userBookmarked, averageRating, totalReviews }: ProductHeaderProps) {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800 pb-8">
       <div className="grid gap-8 lg:grid-cols-2">
@@ -76,6 +79,16 @@ export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, us
             <span className="inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-4 py-2 text-sm font-medium text-orange-800 dark:text-orange-300">
               🔖 {bookmarkCount} {bookmarkCount === 1 ? "bookmark" : "bookmarks"}
             </span>
+
+            {/* Rating Badge */}
+            {averageRating !== undefined && totalReviews !== undefined && totalReviews > 0 && (
+              <span className="inline-flex items-center gap-2 rounded-full bg-yellow-100 dark:bg-yellow-900/30 px-4 py-2">
+                <StarRating rating={averageRating} size="sm" showNumber={false} />
+                <span className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+                  {averageRating.toFixed(1)} ({totalReviews} {totalReviews === 1 ? "review" : "reviews"})
+                </span>
+              </span>
+            )}
           </div>
 
           {/* Action Buttons */}

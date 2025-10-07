@@ -8,7 +8,9 @@ import { RelatedProducts } from "@/components/products/related-products";
 import { VideoSection } from "@/components/products/display/video-section";
 import { DevelopmentDetailsTabs } from "@/components/products/display/development-details-tabs";
 import { CommentsSection } from "@/components/comments/comments-section";
+import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { incrementProductView } from "@/lib/products/view-actions";
+import { getAverageRating } from "@/lib/reviews/actions";
 import type { Metadata } from "next";
 
 interface ProductPageProps {
@@ -124,7 +126,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // Fetch product stats
-  const [votesResult, bookmarksResult] = await Promise.all([
+  const [votesResult, bookmarksResult, ratingData] = await Promise.all([
     supabase
       .from("votes")
       .select("id", { count: "exact", head: true })
@@ -133,10 +135,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
       .from("bookmarks")
       .select("id", { count: "exact", head: true })
       .eq("product_id", product.id),
+    getAverageRating(product.id),
   ]);
 
   const voteCount = votesResult.count || 0;
   const bookmarkCount = bookmarksResult.count || 0;
+  const { averageRating, totalReviews } = ratingData;
 
   // Fetch creator's product count
   const { count: creatorProductCount } = await supabase
@@ -206,6 +210,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             bookmarkCount={bookmarkCount}
             userVoted={userVoted}
             userBookmarked={userBookmarked}
+            averageRating={averageRating}
+            totalReviews={totalReviews}
           />
         </div>
       </div>
@@ -267,6 +273,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               />
             )}
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <ReviewsSection productId={product.id} />
         </div>
 
         {/* Comments Section */}
