@@ -96,20 +96,20 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 text-red-600 dark:text-red-400">
+        <div className="rounded-lg bg-red-900/20 border border-red-800 p-4 text-red-400">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="rounded-lg bg-green-50 dark:bg-green-900/20 p-4 text-green-600 dark:text-green-400">
+        <div className="rounded-lg bg-green-900/20 border border-green-800 p-4 text-green-400">
           Profile updated successfully!
         </div>
       )}
 
       {/* Avatar Upload */}
       <div>
-        <Label>Profile Picture</Label>
+        <Label className="text-gray-300">Profile Picture</Label>
         <div className="mt-2 flex items-center gap-4">
           {avatarPreview ? (
             <Image
@@ -120,7 +120,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               className="rounded-full"
             />
           ) : (
-            <div className="h-20 w-20 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-2xl">
+            <div className="h-20 w-20 rounded-full bg-purple-900/30 flex items-center justify-center text-2xl">
               👤
             </div>
           )}
@@ -130,7 +130,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif"
               onChange={handleAvatarChange}
-              className="text-sm"
+              className="text-sm bg-gray-800 border-gray-700 text-white"
             />
             <p className="mt-1 text-xs text-gray-500">
               JPEG, PNG, WebP, or GIF. Max 2MB.
@@ -141,92 +141,93 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
 
       {/* Full Name */}
       <div>
-        <Label htmlFor="full_name">Full Name</Label>
+        <Label htmlFor="full_name" className="text-gray-300">Full Name</Label>
         <Input
           id="full_name"
           type="text"
           value={formData.full_name}
           onChange={(e) => setFormData((prev) => ({ ...prev, full_name: e.target.value }))}
           placeholder="Your full name"
-          className="mt-1"
+          className="mt-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
         />
         {fieldErrors.full_name && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fieldErrors.full_name[0]}</p>
+          <p className="mt-1 text-sm text-red-400">{fieldErrors.full_name[0]}</p>
         )}
       </div>
 
       {/* Bio */}
       <div>
-        <Label htmlFor="bio">Bio</Label>
+        <Label htmlFor="bio" className="text-gray-300">Bio</Label>
         <Textarea
           id="bio"
           value={formData.bio}
           onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}
           placeholder="Tell us about yourself..."
           rows={4}
-          className="mt-1"
+          className="mt-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
         />
         <p className="mt-1 text-xs text-gray-500">
           {formData.bio?.length || 0}/500 characters
         </p>
         {fieldErrors.bio && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fieldErrors.bio[0]}</p>
+          <p className="mt-1 text-sm text-red-400">{fieldErrors.bio[0]}</p>
         )}
       </div>
 
       {/* Website */}
       <div>
-        <Label htmlFor="website">Website</Label>
+        <Label htmlFor="website" className="text-gray-300">Website</Label>
         <Input
           id="website"
           type="url"
           value={formData.website}
           onChange={(e) => setFormData((prev) => ({ ...prev, website: e.target.value }))}
           placeholder="https://example.com"
-          className="mt-1"
+          className="mt-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
         />
         {fieldErrors.website && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fieldErrors.website[0]}</p>
+          <p className="mt-1 text-sm text-red-400">{fieldErrors.website[0]}</p>
         )}
       </div>
 
       {/* Twitter */}
       <div>
-        <Label htmlFor="twitter">Twitter Handle</Label>
+        <Label htmlFor="twitter" className="text-gray-300">Twitter Handle</Label>
         <div className="mt-1 flex items-center gap-2">
-          <span className="text-gray-500">@</span>
+          <span className="text-gray-400">@</span>
           <Input
             id="twitter"
             type="text"
             value={formData.twitter}
             onChange={(e) => setFormData((prev) => ({ ...prev, twitter: e.target.value }))}
             placeholder="username"
+            className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
           />
         </div>
         {fieldErrors.twitter && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fieldErrors.twitter[0]}</p>
+          <p className="mt-1 text-sm text-red-400">{fieldErrors.twitter[0]}</p>
         )}
       </div>
 
       {/* GitHub */}
       <div>
-        <Label htmlFor="github">GitHub Username</Label>
+        <Label htmlFor="github" className="text-gray-300">GitHub Username</Label>
         <Input
           id="github"
           type="text"
           value={formData.github}
           onChange={(e) => setFormData((prev) => ({ ...prev, github: e.target.value }))}
           placeholder="username"
-          className="mt-1"
+          className="mt-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
         />
         {fieldErrors.github && (
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{fieldErrors.github[0]}</p>
+          <p className="mt-1 text-sm text-red-400">{fieldErrors.github[0]}</p>
         )}
       </div>
 
       {/* Submit Button */}
-      <div className="flex gap-4 border-t pt-6">
-        <Button type="submit" disabled={isSubmitting} className="flex-1">
+      <div className="flex gap-4 border-t border-gray-800 pt-6">
+        <Button type="submit" disabled={isSubmitting} className="flex-1 bg-purple-600 hover:bg-purple-700">
           {isSubmitting ? "Saving..." : "Save Changes"}
         </Button>
       </div>
