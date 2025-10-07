@@ -69,7 +69,7 @@ export function FilterSidebar({
           <Filter className="mr-2 h-4 w-4" />
           Filters
           {hasActiveFilters && (
-            <span className="ml-2 rounded-full bg-purple-600 text-white px-2 py-0.5 text-xs">
+            <span className="ml-2 rounded-full bg-teal-600 text-white px-2 py-0.5 text-xs">
               Active
             </span>
           )}

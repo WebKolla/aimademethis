@@ -80,7 +80,7 @@ export async function ReviewsSection({ productId }: ReviewsSectionProps) {
 
       {/* User's existing review - show at top if exists */}
       {userReview && (
-        <div className="rounded-lg border-2 border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-950/20 p-6">
+        <div className="rounded-lg border-2 border-teal-200 dark:border-teal-800 bg-teal-50 dark:bg-teal-950/20 p-6">
           <h3 className="text-lg font-semibold mb-4">Your Review</h3>
           <ReviewCard review={userReview as never} currentUserId={user?.id} />
         </div>
@@ -91,7 +91,7 @@ export async function ReviewsSection({ productId }: ReviewsSectionProps) {
         <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6 text-center">
           <p className="text-gray-600 dark:text-gray-400">
             Please{" "}
-            <a href="/login" className="text-purple-600 dark:text-purple-400 hover:underline">
+            <a href="/login" className="text-emerald-600 dark:text-emerald-400 hover:underline">
               sign in
             </a>{" "}
             to leave a review

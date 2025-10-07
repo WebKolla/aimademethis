@@ -367,13 +367,13 @@ export function ProductSubmissionForm({ categories }: ProductSubmissionFormProps
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 rounded-full text-sm"
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200 rounded-full text-sm"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="hover:text-purple-600 dark:hover:text-purple-400"
+                    className="hover:text-emerald-600 dark:hover:text-emerald-400"
                   >
                     ×
                   </button>

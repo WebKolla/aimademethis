@@ -26,7 +26,7 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
               className="rounded-full"
             />
           ) : (
-            <div className="h-[120px] w-[120px] rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-4xl">
+            <div className="h-[120px] w-[120px] rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-4xl">
               👤
             </div>
           )}
@@ -72,7 +72,7 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
                   href={profile.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
                   🌐 Website
                 </a>
@@ -82,7 +82,7 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
                   href={`https://twitter.com/${profile.twitter}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
                   🐦 Twitter
                 </a>
@@ -92,7 +92,7 @@ export function ProfileHeader({ profile, productCount, isOwnProfile }: ProfileHe
                   href={`https://github.com/${profile.github}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
                 >
                   💻 GitHub
                 </a>

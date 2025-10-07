@@ -107,7 +107,7 @@ export default async function DashboardPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
           <div className="flex gap-4">
-            <Button asChild className="bg-purple-600 hover:bg-purple-700">
+            <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
               <Link href="/dashboard/products/new">
                 <Plus className="h-4 w-4 mr-2" />
                 Add New Product
@@ -159,7 +159,7 @@ export default async function DashboardPage() {
             <div className="text-center py-12">
               <Package className="h-12 w-12 text-gray-700 mx-auto mb-4" />
               <p className="text-gray-400 mb-4">No products yet</p>
-              <Button asChild className="bg-purple-600 hover:bg-purple-700">
+              <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
                 <Link href="/dashboard/products/new">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Your First Product

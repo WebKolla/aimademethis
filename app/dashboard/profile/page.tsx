@@ -114,7 +114,7 @@ export default async function DashboardProfilePage() {
                   </p>
                   <Link
                     href="/dashboard/products/new"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
                   >
                     Add Your First Product
                   </Link>

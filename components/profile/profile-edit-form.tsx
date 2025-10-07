@@ -120,7 +120,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
               className="rounded-full"
             />
           ) : (
-            <div className="h-20 w-20 rounded-full bg-purple-900/30 flex items-center justify-center text-2xl">
+            <div className="h-20 w-20 rounded-full bg-teal-900/30 flex items-center justify-center text-2xl">
               👤
             </div>
           )}
@@ -227,7 +227,7 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
 
       {/* Submit Button */}
       <div className="flex gap-4 border-t border-gray-800 pt-6">
-        <Button type="submit" disabled={isSubmitting} className="flex-1 bg-purple-600 hover:bg-purple-700">
+        <Button type="submit" disabled={isSubmitting} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
           {isSubmitting ? "Saving..." : "Save Changes"}
         </Button>
       </div>

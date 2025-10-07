@@ -57,7 +57,7 @@ export function ProfileNav({ username, isOwnProfile }: ProfileNavProps) {
                   className={cn(
                     "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
                     isActive
-                      ? "bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300"
+                      ? "bg-teal-100 dark:bg-teal-900/30 text-teal-900 dark:text-teal-300"
                       : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
                   )}
                 >

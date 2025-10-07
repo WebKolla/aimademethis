@@ -59,7 +59,7 @@ export function VoteButton({
         size="sm"
         className={cn(
           "flex items-center gap-1 px-3 h-8",
-          voted && "text-purple-600 dark:text-purple-400"
+          voted && "text-emerald-600 dark:text-emerald-400"
         )}
         onClick={handleVote}
         disabled={isPending}
@@ -76,7 +76,7 @@ export function VoteButton({
       size="sm"
       className={cn(
         "flex flex-col items-center gap-1 h-auto py-2 px-3 min-w-[60px]",
-        voted && "bg-purple-600 hover:bg-purple-700 text-white"
+        voted && "bg-emerald-600 hover:bg-emerald-700 text-white"
       )}
       onClick={handleVote}
       disabled={isPending}

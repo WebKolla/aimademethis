@@ -20,7 +20,7 @@ function MetricCard({
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/50">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+        <Icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
         <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
           {label}
         </span>
@@ -85,7 +85,7 @@ export function MetricsTab({
         )}
       </div>
 
-      <div className="mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+      <div className="mt-6 p-4 bg-purple-50 dark:bg-purple-900/20 border border-teal-200 dark:border-teal-800 rounded-lg">
         <p className="text-sm text-purple-900 dark:text-purple-200">
           💡 <strong>Cost Efficiency:</strong> {totalCostUsd && developmentTimeHours ? (
             <>

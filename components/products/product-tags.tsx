@@ -13,7 +13,7 @@ export function ProductTags({ tags }: ProductTagsProps) {
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
           <Link key={tag.id} href={`/tags/${tag.slug}`}>
-            <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-800 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors cursor-pointer">
+            <span className="inline-flex items-center rounded-full bg-teal-100 dark:bg-teal-900/30 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors cursor-pointer">
               #{tag.name}
             </span>
           </Link>

@@ -72,8 +72,8 @@ export function ReviewCard({ review, currentUserId }: ReviewCardProps) {
               className="rounded-full"
             />
           ) : (
-            <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <span className="text-base font-semibold text-purple-600 dark:text-purple-400">
+            <div className="h-12 w-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center">
+              <span className="text-base font-semibold text-emerald-600 dark:text-emerald-400">
                 {profile?.username?.charAt(0).toUpperCase() || "?"}
               </span>
             </div>
@@ -87,7 +87,7 @@ export function ReviewCard({ review, currentUserId }: ReviewCardProps) {
             <div className="space-y-1">
               <Link
                 href={`/profile/${profile?.username || ""}`}
-                className="font-semibold text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400"
+                className="font-semibold text-gray-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400"
               >
                 {profile?.full_name || profile?.username || "Unknown User"}
               </Link>

@@ -429,7 +429,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
               {tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-purple-900/30 text-purple-200 rounded-full text-sm"
+                  className="inline-flex items-center gap-1 px-3 py-1 bg-teal-900/30 text-teal-200 rounded-full text-sm"
                 >
                   {tag}
                   <button
@@ -723,7 +723,7 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
 
       {/* Submit Buttons */}
       <div className="flex gap-4 pt-6">
-        <Button type="submit" disabled={isPending} className="flex-1 bg-purple-600 hover:bg-purple-700">
+        <Button type="submit" disabled={isPending} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
           {isPending ? "Saving..." : "Save Changes"}
         </Button>
         <Button

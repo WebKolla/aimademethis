@@ -27,7 +27,7 @@ export function UserProducts({ products }: UserProductsProps) {
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {products.map((product) => (
         <Link key={product.id} href={`/products/${product.slug}`}>
-          <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 transition-all hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg">
+          <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 transition-all hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg">
             {/* Product Image */}
             <div className="relative mb-3 aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900">
               {product.image_url ? (
@@ -48,7 +48,7 @@ export function UserProducts({ products }: UserProductsProps) {
             {/* Product Info */}
             <div className="space-y-2">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 line-clamp-1">
+                <h3 className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-1">
                   {product.name}
                 </h3>
                 {product.status === "draft" && (

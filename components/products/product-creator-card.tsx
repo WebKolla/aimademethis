@@ -27,7 +27,7 @@ export function ProductCreatorCard({ creator, productCount = 0 }: ProductCreator
               className="rounded-full"
             />
           ) : (
-            <div className="h-16 w-16 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-2xl">
+            <div className="h-16 w-16 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-2xl">
               👤
             </div>
           )}

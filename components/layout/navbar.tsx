@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState, FormEvent } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signOut } from "@/lib/auth/actions";
-import { LogOut, User as UserIcon, Search } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { LogOut, Search, User as UserIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FormEvent, useEffect, useState } from "react";
 
 export function Navbar() {
   const router = useRouter();
@@ -73,7 +73,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent tracking-tight">
+            <span className="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent tracking-tight">
               AIMMT
             </span>
           </Link>
@@ -81,7 +81,7 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/products"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
               Explore
             </Link>
@@ -97,7 +97,7 @@ export function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="pl-10"
+              className="pl-10  dark:text-white"
             />
           </div>
         </form>

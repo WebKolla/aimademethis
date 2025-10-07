@@ -34,7 +34,7 @@ export function ProductCard({ product, showVotes = true, userVoted = false }: Pr
   } = product;
 
   return (
-    <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg">
+    <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg">
       {/* Vote Button - Outside card for click handling */}
       <div className="flex gap-4 p-6">
         {showVotes && (
@@ -72,7 +72,7 @@ export function ProductCard({ product, showVotes = true, userVoted = false }: Pr
         <div className="space-y-3">
           {/* Title & Pricing */}
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 line-clamp-1">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-1">
               {name}
             </h3>
             {pricing_type && (
@@ -122,7 +122,7 @@ export function ProductCard({ product, showVotes = true, userVoted = false }: Pr
                   className="rounded-full"
                 />
               ) : (
-                <div className="h-6 w-6 rounded-full bg-purple-100 dark:bg-purple-900/30" />
+                <div className="h-6 w-6 rounded-full bg-teal-100 dark:bg-teal-900/30" />
               )}
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 by {profiles.username}

@@ -73,7 +73,7 @@ export function DevelopmentDetailsTabs(props: DevelopmentDetailsTabsProps) {
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? "text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400 bg-white dark:bg-gray-900"
+                ? "text-emerald-600 dark:text-emerald-400 border-b-2 border-purple-600 dark:border-purple-400 bg-white dark:bg-gray-900"
                 : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
             }`}
           >

@@ -23,7 +23,7 @@ export default async function BookmarksPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <BookmarkIcon className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+          <BookmarkIcon className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
           <div>
             <h1 className="text-3xl font-bold">My Bookmarks</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
@@ -42,7 +42,7 @@ export default async function BookmarksPage() {
             </p>
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors"
             >
               Browse Products
             </Link>
@@ -57,7 +57,7 @@ export default async function BookmarksPage() {
                 <Link
                   key={bookmark.id}
                   href={`/products/${product.slug}`}
-                  className="group rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden transition-all hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg"
+                  className="group rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden transition-all hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg"
                 >
                   {/* Product Image */}
                   <div className="relative aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-900">
@@ -80,7 +80,7 @@ export default async function BookmarksPage() {
                   <div className="p-4 space-y-3">
                     {/* Title & Pricing */}
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 line-clamp-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-1">
                         {product.name}
                       </h3>
                       {product.pricing_type && (

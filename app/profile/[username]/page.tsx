@@ -7,19 +7,20 @@ import type { Metadata } from "next";
 import type { Database } from "@/types/database.types";
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
   const supabase = await createClient();
+  const { username } = await params;
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("username, full_name, bio")
-    .eq("username", params.username)
+    .eq("username", username)
     .single();
 
   if (!profile) {
@@ -36,6 +37,7 @@ export async function generateMetadata({ params }: ProfilePageProps): Promise<Me
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   const supabase = await createClient();
+  const { username } = await params;
 
   // Get current user
   const {
@@ -46,7 +48,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { data: profile, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("username", params.username)
+    .eq("username", username)
     .single();
 
   if (error || !profile) {
@@ -87,10 +89,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   return (
     <div className="min-h-screen">
       {/* Profile Navigation */}
-      <ProfileNav username={params.username} isOwnProfile={isOwnProfile} />
+      <ProfileNav username={username} isOwnProfile={isOwnProfile} />
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-purple-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
+      <div className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-12">
           <ProfileHeader
             profile={profile}

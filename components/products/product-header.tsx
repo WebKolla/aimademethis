@@ -68,7 +68,7 @@ export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, us
             )}
 
             {/* Stats */}
-            <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-800 dark:text-purple-300">
+            <span className="inline-flex items-center rounded-full bg-teal-100 dark:bg-teal-900/30 px-4 py-2 text-sm font-medium text-teal-800 dark:text-teal-300">
               ⬆️ {voteCount} {voteCount === 1 ? "vote" : "votes"}
             </span>
 

@@ -55,7 +55,7 @@ export default async function MyProductsPage() {
               Manage and edit your AI-generated products
             </p>
           </div>
-          <Button asChild className="bg-purple-600 hover:bg-purple-700">
+          <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
             <Link href="/dashboard/products/new">
               <Plus className="h-4 w-4 mr-2" />
               Add New Product
@@ -163,7 +163,7 @@ export default async function MyProductsPage() {
               <p className="text-gray-400 mb-6">
                 Start by adding your first AI-generated product to showcase your work
               </p>
-              <Button asChild className="bg-purple-600 hover:bg-purple-700">
+              <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
                 <Link href="/dashboard/products/new">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Your First Product

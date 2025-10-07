@@ -178,7 +178,7 @@ function ProductsPageContent() {
         <div className="lg:col-span-3">
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20 space-y-4">
