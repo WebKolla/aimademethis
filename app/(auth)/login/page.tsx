@@ -69,7 +69,7 @@ export default function LoginPage() {
         setOauthLoading(null);
       }
       // Browser will redirect to OAuth provider
-    } catch (err) {
+    } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "An unexpected error occurred. Please try again.";
       setError(message);
       setOauthLoading(null);
