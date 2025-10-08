@@ -29,6 +29,16 @@ npm run lint
 - Server Components by default, Client Components marked with `"use client"`
 - Route groups: `(auth)` for authentication pages
 
+### Layout Architecture
+**CRITICAL**: All pages automatically include Navbar and Footer from the root layout.
+
+- **Root Layout** (`app/layout.tsx`): Wraps all pages with `<Navbar />` and `<Footer />`
+- **Auth Layout** (`app/(auth)/layout.tsx`): Overrides root layout to exclude Navbar/Footer for clean auth experience
+- **When creating new pages**: Do NOT manually add `<Navbar />` or `<Footer />` - they're automatically included
+- **Exception**: Pages in `(auth)` route group (login, signup) intentionally exclude navigation
+
+**Before creating any new page**, verify with the ui-design-expert agent that the layout is correct and Navbar/Footer will appear automatically.
+
 ### Database: Supabase (PostgreSQL)
 - **Client-side**: Use `createClient()` from `@/lib/supabase/client.ts`
 - **Server-side**: Use `createClient()` from `@/lib/supabase/server.ts`
