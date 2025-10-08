@@ -18,10 +18,10 @@ interface Product {
   id: string;
   name: string;
   slug: string;
-  tagline: string;
+  tagline: string | null;
   image_url: string | null;
-  created_at: string;
-  views_count: number;
+  created_at: string | null;
+  views_count: number | null;
   votes_count: number;
   comments_count: number;
   categories: {
