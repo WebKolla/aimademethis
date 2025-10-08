@@ -11,7 +11,8 @@ import {
   LogOut,
   Home,
   Bookmark,
-  Users
+  Users,
+  Bell
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,11 @@ const navItems = [
     title: "Bookmarks",
     href: "/dashboard/bookmarks",
     icon: Bookmark,
+  },
+  {
+    title: "Followed Products",
+    href: "/dashboard/followed",
+    icon: Bell,
   },
   {
     title: "Profile",
