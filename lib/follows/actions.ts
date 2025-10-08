@@ -196,3 +196,96 @@ export async function getUserFollowing() {
 
   return getFollowing(user.id);
 }
+
+export async function getFollowingFeed(sortBy: "newest" | "trending" = "newest") {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { products: [], error: "Not authenticated" };
+  }
+
+  // Get list of user IDs that the current user follows
+  const { data: followingData, error: followError } = await supabase
+    .from("follows")
+    .select("following_id")
+    .eq("follower_id", user.id)
+    .not("following_id", "is", null);
+
+  if (followError) {
+    console.error("Error getting following list:", followError);
+    return { products: [], error: "Failed to fetch following list" };
+  }
+
+  if (!followingData || followingData.length === 0) {
+    return { products: [] };
+  }
+
+  const followingIds = followingData
+    .map((f) => f.following_id)
+    .filter((id): id is string => id !== null);
+
+  // Fetch products from followed users
+  let query = supabase
+    .from("products")
+    .select(
+      `
+      *,
+      categories (
+        name,
+        slug
+      ),
+      profiles (
+        username,
+        avatar_url,
+        full_name
+      )
+    `
+    )
+    .eq("status", "published")
+    .in("user_id", followingIds);
+
+  // Apply sorting
+  if (sortBy === "newest") {
+    query = query.order("created_at", { ascending: false });
+  } else {
+    // For trending, order by upvotes_count (you could make this more sophisticated)
+    query = query.order("upvotes_count", { ascending: false });
+  }
+
+  query = query.limit(50);
+
+  const { data: products, error: productsError } = await query;
+
+  if (productsError) {
+    console.error("Error fetching following feed:", productsError);
+    return { products: [], error: "Failed to fetch products" };
+  }
+
+  // Get vote counts for each product
+  const productsWithVotes = await Promise.all(
+    (products || []).map(async (product) => {
+      const { count: votesCount } = await supabase
+        .from("votes")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", product.id)
+        .eq("vote_type", "upvote");
+
+      const { count: commentsCount } = await supabase
+        .from("comments")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", product.id);
+
+      return {
+        ...product,
+        votes_count: votesCount || 0,
+        comments_count: commentsCount || 0,
+      };
+    })
+  );
+
+  return { products: productsWithVotes };
+}
