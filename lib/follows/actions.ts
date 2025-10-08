@@ -289,3 +289,186 @@ export async function getFollowingFeed(sortBy: "newest" | "trending" = "newest")
 
   return { products: productsWithVotes };
 }
+
+// =============================================
+// Product Following Functions
+// =============================================
+
+export async function followProduct(productId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  // Check if already following
+  const { data: existing } = await supabase
+    .from("follows")
+    .select("id")
+    .eq("follower_id", user.id)
+    .eq("product_id", productId)
+    .single();
+
+  if (existing) {
+    return { error: "Already following this product" };
+  }
+
+  const { error } = await supabase.from("follows").insert({
+    follower_id: user.id,
+    product_id: productId,
+  });
+
+  if (error) {
+    console.error("Error following product:", error);
+    return { error: "Failed to follow product" };
+  }
+
+  revalidatePath(`/products/[slug]`, "page");
+  return { success: true };
+}
+
+export async function unfollowProduct(productId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  const { error } = await supabase
+    .from("follows")
+    .delete()
+    .eq("follower_id", user.id)
+    .eq("product_id", productId);
+
+  if (error) {
+    console.error("Error unfollowing product:", error);
+    return { error: "Failed to unfollow product" };
+  }
+
+  revalidatePath(`/products/[slug]`, "page");
+  return { success: true };
+}
+
+export async function isFollowingProduct(productId: string) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { isFollowing: false };
+  }
+
+  const { data } = await supabase
+    .from("follows")
+    .select("id")
+    .eq("follower_id", user.id)
+    .eq("product_id", productId)
+    .single();
+
+  return { isFollowing: !!data };
+}
+
+export async function getProductFollowerCount(productId: string) {
+  const supabase = await createClient();
+
+  const { count, error } = await supabase
+    .from("follows")
+    .select("*", { count: "exact", head: true })
+    .eq("product_id", productId);
+
+  if (error) {
+    console.error("Error getting product follower count:", error);
+    return { count: 0 };
+  }
+
+  return { count: count || 0 };
+}
+
+export async function getUserFollowedProducts() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { products: [], error: "Not authenticated" };
+  }
+
+  const { data: follows, error: followError } = await supabase
+    .from("follows")
+    .select(
+      `
+      product_id,
+      created_at,
+      products (
+        id,
+        name,
+        slug,
+        tagline,
+        image_url,
+        views_count,
+        created_at,
+        categories (
+          name,
+          slug
+        ),
+        profiles (
+          username,
+          avatar_url,
+          full_name
+        )
+      )
+    `
+    )
+    .eq("follower_id", user.id)
+    .not("product_id", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (followError) {
+    console.error("Error getting followed products:", followError);
+    return { products: [], error: "Failed to fetch followed products" };
+  }
+
+  // Get vote and comment counts for each product
+  const productsWithStats = await Promise.all(
+    (follows || []).map(async (follow) => {
+      const product = follow.products as any;
+      if (!product) return null;
+
+      const { count: votesCount } = await supabase
+        .from("votes")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", product.id)
+        .eq("vote_type", "upvote");
+
+      const { count: commentsCount } = await supabase
+        .from("comments")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", product.id);
+
+      return {
+        ...product,
+        followed_at: follow.created_at,
+        votes_count: votesCount || 0,
+        comments_count: commentsCount || 0,
+      };
+    })
+  );
+
+  const products = productsWithStats.filter(
+    (p): p is NonNullable<typeof p> => p !== null
+  );
+
+  return { products };
+}

@@ -102,11 +102,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Check if user has voted and bookmarked
+  // Check if user has voted, bookmarked, and is following
   let userVoted = false;
   let userBookmarked = false;
+  let userFollowing = false;
   if (user) {
-    const [voteResult, bookmarkResult] = await Promise.all([
+    const [voteResult, bookmarkResult, followResult] = await Promise.all([
       supabase
         .from("votes")
         .select("id")
@@ -119,14 +120,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
         .eq("product_id", product.id)
         .eq("user_id", user.id)
         .single(),
+      supabase
+        .from("follows")
+        .select("id")
+        .eq("product_id", product.id)
+        .eq("follower_id", user.id)
+        .single(),
     ]);
 
     userVoted = !!voteResult.data;
     userBookmarked = !!bookmarkResult.data;
+    userFollowing = !!followResult.data;
   }
 
   // Fetch product stats
-  const [votesResult, bookmarksResult, ratingData] = await Promise.all([
+  const [votesResult, bookmarksResult, followersResult, ratingData] = await Promise.all([
     supabase
       .from("votes")
       .select("id", { count: "exact", head: true })
@@ -135,11 +143,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
       .from("bookmarks")
       .select("id", { count: "exact", head: true })
       .eq("product_id", product.id),
+    supabase
+      .from("follows")
+      .select("id", { count: "exact", head: true })
+      .eq("product_id", product.id),
     getAverageRating(product.id),
   ]);
 
   const voteCount = votesResult.count || 0;
   const bookmarkCount = bookmarksResult.count || 0;
+  const followerCount = followersResult.count || 0;
   const { averageRating, totalReviews } = ratingData;
 
   // Fetch creator's product count
@@ -208,8 +221,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             product={product}
             voteCount={voteCount}
             bookmarkCount={bookmarkCount}
+            followerCount={followerCount}
             userVoted={userVoted}
             userBookmarked={userBookmarked}
+            userFollowing={userFollowing}
             averageRating={averageRating}
             totalReviews={totalReviews}
           />

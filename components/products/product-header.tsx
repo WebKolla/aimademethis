@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import type { Database } from "@/types/database.types";
 import { VoteButton } from "./vote-button";
 import { BookmarkButton } from "./bookmark-button";
+import { FollowProductButton } from "@/components/follows/follow-product-button";
 import { StarRating } from "@/components/reviews/star-rating";
 
 type Product = Database["public"]["Tables"]["products"]["Row"];
@@ -14,13 +15,15 @@ interface ProductHeaderProps {
   product: Product;
   voteCount: number;
   bookmarkCount: number;
+  followerCount: number;
   userVoted: boolean;
   userBookmarked: boolean;
+  userFollowing: boolean;
   averageRating?: number;
   totalReviews?: number;
 }
 
-export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, userBookmarked, averageRating, totalReviews }: ProductHeaderProps) {
+export function ProductHeader({ product, voteCount, bookmarkCount, followerCount, userVoted, userBookmarked, userFollowing, averageRating, totalReviews }: ProductHeaderProps) {
   return (
     <div className="border-b border-gray-200 dark:border-gray-800 pb-8">
       <div className="grid gap-8 lg:grid-cols-2">
@@ -80,6 +83,10 @@ export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, us
               🔖 {bookmarkCount} {bookmarkCount === 1 ? "bookmark" : "bookmarks"}
             </span>
 
+            <span className="inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-4 py-2 text-sm font-medium text-purple-800 dark:text-purple-300">
+              🔔 {followerCount} {followerCount === 1 ? "follower" : "followers"}
+            </span>
+
             {/* Rating Badge */}
             {averageRating !== undefined && totalReviews !== undefined && totalReviews > 0 && (
               <span className="inline-flex items-center gap-2 rounded-full bg-yellow-100 dark:bg-yellow-900/30 px-4 py-2">
@@ -108,6 +115,14 @@ export function ProductHeader({ product, voteCount, bookmarkCount, userVoted, us
                 initialBookmarked={userBookmarked}
                 initialCount={bookmarkCount}
                 showCount={false}
+              />
+
+              {/* Follow Button */}
+              <FollowProductButton
+                productId={product.id}
+                initialIsFollowing={userFollowing}
+                variant="outline"
+                showText={false}
               />
 
               {product.website_url && (
