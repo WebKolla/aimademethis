@@ -44,19 +44,19 @@ export default async function DashboardProfilePage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">My Profile</h1>
           <p className="text-gray-400">
             Manage your profile information and view your products
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Left Column - Profile Edit Form */}
           <div className="lg:col-span-2">
-            <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
+            <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-8">
               <div className="mb-6">
                 <h2 className="text-xl font-semibold text-white flex items-center gap-2">
                   <User className="h-5 w-5" />

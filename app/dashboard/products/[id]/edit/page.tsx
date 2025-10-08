@@ -44,9 +44,9 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <Button
             variant="ghost"
             size="sm"
@@ -68,7 +68,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
 
         {/* Form Container */}
         <div className="max-w-4xl">
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-8">
+          <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-8">
             <ProductEditForm
               product={result.product as never}
               categories={categories}

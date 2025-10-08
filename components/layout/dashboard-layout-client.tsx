@@ -25,15 +25,15 @@ export function DashboardLayoutClient({
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-950">
-      {/* Desktop Sidebar - Hidden on mobile */}
-      <div className="hidden md:block">
+      {/* Desktop Sidebar - Hidden on mobile/tablet */}
+      <div className="hidden lg:block">
         <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
       </div>
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Mobile Header with Hamburger */}
-        <div className="md:hidden flex items-center gap-4 border-b border-gray-800 bg-gray-900 p-4">
+        {/* Mobile/Tablet Header with Hamburger */}
+        <div className="lg:hidden flex items-center gap-4 border-b border-gray-800 bg-gray-900 p-4">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
