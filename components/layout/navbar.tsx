@@ -86,6 +86,24 @@ export function Navbar() {
             >
               Explore
             </Link>
+            <Link
+              href="/trending"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Trending
+            </Link>
+            <Link
+              href="/categories"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Categories
+            </Link>
+            <Link
+              href="/about"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              About
+            </Link>
           </nav>
         </div>
 
