@@ -51,7 +51,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
@@ -61,7 +61,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 bg-purple-600/10 rounded-lg">
@@ -104,9 +104,9 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-8">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Quick Actions</h2>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button asChild className="bg-emerald-600 hover:bg-emerald-700">
               <Link href="/dashboard/products/new">
                 <Plus className="h-4 w-4 mr-2" />
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Products */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6">
           <h2 className="text-xl font-semibold text-white mb-4">Recent Products</h2>
           {products && products.length > 0 ? (
             <div className="space-y-3">

@@ -46,9 +46,9 @@ export default async function MyProductsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8">
+      <div className="p-4 md:p-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">My Products</h1>
             <p className="text-gray-400">
@@ -65,7 +65,7 @@ export default async function MyProductsPage() {
 
         {/* Products Grid */}
         {productsWithStats && productsWithStats.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {productsWithStats.map((product) => (
               <div
                 key={product.id}
