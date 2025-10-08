@@ -260,7 +260,7 @@ For detailed breakdown, see: `/docs/implementation/Phase 4/work-remaining.md`
 - Mobile app (PWA)
 
 **Timeline:**
-- Launch Readiness: 7-10 hours remaining (2-3 sessions) - Dashboard bugs fixed ✅
+- Launch Readiness: 7-10 hours remaining (2-3 sessions) - Dashboard bugs fixed ✅, Mobile nav fixed ✅
 - Phase 4 Complete: 19-25 hours remaining (5-6 sessions)
 - Full Polish: 31-40 hours remaining (8-10 sessions)
 
