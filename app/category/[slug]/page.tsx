@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { ProductList } from "@/components/products/product-list";
 import { SearchBar } from "@/components/products/search-bar";
 import { HorizontalFilters } from "@/components/products/horizontal-filters";
-import { FeaturedProducts } from "@/components/products/featured-products";
 import { SortDropdown } from "@/components/products/sort-dropdown";
+import { FilterBadges } from "@/components/products/filter-badges";
+import { FilterSidebar } from "@/components/products/filter-sidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
@@ -19,8 +20,6 @@ import {
   getAvailableAITools,
   type SearchFilters,
 } from "@/lib/products/search-actions";
-import { FilterBadges } from "@/components/products/filter-badges";
-import { FilterSidebar } from "@/components/products/filter-sidebar";
 import type { Database } from "@/types/database.types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
@@ -30,9 +29,10 @@ type Product = Database["public"]["Tables"]["products"]["Row"] & {
   comments_count: number;
 };
 
-function ProductsPageContent() {
+function CategoryPageContent() {
+  const params = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const slug = params.slug as string;
 
   // State
   const [products, setProducts] = useState<Product[]>([]);
@@ -40,27 +40,20 @@ function ProductsPageContent() {
   const [tags, setTags] = useState<{ id: string; name: string; slug: string }[]>([]);
   const [aiModels, setAIModels] = useState<string[]>([]);
   const [aiTools, setAITools] = useState<string[]>([]);
+  const [categoryId, setCategoryId] = useState<string>("");
+  const [categoryName, setCategoryName] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
+  const [notFound, setNotFound] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Filter state from URL
-  const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [category, setCategory] = useState(searchParams.get("category") || "all");
-  const [categorySlug, setCategorySlug] = useState<string | null>(null);
-  const [pricing, setPricing] = useState(searchParams.get("pricing") || "all");
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    searchParams.get("tags")?.split(",").filter(Boolean) || []
-  );
-  const [selectedAIModels, setSelectedAIModels] = useState<string[]>(
-    searchParams.get("aiModels")?.split(",").filter(Boolean) || []
-  );
-  const [selectedAITools, setSelectedAITools] = useState<string[]>(
-    searchParams.get("aiTools")?.split(",").filter(Boolean) || []
-  );
-  const [sortBy, setSortBy] = useState<"newest" | "votes" | "reviews" | "views" | "trending">(
-    (searchParams.get("sort") as "newest" | "votes" | "reviews" | "views" | "trending") || "trending"
-  );
+  // Filter state
+  const [query, setQuery] = useState("");
+  const [pricing, setPricing] = useState("all");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedAIModels, setSelectedAIModels] = useState<string[]>([]);
+  const [selectedAITools, setSelectedAITools] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<"newest" | "votes" | "reviews" | "views" | "trending">("trending");
 
   // Load categories, tags, AI models, and AI tools on mount
   useEffect(() => {
@@ -75,19 +68,13 @@ function ProductsPageContent() {
       if (categoriesResult.categories) {
         setCategories(categoriesResult.categories);
 
-        // Check if category param is a slug (not a UUID) and resolve it to ID
-        const categoryParam = searchParams.get("category");
-        if (categoryParam && categoryParam !== "all") {
-          // Check if it's a UUID format (contains hyphens)
-          const isUUID = categoryParam.includes("-");
-          if (!isUUID) {
-            // It's a slug, find the category by slug
-            const foundCategory = categoriesResult.categories.find(c => c.slug === categoryParam);
-            if (foundCategory) {
-              setCategory(foundCategory.id);
-              setCategorySlug(foundCategory.slug);
-            }
-          }
+        // Find the current category by slug
+        const category = categoriesResult.categories.find((c) => c.slug === slug);
+        if (category) {
+          setCategoryId(category.id);
+          setCategoryName(category.name);
+        } else {
+          setNotFound(true);
         }
       }
       if (tagsResult.tags) {
@@ -102,43 +89,18 @@ function ProductsPageContent() {
     }
 
     loadFilters();
-  }, [searchParams]);
-
-  // Update URL when filters change
-  const updateURL = useCallback(() => {
-    // Don't update URL on initial load or if we're already on the correct URL
-    const params = new URLSearchParams();
-
-    if (query) params.set("q", query);
-    if (category !== "all") {
-      // Use slug if available, otherwise use ID for backward compatibility
-      const categoryToUse = categories.find(c => c.id === category);
-      params.set("category", categoryToUse?.slug || category);
-    }
-    if (pricing !== "all") params.set("pricing", pricing);
-    if (selectedTags.length > 0) params.set("tags", selectedTags.join(","));
-    if (selectedAIModels.length > 0) params.set("aiModels", selectedAIModels.join(","));
-    if (selectedAITools.length > 0) params.set("aiTools", selectedAITools.join(","));
-    if (sortBy !== "trending") params.set("sort", sortBy);
-
-    const newURL = params.toString() ? `/products?${params.toString()}` : "/products";
-
-    // Only update if URL actually changed
-    const currentParams = searchParams.toString();
-    const newParams = params.toString();
-    if (currentParams !== newParams) {
-      router.push(newURL, { scroll: false });
-    }
-  }, [query, category, pricing, selectedTags, selectedAIModels, selectedAITools, sortBy, router, categories, searchParams]);
+  }, [slug]);
 
   // Search products when filters change
   useEffect(() => {
     async function performSearch() {
+      if (!categoryId) return; // Wait for category to be loaded
+
       setLoading(true);
 
       const filters: SearchFilters = {
         query: query || undefined,
-        category: category !== "all" ? category : undefined,
+        category: categoryId,
         pricingType: pricing !== "all" ? pricing : undefined,
         tags: selectedTags.length > 0 ? selectedTags : undefined,
         aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
@@ -158,12 +120,10 @@ function ProductsPageContent() {
     }
 
     performSearch();
-    updateURL();
-  }, [query, category, pricing, selectedTags, selectedAIModels, selectedAITools, sortBy, updateURL]);
+  }, [categoryId, query, pricing, selectedTags, selectedAIModels, selectedAITools, sortBy]);
 
   const handleClearFilters = () => {
     setQuery("");
-    setCategory("all");
     setPricing("all");
     setSelectedTags([]);
     setSelectedAIModels([]);
@@ -177,7 +137,8 @@ function ProductsPageContent() {
         setQuery("");
         break;
       case "category":
-        setCategory("all");
+        // Navigate back to all products
+        router.push("/products");
         break;
       case "pricing":
         setPricing("all");
@@ -196,14 +157,29 @@ function ProductsPageContent() {
 
   const hasActiveFilters =
     query ||
-    category !== "all" ||
     pricing !== "all" ||
     selectedTags.length > 0 ||
     selectedAIModels.length > 0 ||
     selectedAITools.length > 0;
 
-  // Get first 3-4 products as featured (placeholder - will be replaced with actual featured logic)
-  const featuredProducts = products.slice(0, 3);
+  if (notFound) {
+    return (
+      <div className="min-h-screen">
+        <div className="container mx-auto px-4 py-20">
+          <div className="text-center space-y-4">
+            <div className="text-6xl">🔍</div>
+            <h1 className="text-3xl font-bold">Category Not Found</h1>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              The category you&apos;re looking for doesn&apos;t exist.
+            </p>
+            <Button asChild>
+              <Link href="/products">Browse All Products</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -214,7 +190,7 @@ function ProductsPageContent() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
-                  Discover AI Products
+                  {categoryName || "Category"}
                 </h1>
                 <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
                   {loading ? (
@@ -249,12 +225,21 @@ function ProductsPageContent() {
           tags={tags}
           aiModels={aiModels}
           aiTools={aiTools}
-          selectedCategory={category}
+          selectedCategory={categoryId}
           selectedPricing={pricing}
           selectedTags={selectedTags}
           selectedAIModels={selectedAIModels}
           selectedAITools={selectedAITools}
-          onCategoryChange={setCategory}
+          onCategoryChange={(catId) => {
+            if (catId === "all") {
+              router.push("/products");
+            } else {
+              const cat = categories.find((c) => c.id === catId);
+              if (cat) {
+                router.push(`/category/${cat.slug}`);
+              }
+            }
+          }}
           onPricingChange={setPricing}
           onTagsChange={setSelectedTags}
           onAIModelsChange={setSelectedAIModels}
@@ -285,12 +270,21 @@ function ProductsPageContent() {
                   tags={tags}
                   aiModels={aiModels}
                   aiTools={aiTools}
-                  selectedCategory={category}
+                  selectedCategory={categoryId}
                   selectedPricing={pricing}
                   selectedTags={selectedTags}
                   selectedAIModels={selectedAIModels}
                   selectedAITools={selectedAITools}
-                  onCategoryChange={setCategory}
+                  onCategoryChange={(catId) => {
+                    if (catId === "all") {
+                      router.push("/products");
+                    } else {
+                      const cat = categories.find((c) => c.id === catId);
+                      if (cat) {
+                        router.push(`/category/${cat.slug}`);
+                      }
+                    }
+                  }}
                   onPricingChange={setPricing}
                   onTagsChange={setSelectedTags}
                   onAIModelsChange={setSelectedAIModels}
@@ -311,7 +305,7 @@ function ProductsPageContent() {
           <FilterBadges
             filters={{
               query: query || undefined,
-              category: category !== "all" ? categories.find((c) => c.id === category) : undefined,
+              category: categories.find((c) => c.id === categoryId),
               pricing: pricing !== "all" ? pricing : undefined,
               tags: tags.filter((t) => selectedTags.includes(t.id)),
               aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
@@ -333,7 +327,7 @@ function ProductsPageContent() {
             <p className="text-muted-foreground max-w-md mx-auto">
               {hasActiveFilters
                 ? "Try adjusting your filters or search query to find what you're looking for."
-                : "Be the first to submit a product!"}
+                : "No products in this category yet. Be the first to submit one!"}
             </p>
             {hasActiveFilters && (
               <Button variant="outline" onClick={handleClearFilters}>
@@ -342,36 +336,30 @@ function ProductsPageContent() {
             )}
           </div>
         ) : (
-          <>
-            {/* Featured Products Section */}
-            {featuredProducts.length > 0 && !hasActiveFilters && (
-              <FeaturedProducts products={featuredProducts} />
-            )}
-
-            {/* All Products Grid */}
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-6">
-                {hasActiveFilters ? "Search Results" : "All Products"}
-              </h2>
-              <ProductList products={products} />
-            </div>
-          </>
+          <div>
+            <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-6">
+              All Products
+            </h2>
+            <ProductList products={products} />
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-export default function ProductsPage() {
+export default function CategoryPage() {
   return (
-    <Suspense fallback={
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+    <Suspense
+      fallback={
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+          </div>
         </div>
-      </div>
-    }>
-      <ProductsPageContent />
+      }
+    >
+      <CategoryPageContent />
     </Suspense>
   );
 }

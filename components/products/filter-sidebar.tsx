@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Filter, X } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -54,7 +55,21 @@ export function FilterSidebar({
   onAIToolsChange,
   onClearFilters,
 }: FilterSidebarProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleCategoryChange = (categoryId: string) => {
+    if (categoryId === "all") {
+      // Go to products page without filters
+      router.push("/products");
+    } else {
+      // Find category slug and redirect to /category/[slug]
+      const category = categories.find(c => c.id === categoryId);
+      if (category) {
+        router.push(`/category/${category.slug}`);
+      }
+    }
+  };
 
   const hasActiveFilters =
     selectedCategory !== "all" ||
@@ -136,7 +151,7 @@ export function FilterSidebar({
         {/* Category Filter */}
         <div className="space-y-3">
           <Label className="text-base font-semibold">Category</Label>
-          <RadioGroup value={selectedCategory} onValueChange={onCategoryChange}>
+          <RadioGroup value={selectedCategory} onValueChange={handleCategoryChange}>
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="all" id="category-all" />
               <Label htmlFor="category-all" className="font-normal cursor-pointer">

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronDown, X, Filter } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -60,6 +61,7 @@ export function HorizontalFilters({
   onAIToolsChange,
   onClearFilters,
 }: HorizontalFiltersProps) {
+  const router = useRouter();
   const [openFilter, setOpenFilter] = useState<string | null>(null);
 
   const hasActiveFilters =
@@ -100,8 +102,18 @@ export function HorizontalFilters({
   };
 
   const handleCategoryChange = (categoryId: string) => {
-    onCategoryChange(categoryId);
     setOpenFilter(null); // Close dropdown after selection
+
+    if (categoryId === "all") {
+      // Go to products page without filters
+      router.push("/products");
+    } else {
+      // Find category slug and redirect to /category/[slug]
+      const category = categories.find(c => c.id === categoryId);
+      if (category) {
+        router.push(`/category/${category.slug}`);
+      }
+    }
   };
 
   const handlePricingChange = (pricing: string) => {
