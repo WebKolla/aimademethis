@@ -17,7 +17,10 @@ import {
   Target,
   Globe,
   Check,
+  Mail,
+  CheckCircle2,
 } from "lucide-react";
+import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 
 const container = {
   hidden: { opacity: 0 },
@@ -355,6 +358,98 @@ export default function HomePage() {
                   </div>
                 </motion.div>
               ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Newsletter Section */}
+        <section className="py-20 md:py-24 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 relative overflow-hidden">
+          {/* Subtle animated background element */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-full blur-3xl"
+            />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6 }}
+              className="max-w-3xl mx-auto"
+            >
+              <div className="relative rounded-3xl border-2 border-transparent bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 p-8 md:p-12 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                {/* Gradient border effect */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20 -z-10 blur-lg" />
+
+                <div className="text-center space-y-6">
+                  {/* Icon Badge */}
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                    className="inline-block"
+                  >
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white shadow-lg shadow-teal-500/30 dark:shadow-teal-500/20">
+                      <Mail className="w-8 h-8" aria-hidden="true" />
+                    </div>
+                  </motion.div>
+
+                  {/* Heading */}
+                  <div className="space-y-3">
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
+                      Stay in the AI Loop
+                    </h2>
+                    <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                      Get weekly updates on trending AI products, exclusive launches, and community highlights delivered to your inbox.
+                    </p>
+                  </div>
+
+                  {/* Newsletter Form */}
+                  <div className="pt-4">
+                    <NewsletterSignup
+                      placeholder="Enter your email address"
+                      buttonText="Subscribe"
+                    />
+                  </div>
+
+                  {/* Trust Indicators */}
+                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-500 dark:text-slate-400 pt-2">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                      <span>Free forever</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                      <span>No spam</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                      <span>Unsubscribe anytime</span>
+                    </div>
+                  </div>
+
+                  {/* Privacy Policy Link */}
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    By subscribing, you agree to our{" "}
+                    <Link href="/privacy" className="text-emerald-600 dark:text-emerald-400 hover:underline underline-offset-2">
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
