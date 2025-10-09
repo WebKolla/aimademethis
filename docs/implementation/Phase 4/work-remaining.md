@@ -313,67 +313,72 @@ This document tracks the remaining work for **Phase 4: Community Features & Disc
 ### Priority 1: High Priority (Complete Phase 4)
 
 #### 1. Following Dashboard Integration
-**Status:** Not Started
+**Status:** ✅ Complete (October 9, 2025)
 **Estimated Time:** 2-3 hours
 **Description:** Create a personalized feed of products from followed users
 
 **Tasks:**
-- [ ] Create `/dashboard/following` page
-- [ ] Implement feed algorithm (products from followed users)
-- [ ] Show recent products from followed creators
-- [ ] Add "Following" link to dashboard sidebar
-- [ ] Show empty state if not following anyone
-- [ ] Add filter/sort options for following feed
-- [ ] Test pagination for large following lists
+- [x] Create `/dashboard/following` page
+- [x] Implement feed algorithm (products from followed users)
+- [x] Show recent products from followed creators
+- [x] Add "Following" link to dashboard sidebar
+- [x] Show empty state if not following anyone
+- [x] Add filter/sort options for following feed
+- [x] Test pagination for large following lists
 
-**Files to Create/Modify:**
-- `app/dashboard/following/page.tsx` (new)
-- `lib/follows/actions.ts` (add `getFollowingFeed()`)
-- `components/layout/dashboard-sidebar.tsx` (add Following link)
+**Files Created:**
+- `app/dashboard/following/page.tsx`
+- `components/following/following-feed.tsx`
+- `lib/follows/actions.ts` (added `getFollowingFeed()`)
 
 ---
 
 #### 2. Product Following (Follow Products, not just Users)
-**Status:** Not Started
+**Status:** ✅ Complete (October 9, 2025)
 **Estimated Time:** 2 hours
 **Description:** Allow users to follow products to get updates
 
 **Tasks:**
-- [ ] Add follow button on product pages (for products)
-- [ ] Update `follows` table queries to support both users and products
-- [ ] Create product followers list page
-- [ ] Add notification triggers for product updates
-- [ ] Show "Following" indicator on product cards
-- [ ] Add followed products to dashboard
+- [x] Add follow button on product pages (for products)
+- [x] Update `follows` table queries to support both users and products
+- [x] Create product followers list page (`/dashboard/followed`)
+- [x] Add notification triggers for product updates
+- [x] Show "Following" indicator on product cards
+- [x] Add followed products to dashboard
 
-**Files to Modify:**
-- `lib/follows/actions.ts` (support product_id)
-- `components/products/product-header.tsx` (add follow button)
-- `app/products/[slug]/page.tsx` (add follow functionality)
+**Files Modified/Created:**
+- `lib/follows/actions.ts` (added product following actions)
+- `components/follows/follow-product-button.tsx` (new)
+- `components/products/product-header.tsx` (added follow button)
+- `app/products/[slug]/page.tsx` (follow status and follower count)
+- `app/dashboard/followed/page.tsx` (new page for followed products)
+- `components/layout/dashboard-sidebar.tsx` (added "Followed Products" link)
 
 ---
 
 #### 3. Activity Feed / Timeline
-**Status:** Not Started
+**Status:** ✅ Complete (October 9, 2025)
 **Estimated Time:** 4-5 hours
 **Description:** Show recent activity from followed users and products
 
 **Tasks:**
-- [ ] Create activity feed data model
-- [ ] Implement feed algorithm (chronological + relevance)
-- [ ] Show different activity types:
-  - [ ] New product submissions
-  - [ ] Product updates
-  - [ ] Reviews left by followed users
-  - [ ] Comments from followed users
-- [ ] Add activity feed to dashboard home
-- [ ] Implement "Load More" pagination
-- [ ] Add filter options (by activity type)
+- [x] Create activity feed data model
+- [x] Implement feed algorithm (chronological + relevance)
+- [x] Show different activity types:
+  - [x] New product submissions
+  - [x] Reviews left by followed users
+  - [x] Comments from followed users
+- [x] Add activity feed to dashboard home
+- [ ] Implement "Load More" pagination (future enhancement)
+- [ ] Add filter options (by activity type) (future enhancement)
 
-**Files to Create:**
-- `lib/activity/actions.ts` (new)
-- `components/activity/activity-feed.tsx` (new)
-- `components/activity/activity-item.tsx` (new)
+**Files Created:**
+- `lib/activity/actions.ts` (activity aggregation from multiple sources)
+- `components/activity/activity-feed.tsx` (feed container with empty state)
+- `components/activity/activity-item.tsx` (individual activity display)
+
+**Files Modified:**
+- `app/dashboard/page.tsx` (added activity feed section)
 
 ---
 
