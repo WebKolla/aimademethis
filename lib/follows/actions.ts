@@ -419,6 +419,7 @@ export async function getUserFollowedProducts() {
         image_url,
         views_count,
         created_at,
+        pricing_type,
         categories (
           name,
           slug
@@ -451,6 +452,7 @@ export async function getUserFollowedProducts() {
         image_url: string | null;
         views_count: number | null;
         created_at: string | null;
+        pricing_type: string | null;
         categories: { name: string; slug: string } | null;
         profiles: { username: string; avatar_url: string | null; full_name: string | null } | null;
       };

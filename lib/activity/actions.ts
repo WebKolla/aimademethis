@@ -20,7 +20,7 @@ export interface Activity {
     slug: string;
     image_url: string | null;
   };
-  content?: string; // For reviews and comments
+  content?: string | null; // For reviews and comments
   rating?: number; // For reviews
 }
 
@@ -50,10 +50,11 @@ export async function getActivityFeed(limit: number = 20) {
     .map((f) => f.following_id)
     .filter((id): id is string => id !== null);
 
-  const followedProductIds = follows
-    .filter((f) => f.product_id)
-    .map((f) => f.product_id)
-    .filter((id): id is string => id !== null);
+  // Note: followedProductIds could be used for product-specific activity in the future
+  // const followedProductIds = follows
+  //   .filter((f) => f.product_id)
+  //   .map((f) => f.product_id)
+  //   .filter((id): id is string => id !== null);
 
   const activities: Activity[] = [];
 
@@ -84,7 +85,7 @@ export async function getActivityFeed(limit: number = 20) {
 
     if (products) {
       products.forEach((product) => {
-        if (product.profiles) {
+        if (product.profiles && product.created_at) {
           const profile = product.profiles as {
             id: string;
             username: string;
@@ -120,7 +121,7 @@ export async function getActivityFeed(limit: number = 20) {
       .select(
         `
         id,
-        content,
+        comment,
         rating,
         created_at,
         user_id,
@@ -145,7 +146,7 @@ export async function getActivityFeed(limit: number = 20) {
 
     if (reviews) {
       reviews.forEach((review) => {
-        if (review.profiles && review.products) {
+        if (review.profiles && review.products && review.created_at) {
           const profile = review.profiles as {
             id: string;
             username: string;
@@ -174,7 +175,7 @@ export async function getActivityFeed(limit: number = 20) {
               slug: product.slug,
               image_url: product.image_url,
             },
-            content: review.content,
+            content: review.comment,
             rating: review.rating,
           });
         }
@@ -213,7 +214,7 @@ export async function getActivityFeed(limit: number = 20) {
 
     if (comments) {
       comments.forEach((comment) => {
-        if (comment.profiles && comment.products) {
+        if (comment.profiles && comment.products && comment.created_at) {
           const profile = comment.profiles as {
             id: string;
             username: string;
