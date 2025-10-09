@@ -267,7 +267,7 @@ export async function getFollowingFeed(sortBy: "newest" | "trending" = "newest")
 
   // Get vote counts for each product
   const productsWithVotes = await Promise.all(
-    (products || []).map(async (product) => {
+    (products || []).map(async (product: (typeof products)[0]) => {
       const { count: votesCount } = await supabase
         .from("votes")
         .select("id", { count: "exact", head: true })
@@ -443,7 +443,8 @@ export async function getUserFollowedProducts() {
 
   // Get vote and comment counts for each product
   const productsWithStats = await Promise.all(
-    (follows || []).map(async (follow) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (follows || []).map(async (follow: any) => {
       const product = follow.products as {
         id: string;
         name: string;

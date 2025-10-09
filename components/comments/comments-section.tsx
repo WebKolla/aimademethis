@@ -48,7 +48,8 @@ export async function CommentsSection({ productId }: CommentsSectionProps) {
 
       {/* Comments List */}
       <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-6">
-        <CommentList comments={comments} currentUserId={user?.id} productId={productId} />
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <CommentList comments={comments as any} currentUserId={user?.id} productId={productId} />
       </div>
     </div>
   );

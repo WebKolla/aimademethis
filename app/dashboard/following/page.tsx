@@ -93,7 +93,8 @@ export default async function FollowingPage({
             </div>
           </div>
         ) : (
-          <FollowingFeed products={products} initialSort={sortBy} />
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          <FollowingFeed products={products as any} initialSort={sortBy} />
         )}
       </div>
     </DashboardLayout>

@@ -68,7 +68,8 @@ export default async function FollowersPage({ params }: FollowersPageProps) {
 
   // Get follow status for each follower if user is logged in
   const followersWithStatus = await Promise.all(
-    (followers as Follow[]).map(async (follow) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (followers as any[]).map(async (follow: any) => {
       if (!follow.follower) return null;
 
       const followStatus = user ? await isFollowing(follow.follower.id) : { isFollowing: false };

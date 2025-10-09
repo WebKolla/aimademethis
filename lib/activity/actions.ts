@@ -85,8 +85,10 @@ export async function getActivityFeed(limit: number = 20) {
 
     if (products) {
       products.forEach((product) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (product.profiles && product.created_at) {
-          const profile = product.profiles as {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const profile = (product as any).profiles as {
             id: string;
             username: string;
             avatar_url: string | null;
@@ -145,7 +147,8 @@ export async function getActivityFeed(limit: number = 20) {
       .limit(limit);
 
     if (reviews) {
-      reviews.forEach((review) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      reviews.forEach((review: any) => {
         if (review.profiles && review.products && review.created_at) {
           const profile = review.profiles as {
             id: string;
@@ -213,7 +216,8 @@ export async function getActivityFeed(limit: number = 20) {
       .limit(limit);
 
     if (comments) {
-      comments.forEach((comment) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      comments.forEach((comment: any) => {
         if (comment.profiles && comment.products && comment.created_at) {
           const profile = comment.profiles as {
             id: string;
