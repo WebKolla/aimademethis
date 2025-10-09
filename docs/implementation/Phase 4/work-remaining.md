@@ -383,26 +383,27 @@ This document tracks the remaining work for **Phase 4: Community Features & Disc
 ---
 
 #### 4. Enhanced Notifications
-**Status:** Partially Complete
+**Status:** ✅ Complete (October 9, 2025)
 **Estimated Time:** 2 hours
 **Description:** Complete notification triggers and email notifications
 
 **Tasks:**
-- [ ] Add notification triggers for:
+- [x] Add notification triggers for:
   - [x] New followers (already done)
   - [x] Comments on own products (already done)
   - [x] Reviews on own products (already done)
   - [x] Votes on own products (already done)
-  - [ ] Product updates from followed creators
-  - [ ] Replies to own comments
-  - [ ] Mentions (future)
-- [ ] Email notification system (optional, via Supabase)
-- [ ] Notification preferences page
-- [ ] Digest notifications (daily/weekly summary)
+  - [x] Product updates from followed creators
+  - [x] Replies to own comments
+  - [ ] Mentions (future enhancement)
+- [ ] Email notification system (optional, future enhancement)
+- [ ] Notification preferences page (future enhancement)
+- [ ] Digest notifications (daily/weekly summary, future enhancement)
 
-**Files to Modify:**
-- `lib/notifications/actions.ts` (add new triggers)
-- `app/dashboard/settings/notifications/page.tsx` (new)
+**Files Modified:**
+- `lib/notifications/actions.ts` (added createProductUpdateNotification, createCommentReplyNotification)
+- `lib/products/edit-actions.ts` (integrated product update notifications)
+- `lib/comments/actions.ts` (integrated reply notifications with context fetching)
 
 ---
 
