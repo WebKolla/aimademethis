@@ -40,14 +40,21 @@ export default async function DashboardPage() {
     .eq("user_id", user.id)
     .eq("status", "draft");
 
-  // Get total votes
+  // Get total votes across ALL user products (not just recent 5)
   let totalVotes = 0;
-  if (products && products.length > 0) {
-    const productIds = products.map((p) => p.id);
+  // First get all product IDs
+  const { data: allProducts } = await supabase
+    .from("products")
+    .select("id")
+    .eq("user_id", user.id);
+
+  if (allProducts && allProducts.length > 0) {
+    const productIds = allProducts.map((p) => p.id);
     const { count } = await supabase
       .from("votes")
       .select("id", { count: "exact", head: true })
-      .in("product_id", productIds);
+      .in("product_id", productIds)
+      .eq("vote_type", "upvote"); // Only count upvotes
     totalVotes = count || 0;
   }
 
