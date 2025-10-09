@@ -443,7 +443,17 @@ export async function getUserFollowedProducts() {
   // Get vote and comment counts for each product
   const productsWithStats = await Promise.all(
     (follows || []).map(async (follow) => {
-      const product = follow.products as any;
+      const product = follow.products as {
+        id: string;
+        name: string;
+        slug: string;
+        tagline: string | null;
+        image_url: string | null;
+        views_count: number | null;
+        created_at: string | null;
+        categories: { name: string; slug: string } | null;
+        profiles: { username: string; avatar_url: string | null; full_name: string | null } | null;
+      };
       if (!product) return null;
 
       const { count: votesCount } = await supabase
