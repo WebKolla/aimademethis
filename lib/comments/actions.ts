@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { createCommentReplyNotification } from "@/lib/notifications/actions";
 
 export async function addComment(productId: string, content: string, parentId?: string) {
   const supabase = await createClient();
@@ -42,6 +43,43 @@ export async function addComment(productId: string, content: string, parentId?: 
   // Increment comment count (only for top-level comments)
   if (!parentId) {
     await supabase.rpc("increment_comment_count", { product_id: productId });
+  }
+
+  // If this is a reply, send notification to parent comment author
+  if (parentId) {
+    // Get parent comment details
+    const { data: parentComment } = await supabase
+      .from("comments")
+      .select("user_id")
+      .eq("id", parentId)
+      .single();
+
+    // Get product details
+    const { data: product } = await supabase
+      .from("products")
+      .select("name, slug")
+      .eq("id", productId)
+      .single();
+
+    // Get user profile
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", user.id)
+      .single();
+
+    if (parentComment && product && profile) {
+      await createCommentReplyNotification({
+        parentCommentId: parentId,
+        parentCommentAuthorId: parentComment.user_id,
+        replyAuthorId: user.id,
+        replyAuthorUsername: profile.username,
+        productId,
+        productName: product.name,
+        productSlug: product.slug,
+        commentId: comment.id,
+      });
+    }
   }
 
   revalidatePath(`/products/[slug]`, "page");

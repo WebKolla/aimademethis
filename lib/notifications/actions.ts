@@ -162,3 +162,82 @@ export async function deleteAllNotifications() {
   return { error: null };
 }
 
+// Notification creation helpers
+
+export async function createProductUpdateNotification(params: {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  actorId: string;
+}) {
+  const supabase = await createClient();
+
+  // Get all followers of this product
+  const { data: followers } = await supabase
+    .from("follows")
+    .select("follower_id")
+    .eq("product_id", params.productId)
+    .not("follower_id", "is", null);
+
+  if (!followers || followers.length === 0) {
+    return { success: true }; // No followers to notify
+  }
+
+  // Create notifications for all followers
+  const notifications = followers.map((follow) => ({
+    user_id: follow.follower_id!,
+    actor_id: params.actorId,
+    product_id: params.productId,
+    type: "product_update",
+    title: "Product Updated",
+    message: `${params.productName} has been updated`,
+    link: `/products/${params.productSlug}`,
+    is_read: false,
+  }));
+
+  const { error } = await supabase.from("notifications").insert(notifications);
+
+  if (error) {
+    console.error("Error creating product update notifications:", error);
+    return { error: error.message };
+  }
+
+  return { success: true };
+}
+
+export async function createCommentReplyNotification(params: {
+  parentCommentId: string;
+  parentCommentAuthorId: string;
+  replyAuthorId: string;
+  replyAuthorUsername: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  commentId: string;
+}) {
+  const supabase = await createClient();
+
+  // Don't notify if replying to own comment
+  if (params.parentCommentAuthorId === params.replyAuthorId) {
+    return { success: true };
+  }
+
+  const { error } = await supabase.from("notifications").insert({
+    user_id: params.parentCommentAuthorId,
+    actor_id: params.replyAuthorId,
+    product_id: params.productId,
+    comment_id: params.commentId,
+    type: "comment_reply",
+    title: "New Reply",
+    message: `${params.replyAuthorUsername} replied to your comment on ${params.productName}`,
+    link: `/products/${params.productSlug}#comment-${params.commentId}`,
+    is_read: false,
+  });
+
+  if (error) {
+    console.error("Error creating comment reply notification:", error);
+    return { error: error.message };
+  }
+
+  return { success: true };
+}

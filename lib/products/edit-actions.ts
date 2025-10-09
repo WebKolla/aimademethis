@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { ProductSubmissionData, productSubmissionSchema } from "./schemas";
 import { revalidatePath } from "next/cache";
+import { createProductUpdateNotification } from "@/lib/notifications/actions";
 
 // Get product for editing (must be owner)
 export async function getProductForEdit(productId: string) {
@@ -183,6 +184,14 @@ export async function updateProduct(productId: string, data: ProductSubmissionDa
     revalidatePath("/dashboard/products");
     revalidatePath(`/dashboard/products/${productId}/edit`);
     revalidatePath(`/products/${existingProduct.slug}`);
+
+    // Send notifications to product followers
+    await createProductUpdateNotification({
+      productId,
+      productName: validatedData.name,
+      productSlug: existingProduct.slug,
+      actorId: user.id,
+    });
 
     return {
       success: true,
