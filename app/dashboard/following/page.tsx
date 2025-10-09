@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 export default async function FollowingPage({
   searchParams,
 }: {
-  searchParams: { sort?: string };
+  searchParams: Promise<{ sort?: string }>;
 }) {
   const supabase = await createClient();
   const {
@@ -18,7 +18,8 @@ export default async function FollowingPage({
 
   if (!user) return null;
 
-  const sortBy = (searchParams.sort === "trending" ? "trending" : "newest") as
+  const params = await searchParams;
+  const sortBy = (params.sort === "trending" ? "trending" : "newest") as
     | "newest"
     | "trending";
   const { products, error } = await getFollowingFeed(sortBy);

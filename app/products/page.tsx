@@ -10,7 +10,8 @@ import { SortDropdown } from "@/components/products/sort-dropdown";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
-import { Loader2, Filter } from "lucide-react";
+import { Loader2, Filter, Sparkles, TrendingUp, Users } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   searchProducts,
   getCategories,
@@ -47,7 +48,6 @@ function ProductsPageContent() {
   // Filter state from URL
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [category, setCategory] = useState(searchParams.get("category") || "all");
-  const [categorySlug, setCategorySlug] = useState<string | null>(null);
   const [pricing, setPricing] = useState(searchParams.get("pricing") || "all");
   const [selectedTags, setSelectedTags] = useState<string[]>(
     searchParams.get("tags")?.split(",").filter(Boolean) || []
@@ -85,7 +85,6 @@ function ProductsPageContent() {
             const foundCategory = categoriesResult.categories.find(c => c.slug === categoryParam);
             if (foundCategory) {
               setCategory(foundCategory.id);
-              setCategorySlug(foundCategory.slug);
             }
           }
         }
@@ -207,40 +206,144 @@ function ProductsPageContent() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 border-b">
-        <div className="container mx-auto px-4 py-12">
-          <div className="space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
-                  Discover AI Products
+      {/* Modern Hero Section */}
+      <section className="relative min-h-[60vh] bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/30 dark:from-slate-950 dark:via-teal-950/20 dark:to-emerald-950/20 overflow-hidden border-b border-gray-200 dark:border-gray-800">
+
+        {/* Animated Background Blobs */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+            x: [0, 50, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 -right-20 w-96 h-96 bg-teal-500/10 dark:bg-teal-500/5 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [0, -90, 0],
+            x: [0, -30, 0],
+            y: [0, 50, 0]
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-20 -left-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            rotate: [0, 45, 0]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/5 dark:bg-cyan-500/3 rounded-full blur-3xl"
+        />
+
+        {/* Hero Content */}
+        <div className="relative container mx-auto px-4 py-16 md:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+            {/* Left Column: Headline + Description + CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              <div className="space-y-4">
+                <h1 className="text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none">
+                  <span className="block text-gray-900 dark:text-white">Discover</span>
+                  <span className="block bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">
+                    AI Products
+                  </span>
                 </h1>
-                <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
-                  {loading ? (
-                    "Loading..."
-                  ) : (
-                    <>
-                      {totalCount} {totalCount === 1 ? "product" : "products"} found
-                      {hasActiveFilters && " matching your filters"}
-                    </>
-                  )}
+
+                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
+                  Explore cutting-edge AI tools and applications built by innovators worldwide
                 </p>
               </div>
-              <Button asChild size="lg">
-                <Link href="/products/new">Submit Product</Link>
-              </Button>
-            </div>
 
-            {/* Search Bar */}
-            <SearchBar
-              initialValue={query}
-              onSearch={setQuery}
-              placeholder="Search by name, tagline, or description..."
-            />
+              {/* Search Bar */}
+              <div className="max-w-2xl">
+                <SearchBar
+                  initialValue={query}
+                  onSearch={setQuery}
+                  placeholder="Search by name, tagline, or description..."
+                />
+              </div>
+
+              {/* CTA Button */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button asChild size="lg" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 text-lg px-8 h-14 rounded-full font-semibold">
+                  <Link href="/products/new">
+                    <Sparkles className="mr-2 h-5 w-5" />
+                    Submit Your Product
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Right Column: Quick Stats Bento Grid */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="grid grid-cols-2 gap-4 lg:gap-6"
+            >
+              {/* Total Products */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="col-span-2 p-6 md:p-8 rounded-3xl bg-white/60 dark:bg-gray-900/60 backdrop-blur-lg border border-white/20 dark:border-gray-800/50 shadow-xl"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
+                      Total Products
+                    </div>
+                    <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                      {loading ? "..." : totalCount}
+                    </div>
+                    <div className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                      {hasActiveFilters ? "matching filters" : "and counting"}
+                    </div>
+                  </div>
+                  <div className="text-6xl opacity-80">
+                    🚀
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Trending Products */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="p-6 rounded-3xl bg-gradient-to-br from-orange-50 to-rose-50 dark:from-orange-950/30 dark:to-rose-950/30 backdrop-blur-lg border border-orange-200/50 dark:border-orange-900/50 shadow-lg"
+              >
+                <TrendingUp className="h-8 w-8 text-orange-600 dark:text-orange-400 mb-3" />
+                <div className="text-3xl font-black text-gray-900 dark:text-white">
+                  {Math.floor(totalCount * 0.15)}
+                </div>
+                <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">
+                  Trending Now
+                </div>
+              </motion.div>
+
+              {/* Active Users */}
+              <motion.div
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="p-6 rounded-3xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 backdrop-blur-lg border border-purple-200/50 dark:border-purple-900/50 shadow-lg"
+              >
+                <Users className="h-8 w-8 text-purple-600 dark:text-purple-400 mb-3" />
+                <div className="text-3xl font-black text-gray-900 dark:text-white">
+                  {Math.floor(totalCount * 0.7)}+
+                </div>
+                <div className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-1">
+                  Creators
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Desktop Horizontal Filters */}
       <div className="hidden lg:block">

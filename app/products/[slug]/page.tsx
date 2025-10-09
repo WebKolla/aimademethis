@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { ProductHeader } from "@/components/products/product-header";
+import { ProductHero } from "@/components/products/product-hero";
 import { ProductDescription } from "@/components/products/product-description";
 import { ProductCreatorCard } from "@/components/products/product-creator-card";
 import { ProductTags } from "@/components/products/product-tags";
@@ -9,7 +9,7 @@ import { VideoSection } from "@/components/products/display/video-section";
 import { DevelopmentDetailsTabs } from "@/components/products/display/development-details-tabs";
 import { CommentsSection } from "@/components/comments/comments-section";
 import { ReviewsSection } from "@/components/reviews/reviews-section";
-import { incrementProductView } from "@/lib/products/view-actions";
+import { ProductViewTracker } from "@/components/products/product-view-tracker";
 import { getAverageRating } from "@/lib/reviews/actions";
 import type { Metadata } from "next";
 
@@ -209,49 +209,65 @@ export default async function ProductPage({ params }: ProductPageProps) {
     })
   );
 
-  // Increment view count (async, don't await)
-  incrementProductView(product.id);
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+      {/* Track product view on client side */}
+      <ProductViewTracker productId={product.id} />
+
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto px-4 py-12">
-          <ProductHeader
-            product={product}
-            voteCount={voteCount}
-            bookmarkCount={bookmarkCount}
-            followerCount={followerCount}
-            userVoted={userVoted}
-            userBookmarked={userBookmarked}
-            userFollowing={userFollowing}
-            averageRating={averageRating}
-            totalReviews={totalReviews}
-          />
-        </div>
-      </div>
+      <ProductHero
+        product={product}
+        voteCount={voteCount}
+        bookmarkCount={bookmarkCount}
+        followerCount={followerCount}
+        userVoted={userVoted}
+        userBookmarked={userBookmarked}
+        userFollowing={userFollowing}
+        averageRating={averageRating}
+        totalReviews={totalReviews}
+      />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* Left Column - Description & Tags */}
-          <div className="lg:col-span-2 space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold mb-4">About {product.name}</h2>
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-2 space-y-12">
+            {/* About Section */}
+            <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-lg hover:shadow-2xl transition-all duration-300">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-6">
+                About {product.name}
+              </h2>
               <ProductDescription description={product.description} />
             </div>
 
-            <ProductTags tags={tags} />
+            {/* Tags Section */}
+            <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-lg">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-6">
+                Tags & Categories
+              </h2>
+              <ProductTags tags={tags} />
+            </div>
 
-            {/* Media Section */}
-            <VideoSection
-              videoUrl={product.video_url}
-              demoVideoUrl={product.demo_video_url}
-            />
+            {/* Video Section */}
+            {(product.video_url || product.demo_video_url) && (
+              <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-lg overflow-hidden">
+                <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-6">
+                  Product Demo
+                </h2>
+                <VideoSection
+                  videoUrl={product.video_url}
+                  demoVideoUrl={product.demo_video_url}
+                />
+              </div>
+            )}
 
             {/* Development Details */}
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Development Details</h2>
+            <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-lg">
+              <div className="border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 p-6">
+                <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+                  Development Details
+                </h2>
+              </div>
               <DevelopmentDetailsTabs
                 // Tools
                 ideUsed={product.ide_used}
@@ -279,29 +295,61 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
 
-          {/* Right Column - Creator Card */}
+          {/* Right Column - Sticky Creator Card */}
           <div className="lg:col-span-1">
-            {product.profiles && (
-              <ProductCreatorCard
-                creator={product.profiles as never}
-                productCount={creatorProductCount || 0}
-              />
-            )}
+            <div className="sticky top-24 space-y-6">
+              {product.profiles && (
+                <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xl hover:shadow-2xl transition-all duration-300">
+                  <ProductCreatorCard
+                    creator={product.profiles as never}
+                    productCount={creatorProductCount || 0}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Reviews Section */}
-        <div className="mt-12">
-          <ReviewsSection productId={product.id} />
+        <div className="mt-16">
+          <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-lg">
+            <div className="border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 p-8">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+                User Reviews
+              </h2>
+            </div>
+            <div className="p-8">
+              <ReviewsSection productId={product.id} />
+            </div>
+          </div>
         </div>
 
         {/* Comments Section */}
         <div className="mt-12">
-          <CommentsSection productId={product.id} />
+          <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-lg">
+            <div className="border-b border-slate-200 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 p-8">
+              <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+                Discussion
+              </h2>
+            </div>
+            <div className="p-8">
+              <CommentsSection productId={product.id} />
+            </div>
+          </div>
         </div>
 
         {/* Related Products */}
-        <RelatedProducts products={relatedWithCounts as never[]} />
+        <div className="mt-24 pb-16">
+          <div className="text-center space-y-4 mb-12">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
+              You Might Also Like
+            </h2>
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Discover more amazing AI products in the same category
+            </p>
+          </div>
+          <RelatedProducts products={relatedWithCounts as never[]} />
+        </div>
       </div>
     </div>
   );
