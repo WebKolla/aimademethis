@@ -133,3 +133,35 @@ html {
 .prose a {
   @apply text-purple-600 dark:text-purple-400 hover:underline;
 }
+
+/* Scrollbar Styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thumb-emerald-600::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  background-color: hsl(210 17% 95%);
+}
+
+.dark .scrollbar-track-gray-900::-webkit-scrollbar-track {
+  background-color: hsl(217 33% 17%);
+}

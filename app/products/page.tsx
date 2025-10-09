@@ -4,11 +4,13 @@ import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProductList } from "@/components/products/product-list";
 import { SearchBar } from "@/components/products/search-bar";
-import { FilterSidebar } from "@/components/products/filter-sidebar";
+import { HorizontalFilters } from "@/components/products/horizontal-filters";
+import { FeaturedProducts } from "@/components/products/featured-products";
 import { SortDropdown } from "@/components/products/sort-dropdown";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, Filter } from "lucide-react";
 import {
   searchProducts,
   getCategories,
@@ -18,6 +20,7 @@ import {
   type SearchFilters,
 } from "@/lib/products/search-actions";
 import { FilterBadges } from "@/components/products/filter-badges";
+import { FilterSidebar } from "@/components/products/filter-sidebar";
 import type { Database } from "@/types/database.types";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
@@ -39,6 +42,7 @@ function ProductsPageContent() {
   const [aiTools, setAITools] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter state from URL
   const [query, setQuery] = useState(searchParams.get("q") || "");
@@ -118,7 +122,6 @@ function ProductsPageContent() {
       const result = await searchProducts(filters);
 
       if (result.products) {
-        // Get vote and comment counts for each product
         const productsWithCounts = result.products as Product[];
         setProducts(productsWithCounts);
         setTotalCount(result.count || 0);
@@ -172,106 +175,161 @@ function ProductsPageContent() {
     selectedAIModels.length > 0 ||
     selectedAITools.length > 0;
 
+  // Get first 3-4 products as featured (placeholder - will be replaced with actual featured logic)
+  const featuredProducts = products.slice(0, 3);
+
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="mb-8 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-black tracking-tight">
-              Discover AI Products
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              {loading ? (
-                "Loading..."
-              ) : (
-                <>
-                  {totalCount} {totalCount === 1 ? "product" : "products"} found
-                  {hasActiveFilters && " matching your filters"}
-                </>
-              )}
-            </p>
+      <div className="bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 border-b">
+        <div className="container mx-auto px-4 py-12">
+          <div className="space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
+                  Discover AI Products
+                </h1>
+                <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mt-3">
+                  {loading ? (
+                    "Loading..."
+                  ) : (
+                    <>
+                      {totalCount} {totalCount === 1 ? "product" : "products"} found
+                      {hasActiveFilters && " matching your filters"}
+                    </>
+                  )}
+                </p>
+              </div>
+              <Button asChild size="lg">
+                <Link href="/products/new">Submit Product</Link>
+              </Button>
+            </div>
+
+            {/* Search Bar */}
+            <SearchBar
+              initialValue={query}
+              onSearch={setQuery}
+              placeholder="Search by name, tagline, or description..."
+            />
           </div>
-          <Button asChild>
-            <Link href="/products/new">Submit Product</Link>
-          </Button>
         </div>
+      </div>
 
-        {/* Search Bar */}
-        <SearchBar
-          initialValue={query}
-          onSearch={setQuery}
-          placeholder="Search by name, tagline, or description..."
-        />
-
-        {/* Sort and Results Count */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <SortDropdown value={sortBy} onChange={(value) => setSortBy(value as typeof sortBy)} />
-        </div>
-
-        {/* Active Filter Badges */}
-        <FilterBadges
-          filters={{
-            query: query || undefined,
-            category: category !== "all" ? categories.find((c) => c.id === category) : undefined,
-            pricing: pricing !== "all" ? pricing : undefined,
-            tags: tags.filter((t) => selectedTags.includes(t.id)),
-            aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
-            aiTools: selectedAITools.length > 0 ? selectedAITools : undefined,
-          }}
-          onRemoveFilter={handleRemoveFilter}
-          onClearAll={handleClearFilters}
+      {/* Desktop Horizontal Filters */}
+      <div className="hidden lg:block">
+        <HorizontalFilters
+          categories={categories}
+          tags={tags}
+          aiModels={aiModels}
+          aiTools={aiTools}
+          selectedCategory={category}
+          selectedPricing={pricing}
+          selectedTags={selectedTags}
+          selectedAIModels={selectedAIModels}
+          selectedAITools={selectedAITools}
+          onCategoryChange={setCategory}
+          onPricingChange={setPricing}
+          onTagsChange={setSelectedTags}
+          onAIModelsChange={setSelectedAIModels}
+          onAIToolsChange={setSelectedAITools}
+          onClearFilters={handleClearFilters}
         />
       </div>
 
-      {/* Main Content with Sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Filters Sidebar */}
-        <aside className="lg:col-span-1">
-          <FilterSidebar
-            categories={categories}
-            tags={tags}
-            aiModels={aiModels}
-            aiTools={aiTools}
-            selectedCategory={category}
-            selectedPricing={pricing}
-            selectedTags={selectedTags}
-            selectedAIModels={selectedAIModels}
-            selectedAITools={selectedAITools}
-            onCategoryChange={setCategory}
-            onPricingChange={setPricing}
-            onTagsChange={setSelectedTags}
-            onAIModelsChange={setSelectedAIModels}
-            onAIToolsChange={setSelectedAITools}
-            onClearFilters={handleClearFilters}
-          />
-        </aside>
-
-        {/* Products Grid */}
-        <div className="lg:col-span-3">
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
-            </div>
-          ) : products.length === 0 ? (
-            <div className="text-center py-20 space-y-4">
-              <div className="text-6xl">🔍</div>
-              <h3 className="text-2xl font-bold">No products found</h3>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                {hasActiveFilters
-                  ? "Try adjusting your filters or search query to find what you're looking for."
-                  : "Be the first to submit a product!"}
-              </p>
-              {hasActiveFilters && (
-                <Button variant="outline" onClick={handleClearFilters}>
-                  Clear All Filters
-                </Button>
-              )}
-            </div>
-          ) : (
-            <ProductList products={products} />
-          )}
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden border-b bg-background sticky top-16 z-40">
+        <div className="container mx-auto px-4 py-3">
+          <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="w-full">
+                <Filter className="mr-2 h-4 w-4" />
+                Filters
+                {hasActiveFilters && (
+                  <span className="ml-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 text-xs font-medium">
+                    Active
+                  </span>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
+              <div className="py-4">
+                <FilterSidebar
+                  categories={categories}
+                  tags={tags}
+                  aiModels={aiModels}
+                  aiTools={aiTools}
+                  selectedCategory={category}
+                  selectedPricing={pricing}
+                  selectedTags={selectedTags}
+                  selectedAIModels={selectedAIModels}
+                  selectedAITools={selectedAITools}
+                  onCategoryChange={setCategory}
+                  onPricingChange={setPricing}
+                  onTagsChange={setSelectedTags}
+                  onAIModelsChange={setSelectedAIModels}
+                  onAIToolsChange={setSelectedAITools}
+                  onClearFilters={handleClearFilters}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8">
+        {/* Sort and Filter Badges */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <SortDropdown value={sortBy} onChange={(value) => setSortBy(value as typeof sortBy)} />
+          <FilterBadges
+            filters={{
+              query: query || undefined,
+              category: category !== "all" ? categories.find((c) => c.id === category) : undefined,
+              pricing: pricing !== "all" ? pricing : undefined,
+              tags: tags.filter((t) => selectedTags.includes(t.id)),
+              aiModels: selectedAIModels.length > 0 ? selectedAIModels : undefined,
+              aiTools: selectedAITools.length > 0 ? selectedAITools : undefined,
+            }}
+            onRemoveFilter={handleRemoveFilter}
+            onClearAll={handleClearFilters}
+          />
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-20 space-y-4">
+            <div className="text-6xl">🔍</div>
+            <h3 className="text-2xl font-bold">No products found</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              {hasActiveFilters
+                ? "Try adjusting your filters or search query to find what you're looking for."
+                : "Be the first to submit a product!"}
+            </p>
+            {hasActiveFilters && (
+              <Button variant="outline" onClick={handleClearFilters}>
+                Clear All Filters
+              </Button>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* Featured Products Section */}
+            {featuredProducts.length > 0 && !hasActiveFilters && (
+              <FeaturedProducts products={featuredProducts} />
+            )}
+
+            {/* All Products Grid */}
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mb-6">
+                {hasActiveFilters ? "Search Results" : "All Products"}
+              </h2>
+              <ProductList products={products} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -282,7 +340,7 @@ export default function ProductsPage() {
     <Suspense fallback={
       <div className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
         </div>
       </div>
     }>

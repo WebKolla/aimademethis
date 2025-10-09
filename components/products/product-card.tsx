@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircleIcon } from "lucide-react";
+import { ArrowUp, MessageCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import type { Database } from "@/types/database.types";
-import { VoteButton } from "./vote-button";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
   categories: { name: string; slug: string } | null;
@@ -15,13 +15,24 @@ type Product = Database["public"]["Tables"]["products"]["Row"] & {
 
 interface ProductCardProps {
   product: Product;
-  showVotes?: boolean;
-  userVoted?: boolean;
 }
 
-export function ProductCard({ product, showVotes = true, userVoted = false }: ProductCardProps) {
+const pricingBadgeClasses = {
+  free: "bg-green-100 dark:bg-green-900/90 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800 backdrop-blur-sm",
+  freemium: "bg-blue-100 dark:bg-blue-900/90 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800 backdrop-blur-sm",
+  paid: "bg-purple-100 dark:bg-purple-900/90 text-purple-800 dark:text-purple-200 border-purple-200 dark:border-purple-800 backdrop-blur-sm",
+  subscription: "bg-orange-100 dark:bg-orange-900/90 text-orange-800 dark:text-orange-200 border-orange-200 dark:border-orange-800 backdrop-blur-sm",
+};
+
+const pricingLabels = {
+  free: "Free",
+  freemium: "Freemium",
+  paid: "Paid",
+  subscription: "Subscription",
+};
+
+export function ProductCard({ product }: ProductCardProps) {
   const {
-    id,
     slug,
     name,
     tagline,
@@ -34,105 +45,93 @@ export function ProductCard({ product, showVotes = true, userVoted = false }: Pr
   } = product;
 
   return (
-    <div className="group h-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-lg">
-      {/* Vote Button - Outside card for click handling */}
-      <div className="flex gap-4 p-6">
-        {showVotes && (
-          <div onClick={(e) => e.stopPropagation()}>
-            <VoteButton
-              productId={id}
-              initialVoted={userVoted}
-              initialCount={upvotes_count || 0}
-              variant="default"
-            />
-          </div>
-        )}
+    <Link href={`/products/${slug}`} className="group block h-full">
+      <div className="h-full rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 transition-all duration-300 hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1">
 
-        {/* Product Content */}
-        <Link href={`/products/${slug}`} className="flex-1">
-          <div>
-        {/* Product Image */}
-        <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900">
+        {/* Image with Overlay Elements */}
+        <div className="relative aspect-video w-full overflow-hidden rounded-t-xl bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-900 dark:to-gray-800">
           {image_url ? (
             <Image
               src={image_url}
               alt={name}
               fill
-              className="object-cover transition-transform group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-gray-400">
-              <span className="text-4xl">🤖</span>
+            <div className="flex h-full items-center justify-center">
+              <span className="text-6xl opacity-50">🤖</span>
+            </div>
+          )}
+
+          {/* Pricing Badge - Top Right Overlay */}
+          {pricing_type && pricing_type in pricingBadgeClasses && (
+            <div className="absolute top-3 right-3">
+              <Badge className={pricingBadgeClasses[pricing_type as keyof typeof pricingBadgeClasses]}>
+                {pricingLabels[pricing_type as keyof typeof pricingLabels]}
+              </Badge>
+            </div>
+          )}
+
+          {/* Category Badge - Bottom Left Overlay */}
+          {categories && (
+            <div className="absolute bottom-3 left-3">
+              <Badge variant="secondary" className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm">
+                {categories.name}
+              </Badge>
             </div>
           )}
         </div>
 
-        {/* Product Info */}
-        <div className="space-y-3">
-          {/* Title & Pricing */}
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-1">
-              {name}
-            </h3>
-            {pricing_type && (
-              <span className="inline-flex shrink-0 items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-800 dark:text-green-300">
-                {pricing_type === "free"
-                  ? "Free"
-                  : pricing_type === "freemium"
-                  ? "Freemium"
-                  : pricing_type === "paid"
-                  ? "Paid"
-                  : "Subscription"}
-              </span>
-            )}
-          </div>
+        {/* Card Content */}
+        <div className="p-5 space-y-4">
+
+          {/* Title */}
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 line-clamp-2 leading-tight tracking-tight">
+            {name}
+          </h3>
 
           {/* Tagline */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{tagline}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+            {tagline}
+          </p>
 
-          {/* Metadata */}
-          <div className="flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-3 text-sm text-gray-500 dark:text-gray-500">
-            {/* Category */}
-            {categories && (
-              <span className="inline-flex items-center gap-1">
-                <span className="text-xs">📁</span>
-                {categories.name}
+          {/* Footer: Creator + Stats */}
+          <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800">
+
+            {/* Creator */}
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className="relative h-6 w-6 rounded-full overflow-hidden flex-shrink-0">
+                {profiles?.avatar_url ? (
+                  <Image
+                    src={profiles.avatar_url}
+                    alt={profiles.username}
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-emerald-400 to-teal-400" />
+                )}
+              </div>
+              <span className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                {profiles?.username}
               </span>
-            )}
+            </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1">
-                <MessageCircleIcon className="h-4 w-4" />
-                {comments_count}
-              </span>
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-500">
+                <ArrowUp className="h-4 w-4" />
+                <span className="text-sm font-medium">{upvotes_count}</span>
+              </div>
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-500">
+                <MessageCircle className="h-4 w-4" />
+                <span className="text-sm font-medium">{comments_count}</span>
+              </div>
             </div>
           </div>
-
-          {/* Creator */}
-          {profiles && (
-            <div className="flex items-center gap-2 border-t border-gray-100 dark:border-gray-800 pt-3">
-              {profiles.avatar_url ? (
-                <Image
-                  src={profiles.avatar_url}
-                  alt={profiles.username}
-                  width={24}
-                  height={24}
-                  className="rounded-full"
-                />
-              ) : (
-                <div className="h-6 w-6 rounded-full bg-teal-100 dark:bg-teal-900/30" />
-              )}
-              <span className="text-sm text-gray-600 dark:text-gray-400">
-                by {profiles.username}
-              </span>
-            </div>
-          )}
         </div>
-          </div>
-        </Link>
       </div>
-    </div>
+    </Link>
   );
 }

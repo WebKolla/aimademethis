@@ -137,17 +137,37 @@ Authentication is handled by Supabase Auth with:
 
 ## 📱 Features
 
-### MVP Features
-- ✅ Product listing and discovery
-- ✅ User authentication (Supabase Auth)
-- ✅ Product submission
-- ✅ Search and filters
-- ✅ User profiles
-- ⏳ Reviews and ratings (database ready)
-- ⏳ Upvotes/downvotes (database ready)
-- ⏳ Bookmarks (database ready)
+For a comprehensive list of all 100+ platform features, see **[FEATURES.md](./FEATURES.md)**. This document includes:
 
-### SEO Optimization
+- **11 Major Categories**: Authentication, Profiles, Products, Discovery, Community, Dashboard, Notifications, Content, Design, SEO, Admin
+- **100+ Features**: All documented with implementation status and technical details
+- **Status Indicators**: ✅ Fully Implemented, 🚧 In Progress, 📋 Planned, 💭 Future
+- **Sub-features**: Detailed breakdown of each major feature with all components and capabilities
+
+### Key Features at a Glance
+
+#### Core Platform
+- ✅ **Authentication**: Email/password + OAuth (Google, GitHub)
+- ✅ **User Profiles**: Profile pages, avatar upload, bio, social links, follow system
+- ✅ **Product Management**: Comprehensive submission form, listing, detail pages, edit/delete
+- ✅ **Discovery**: Advanced search, 10 categories, tag system, multiple sort options
+
+#### Community Features
+- ✅ **Voting System**: Upvote/downvote products with optimistic updates
+- ✅ **Reviews & Ratings**: 5-star ratings with text reviews
+- ✅ **Comments**: Threaded discussions with nested replies
+- ✅ **Bookmarks**: Save products for later
+- ✅ **Notifications**: Real-time updates with bell icon and unread counts
+- ✅ **Following**: Follow users and see their activity
+
+#### Dashboard & Analytics
+- ✅ **Modern Dashboard**: Sidebar layout with stats and quick actions
+- ✅ **Product Management**: My Products page with status filters
+- ✅ **Settings**: Profile editing, avatar upload
+- ✅ **Bookmarks**: Manage saved products
+- ✅ **Social**: Followers/Following lists
+
+#### SEO & Performance
 - ✅ Next.js Metadata API for dynamic SEO
 - ✅ Open Graph and Twitter Card tags
 - ✅ JSON-LD structured data
@@ -190,6 +210,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX (optional)
 4. **SEO Metadata**: `app/layout.tsx`
 5. **Sitemap**: `app/sitemap.ts`
 6. **Design Guidelines**: `DESIGN_GUIDELINES.md` - Complete design system documentation
+7. **Features Documentation**: `FEATURES.md` - Comprehensive list of all platform features
 
 ## 🧪 Development Tips
 
@@ -286,6 +307,7 @@ MIT License - feel free to use this project for your own purposes.
 
 ## 🔗 Links
 
+- **[Features Documentation](./FEATURES.md)** - Comprehensive list of all platform features
 - **[Design Guidelines](./DESIGN_GUIDELINES.md)** - Complete design system documentation
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Supabase Documentation](https://supabase.com/docs)
