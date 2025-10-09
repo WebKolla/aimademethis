@@ -3,6 +3,8 @@ import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Package, TrendingUp, Eye, Plus } from "lucide-react";
+import { getActivityFeed } from "@/lib/activity/actions";
+import { ActivityFeed } from "@/components/activity/activity-feed";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -48,6 +50,9 @@ export default async function DashboardPage() {
       .in("product_id", productIds);
     totalVotes = count || 0;
   }
+
+  // Get activity feed from followed users
+  const { activities } = await getActivityFeed(10);
 
   return (
     <DashboardLayout>
@@ -122,7 +127,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Products */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6 mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Recent Products</h2>
           {products && products.length > 0 ? (
             <div className="space-y-3">
@@ -167,6 +172,12 @@ export default async function DashboardPage() {
               </Button>
             </div>
           )}
+        </div>
+
+        {/* Activity Feed */}
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6">
+          <h2 className="text-xl font-semibold text-white mb-4">Recent Activity</h2>
+          <ActivityFeed activities={activities || []} />
         </div>
       </div>
     </DashboardLayout>
