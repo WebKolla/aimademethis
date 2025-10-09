@@ -1,16 +1,28 @@
 # AIMadeThis - AI Product Discovery Platform
 
-A community-driven platform for discovering, sharing, and discussing AI products built by innovators worldwide.
+A community-driven platform for discovering, sharing, and discussing AI-built products. Connect with creators, discover innovative AI projects, and join a thriving community of AI builders and enthusiasts.
+
+**Production URL**: [aimademethis.vercel.app](https://aimademethis.vercel.app)
+
+## ✨ Platform Highlights
+
+- 🎯 **Product Discovery**: Advanced search, filtering by categories, tags, AI models, and tools
+- 👥 **Social Features**: Follow creators, like products, comment with threading, and get real-time notifications
+- 📊 **Analytics Dashboard**: Track your products, engagement metrics, and community activity
+- 🔔 **Smart Notifications**: Real-time updates for upvotes, comments, follows, and product updates
+- 📱 **Responsive Design**: Fully optimized for desktop, tablet, and mobile with dark mode support
+- 🚀 **Performance**: Built with Next.js 15 + Turbopack for blazing-fast performance
 
 ## 🚀 Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 15 (App Router) with Turbopack
 - **Database**: Supabase (PostgreSQL + Auth + Storage + Realtime)
-- **Styling**: TailwindCSS + shadcn/ui
+- **Styling**: TailwindCSS v4 + shadcn/ui components
 - **State Management**: React Query (@tanstack/react-query)
-- **Forms**: React Hook Form + Zod
-- **Type Safety**: TypeScript
-- **Deployment**: Vercel (recommended)
+- **Forms**: React Hook Form + Zod validation
+- **Email**: Resend (for contact form and notifications)
+- **Type Safety**: TypeScript with strict mode
+- **Deployment**: Vercel
 
 ## 🏗️ Project Structure
 
@@ -177,6 +189,7 @@ NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX (optional)
 3. **Type Definitions**: `types/database.types.ts`
 4. **SEO Metadata**: `app/layout.tsx`
 5. **Sitemap**: `app/sitemap.ts`
+6. **Design Guidelines**: `DESIGN_GUIDELINES.md` - Complete design system documentation
 
 ## 🧪 Development Tips
 
@@ -220,7 +233,18 @@ npm run build
 - `GET /api/products/[id]` - Get product details
 - `POST /api/upload` - Upload images to Supabase Storage
 
-## 🎨 Customization
+## 🎨 Design System
+
+The project uses a comprehensive design system. See **[DESIGN_GUIDELINES.md](./DESIGN_GUIDELINES.md)** for:
+
+- **Color System**: Emerald-to-teal gradients, light/dark mode palettes
+- **Typography**: Inter (body) + Space Grotesk (headings) with complete type scale
+- **Components**: Buttons, cards, forms, navigation with all variants
+- **Layout Patterns**: Grid systems, responsive breakpoints, section layouts
+- **Animation**: Framer Motion patterns, CSS animations, timing guidelines
+- **Accessibility**: WCAG 2.1 AA compliance, keyboard navigation, ARIA labels
+- **Icons**: Lucide React icons with sizing and usage guidelines
+- **Best Practices**: Do's/don'ts, common patterns, anti-patterns
 
 ### Theme Colors
 
@@ -228,19 +252,22 @@ Edit `app/globals.css` to customize the color scheme:
 
 ```css
 :root {
-  --primary: 262 83% 58%; /* Purple gradient */
-  --secondary: 210 40% 96.1%;
-  /* ... other colors */
+  --primary: 160 84% 39%; /* Emerald-600 */
+  --accent: 158 64% 52%; /* Teal */
+  /* ... see DESIGN_GUIDELINES.md for complete palette */
 }
 ```
 
 ### Fonts
 
-Change fonts in `app/layout.tsx`:
+Fonts are defined in `app/globals.css`:
 
-```typescript
-const inter = Inter({ subsets: ["latin"] });
-const poppins = Poppins({ weight: ["400", "700"] });
+```css
+/* Body */
+font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+/* Headings */
+font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 ```
 
 ## 🤝 Contributing
@@ -259,6 +286,7 @@ MIT License - feel free to use this project for your own purposes.
 
 ## 🔗 Links
 
+- **[Design Guidelines](./DESIGN_GUIDELINES.md)** - Complete design system documentation
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Supabase Documentation](https://supabase.com/docs)
 - [shadcn/ui Documentation](https://ui.shadcn.com)

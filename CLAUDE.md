@@ -135,6 +135,26 @@ npx supabase link --project-ref your-project-ref
 npx supabase gen types typescript --linked > types/database.types.ts
 ```
 
+## Design System
+
+The project has a comprehensive design system documented in **[DESIGN_GUIDELINES.md](/DESIGN_GUIDELINES.md)**. This is the single source of truth for all design decisions.
+
+**Key Guidelines:**
+- **Colors**: Emerald-to-teal gradient signature (HSL tokens in globals.css)
+- **Typography**: Inter (body) + Space Grotesk (headings) with -0.02em letter spacing
+- **Components**: shadcn/ui with custom styling (see DESIGN_GUIDELINES.md for variants)
+- **Animations**: Framer Motion for page transitions, smooth hover effects
+- **Dark Mode**: next-themes with automatic system detection
+- **Accessibility**: WCAG 2.1 AA compliance, keyboard navigation, ARIA labels
+- **Icons**: Lucide React with consistent sizing (h-4 w-4 for buttons, h-5 w-5 for nav)
+
+**Before designing/coding new UI:**
+1. Check DESIGN_GUIDELINES.md for existing patterns
+2. Use established color tokens (never hardcode colors)
+3. Follow spacing scale (4px increments: 4, 8, 12, 16, 24, 32, etc.)
+4. Test in both light and dark modes
+5. Verify accessibility (focus states, contrast ratios, ARIA labels)
+
 ## Adding UI Components
 
 Use shadcn/ui CLI:
@@ -145,6 +165,12 @@ npx shadcn@latest add card
 ```
 
 Components are installed to `components/ui/` with full source code (not imported from a package).
+
+**After adding components:**
+- Customize according to DESIGN_GUIDELINES.md
+- Apply emerald/teal colors for primary actions
+- Ensure dark mode compatibility
+- Add proper TypeScript types
 
 ## Middleware & Route Protection
 
@@ -267,6 +293,7 @@ For detailed breakdown, see: `/docs/implementation/Phase 4/work-remaining.md`
 - Full Polish: 30.5-39 hours remaining (8-10 sessions)
 
 ### Key Documentation
+- **Design Guidelines:** `/DESIGN_GUIDELINES.md` - **Complete design system (START HERE for UI work)**
 - **PRD:** `/docs/PRD.md` - Complete product requirements
 - **Work Remaining:** `/docs/implementation/Phase 4/work-remaining.md` - Detailed task breakdown
 - **Phase 3 Summary:** `/docs/implementation/Phase 3/DASHBOARD_REDESIGN_SUMMARY.md`
