@@ -46,6 +46,13 @@ export function PricingPageClient() {
     return Math.round((savings / monthlyCost) * 100);
   };
 
+  // Calculate the maximum savings across all paid plans
+  const maxYearlySavings = Math.max(
+    ...PRICING_TIERS.filter((tier) => tier.priceMonthly > 0).map((tier) =>
+      yearlyDiscount(tier.priceMonthly, tier.priceYearly)
+    )
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
       {/* Hero Section */}
@@ -109,8 +116,10 @@ export function PricingPageClient() {
             >
               Yearly
             </span>
-            {billingCycle === "yearly" && (
-              <Badge className="bg-emerald-500 text-white">Save 17%</Badge>
+            {billingCycle === "yearly" && maxYearlySavings > 0 && (
+              <Badge className="bg-emerald-500 text-white">
+                Save up to {maxYearlySavings}%
+              </Badge>
             )}
           </div>
         </motion.div>

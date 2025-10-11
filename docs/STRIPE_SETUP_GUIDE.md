@@ -262,7 +262,64 @@ You should see your test subscription!
 
 ---
 
-## Part 4: Testing Scenarios
+## Part 4: Trial Period Logic
+
+The system implements smart trial eligibility to prevent abuse:
+
+### Trial Eligibility Rules
+
+**14-day free trial is automatically offered when:**
+1. ✅ User subscribes to **Pro plan** (not Pro Plus or Free)
+2. ✅ User has **never had a trial before** (tracked in database)
+3. ✅ User has **no existing subscription**
+
+**Trial is NOT offered when:**
+- ❌ User subscribes to Pro Plus plan (premium tier, no trial)
+- ❌ User has had a trial before (prevents abuse)
+- ❌ User already has an active subscription (upgrade scenario)
+
+### How It Works
+
+The checkout session creation (`lib/subscription/actions.ts:129-138`) checks:
+
+```typescript
+// Check subscription history including trial usage
+const { data: existingSubscription } = await supabase
+  .from("subscriptions")
+  .select("stripe_customer_id, trial_start, trial_end")
+  .eq("user_id", user.id)
+  .single();
+
+// Determine eligibility
+const hasHadTrial = existingSubscription?.trial_start != null;
+const isEligibleForTrial =
+  input.planName === "pro" &&
+  !hasHadTrial &&
+  !existingSubscription;
+```
+
+This prevents:
+- Multiple trial abuse (user cancels and re-subscribes for another trial)
+- Trial on premium plans (Pro Plus should convert immediately)
+- Trial conflicts with existing subscriptions
+
+### Testing Trials
+
+1. **Test eligible user** (should get trial):
+   - New user
+   - No subscription history
+   - Subscribes to Pro plan
+   - Should see "Start 14-day trial" in Stripe Checkout
+
+2. **Test ineligible user** (should NOT get trial):
+   - Create a subscription with trial
+   - Cancel it
+   - Try to subscribe again
+   - Should go straight to paid subscription
+
+---
+
+## Part 5: Testing Scenarios
 
 ### Test Card Numbers
 

@@ -119,12 +119,23 @@ export async function createCheckoutSession(
       return { error: "Price not configured for this plan" };
     }
 
-    // Check if user already has a Stripe customer ID
+    // Check if user already has a Stripe customer ID and subscription history
     const { data: existingSubscription } = await supabase
       .from("subscriptions")
-      .select("stripe_customer_id")
+      .select("stripe_customer_id, trial_start, trial_end")
       .eq("user_id", user.id)
       .single();
+
+    // Determine if user is eligible for trial
+    // Trial eligibility rules:
+    // 1. Only for Pro plan (not Pro Plus or Free)
+    // 2. User has never had a trial before (trial_start is null)
+    // 3. User doesn't have an active subscription
+    const hasHadTrial = existingSubscription?.trial_start != null;
+    const isEligibleForTrial =
+      input.planName === "pro" &&
+      !hasHadTrial &&
+      !existingSubscription;
 
     // Build base URL
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -153,8 +164,8 @@ export async function createCheckoutSession(
           plan_name: input.planName,
           billing_cycle: input.billingCycle,
         },
-        // Optional: Add 14-day trial for new subscribers
-        trial_period_days: existingSubscription ? undefined : 14,
+        // 14-day trial only for first-time Pro plan subscribers
+        trial_period_days: isEligibleForTrial ? 14 : undefined,
       },
       allow_promotion_codes: true,
     });
