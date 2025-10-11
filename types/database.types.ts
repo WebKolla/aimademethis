@@ -585,6 +585,178 @@ export type Database = {
           },
         ]
       }
+      subscription_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_name: string
+          features: Json
+          id: string
+          is_active: boolean
+          limits: Json
+          name: string
+          price_monthly: number
+          price_yearly: number | null
+          sort_order: number
+          stripe_price_id_monthly: string | null
+          stripe_price_id_yearly: string | null
+          stripe_product_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_name: string
+          features?: Json
+          id?: string
+          is_active?: boolean
+          limits?: Json
+          name: string
+          price_monthly?: number
+          price_yearly?: number | null
+          sort_order?: number
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_name?: string
+          features?: Json
+          id?: string
+          is_active?: boolean
+          limits?: Json
+          name?: string
+          price_monthly?: number
+          price_yearly?: number | null
+          sort_order?: number
+          stripe_price_id_monthly?: string | null
+          stripe_price_id_yearly?: string | null
+          stripe_product_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscription_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          status: string
+          stripe_charge_id: string | null
+          stripe_invoice_id: string | null
+          stripe_payment_intent_id: string | null
+          subscription_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status: string
+          stripe_charge_id?: string | null
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subscription_id: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          status?: string
+          stripe_charge_id?: string | null
+          stripe_invoice_id?: string | null
+          stripe_payment_intent_id?: string | null
+          subscription_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_transactions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          billing_cycle: string
+          cancel_at_period_end: boolean
+          canceled_at: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          trial_end: string | null
+          trial_start: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          billing_cycle?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          billing_cycle?: string
+          cancel_at_period_end?: boolean
+          canceled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tags: {
         Row: {
           created_at: string | null
@@ -603,6 +775,45 @@ export type Database = {
           id?: string
           name?: string
           slug?: string
+        }
+        Relationships: []
+      }
+      usage_tracking: {
+        Row: {
+          created_at: string
+          feature_name: string
+          id: string
+          limit_count: number | null
+          metadata: Json | null
+          period_end: string
+          period_start: string
+          updated_at: string
+          usage_count: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feature_name: string
+          id?: string
+          limit_count?: number | null
+          metadata?: Json | null
+          period_end: string
+          period_start?: string
+          updated_at?: string
+          usage_count?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feature_name?: string
+          id?: string
+          limit_count?: number | null
+          metadata?: Json | null
+          period_end?: string
+          period_start?: string
+          updated_at?: string
+          usage_count?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -650,6 +861,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_usage_limit: {
+        Args: { p_feature_name: string; p_user_id: string }
+        Returns: boolean
+      }
       create_notification: {
         Args: {
           p_actor_id?: string
@@ -672,6 +887,24 @@ export type Database = {
         Args: { product_id: string }
         Returns: undefined
       }
+      get_user_subscription: {
+        Args: { p_user_id?: string }
+        Returns: {
+          billing_cycle: string
+          cancel_at_period_end: boolean
+          current_period_end: string
+          is_trial: boolean
+          plan_display_name: string
+          plan_features: Json
+          plan_id: string
+          plan_limits: Json
+          plan_name: string
+          status: string
+          subscription_id: string
+          trial_end: string
+          user_id: string
+        }[]
+      }
       increment_comment_count: {
         Args: { product_id: string }
         Returns: undefined
@@ -683,6 +916,14 @@ export type Database = {
       increment_upvotes: {
         Args: { product_id: string }
         Returns: undefined
+      }
+      increment_usage: {
+        Args: {
+          p_feature_name: string
+          p_increment?: number
+          p_user_id: string
+        }
+        Returns: boolean
       }
     }
     Enums: {
