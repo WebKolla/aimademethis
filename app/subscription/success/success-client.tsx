@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Sparkles, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,48 +46,73 @@ export function SubscriptionSuccessClient() {
       >
         <Card className="border-2 border-emerald-500/20 shadow-2xl">
           <CardHeader className="text-center space-y-6 pt-12">
-            {isActivating ? (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
-              >
-                <Loader2 className="h-10 w-10 text-white animate-spin" />
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
-              >
-                <CheckCircle2 className="h-10 w-10 text-white" />
-              </motion.div>
-            )}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
+              className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isActivating ? "loading" : "success"}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isActivating ? (
+                    <Loader2 className="h-10 w-10 text-white animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-10 w-10 text-white" />
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
 
-            <div className="space-y-2">
-              <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
-                {isActivating ? "Activating Your Subscription" : "Welcome to Pro!"}
-              </CardTitle>
-              <p className="text-slate-600 dark:text-slate-400 text-lg">
-                {isActivating
-                  ? "We're setting up your account with all the premium features..."
-                  : "Your subscription has been successfully activated"}
-              </p>
-            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isActivating ? "loading-text" : "success-text"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2"
+              >
+                <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                  {isActivating ? "Activating Your Subscription" : "Welcome to Pro!"}
+                </CardTitle>
+                <p className="text-slate-600 dark:text-slate-400 text-lg">
+                  {isActivating
+                    ? "We're setting up your account with all the premium features..."
+                    : "Your subscription has been successfully activated"}
+                </p>
+              </motion.div>
+            </AnimatePresence>
 
-            {!isActivating && subscription && (
-              <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 text-base">
-                <Sparkles className="h-4 w-4 mr-2" />
-                {subscription.planDisplayName} Plan Active
-              </Badge>
-            )}
+            <AnimatePresence>
+              {!isActivating && subscription && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 text-base">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    {subscription.planDisplayName} Plan Active
+                  </Badge>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </CardHeader>
 
           <CardContent className="space-y-8 pb-12">
-            {!isActivating && subscription && (
-              <>
+            <AnimatePresence>
+              {!isActivating && subscription && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
                 {/* Subscription Details */}
                 <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 space-y-4">
                   <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -160,8 +185,9 @@ export function SubscriptionSuccessClient() {
                     </a>
                   </p>
                 </div>
-              </>
-            )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {isActivating && (
               <div className="text-center space-y-4">
