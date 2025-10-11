@@ -92,7 +92,7 @@ export function SubscriptionSuccessClient() {
                 <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 space-y-4">
                   <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                    What's Included
+                    What&apos;s Included
                   </h3>
                   <ul className="space-y-3">
                     {subscription.planFeatures.slice(0, 5).map((feature) => (
@@ -120,7 +120,7 @@ export function SubscriptionSuccessClient() {
                         day: "numeric",
                         year: "numeric",
                       })}
-                      . You won't be charged until then.
+                      . You won&apos;t be charged until then.
                     </p>
                   </div>
                 )}
@@ -128,7 +128,7 @@ export function SubscriptionSuccessClient() {
                 {/* Next Steps */}
                 <div className="space-y-4">
                   <h3 className="font-bold text-slate-900 dark:text-white">
-                    What's Next?
+                    What&apos;s Next?
                   </h3>
                   <div className="grid gap-3 sm:grid-cols-2">
                     <Button
