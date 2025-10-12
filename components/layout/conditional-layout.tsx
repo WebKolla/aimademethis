@@ -4,7 +4,27 @@ import { usePathname } from 'next/navigation'
 import { Navbar } from './navbar'
 import { Footer } from './footer'
 
-export function ConditionalLayout({ children }: { children: React.ReactNode }) {
+interface FooterCategory {
+  slug: string;
+  name: string;
+}
+
+interface FooterProduct {
+  slug: string;
+  name: string;
+}
+
+interface ConditionalLayoutProps {
+  children: React.ReactNode;
+  footerCategories?: FooterCategory[];
+  footerProducts?: FooterProduct[];
+}
+
+export function ConditionalLayout({
+  children,
+  footerCategories = [],
+  footerProducts = []
+}: ConditionalLayoutProps) {
   const pathname = usePathname()
 
   // Hide navbar and footer on dashboard and auth pages
@@ -19,7 +39,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     <>
       <Navbar />
       {children}
-      <Footer />
+      <Footer categories={footerCategories} products={footerProducts} />
     </>
   )
 }

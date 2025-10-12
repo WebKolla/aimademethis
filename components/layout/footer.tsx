@@ -2,11 +2,27 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { Flame } from "lucide-react";
 
-export function Footer() {
+interface FooterCategory {
+  slug: string;
+  name: string;
+}
+
+interface FooterProduct {
+  slug: string;
+  name: string;
+}
+
+interface FooterProps {
+  categories?: FooterCategory[];
+  products?: FooterProduct[];
+}
+
+export function Footer({ categories = [], products = [] }: FooterProps = {}) {
+
   return (
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand */}
           <div className="space-y-4">
             <Logo textClassName="text-lg tracking-tight" variant="gradient" />
@@ -48,32 +64,58 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Popular Categories */}
+          {categories.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">Popular Categories</h4>
+              <ul className="space-y-2 text-sm">
+                {categories.map((category) => (
+                  <li key={category.slug}>
+                    <Link
+                      href={`/products?category=${category.slug}`}
+                      className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    >
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Trending Products */}
+          {products.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">Trending Now</h4>
+              <ul className="space-y-2 text-sm">
+                {products.map((product) => (
+                  <li key={product.slug}>
+                    <Link
+                      href={`/products/${product.slug}`}
+                      className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    >
+                      {product.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Legal & Resources */}
           <div>
-            <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">Resources</h4>
+            <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/about" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   About
                 </Link>
               </li>
-              {/* <li>
-                <Link href="/blog" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                  Blog
+              <li>
+                <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                  Contact
                 </Link>
               </li>
-              <li>
-                <Link href="/api" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                  API
-                </Link>
-              </li> */}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="font-semibold mb-4 text-gray-900 dark:text-gray-100">Legal</h4>
-            <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/privacy" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Privacy Policy
@@ -82,11 +124,6 @@ export function Footer() {
               <li>
                 <Link href="/terms" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                  Contact
                 </Link>
               </li>
             </ul>

@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { ConditionalLayout } from "@/components/layout/conditional-layout";
+import { createClient } from "@/lib/supabase/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -90,17 +91,40 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch footer data for SEO internal linking
+  const supabase = await createClient();
+
+  const [categoriesResult, productsResult] = await Promise.all([
+    supabase
+      .from("categories")
+      .select("slug, name")
+      .order("name", { ascending: true })
+      .limit(5),
+    supabase
+      .from("products")
+      .select("slug, name")
+      .eq("status", "published")
+      .order("trending_score", { ascending: false })
+      .limit(3),
+  ]);
+
+  const footerCategories = categoriesResult.data || [];
+  const footerProducts = productsResult.data || [];
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className={`${inter.variable} ${poppins.variable} antialiased`} suppressHydrationWarning>
         <Providers>
-          <ConditionalLayout>
+          <ConditionalLayout
+            footerCategories={footerCategories}
+            footerProducts={footerProducts}
+          >
             {children}
           </ConditionalLayout>
         </Providers>

@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "filter AI products",
     "Submit SAAS product to directory",
   ],
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'}/products`,
+  },
   openGraph: {
     title: "Browse AI Products | AIMMT",
     description: "Discover hundreds of innovative AI products. Advanced filtering and search.",
