@@ -160,6 +160,38 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_product_history: {
+        Row: {
+          created_at: string | null
+          featured_at: string
+          featured_until: string
+          id: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          featured_at?: string
+          featured_until: string
+          id?: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string | null
+          featured_at?: string
+          featured_until?: string
+          id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "featured_product_history_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follows: {
         Row: {
           created_at: string | null
