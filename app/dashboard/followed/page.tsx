@@ -19,7 +19,7 @@ export default async function FollowedProductsPage() {
       <div className="p-4 md:p-8 space-y-6">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <Bell className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+          <Bell className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
           <div>
             <h1 className="text-3xl font-bold">Followed Products</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
@@ -63,12 +63,12 @@ export default async function FollowedProductsPage() {
             <p className="text-gray-500 dark:text-gray-400 mb-6">
               Follow products to get notified about updates
             </p>
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+            <Button
+              asChild
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg"
             >
-              Browse Products
-            </Link>
+              <Link href="/products">Browse Products</Link>
+            </Button>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

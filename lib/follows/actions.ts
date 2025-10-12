@@ -369,6 +369,9 @@ export async function unfollowProduct(productId: string) {
     return { error: "Not authenticated" };
   }
 
+  // Note: No subscription check - allow users to unfollow even if downgraded
+  // This ensures users can manage their existing follows after subscription changes
+
   const { error } = await supabase
     .from("follows")
     .delete()
