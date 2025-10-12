@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Crown, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 
@@ -21,13 +21,20 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
+// Icon mapping for pricing plans
+const iconComponents: Record<string, LucideIcon> = {
+  Zap: Zap,
+  Sparkles: Sparkles,
+  Crown: Crown,
+};
+
 interface PlanData {
   name: string;
   displayName: string;
   price: string;
   period: string;
   description: string;
-  icon: LucideIcon;
+  iconName: string;
   iconColor: string;
   features: string[];
   cta: string;
@@ -44,6 +51,12 @@ export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProp
   if (plans.length === 0) {
     return null;
   }
+
+  // Transform plans to include icon components
+  const plansWithIcons = plans.map(plan => ({
+    ...plan,
+    icon: iconComponents[plan.iconName] || Sparkles,
+  }));
 
   return (
     <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 relative overflow-hidden">
@@ -95,7 +108,7 @@ export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProp
 
           {/* Pricing Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {plans.map((plan) => (
+            {plansWithIcons.map((plan) => (
               <motion.div
                 key={plan.name}
                 variants={item}

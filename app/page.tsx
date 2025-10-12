@@ -1,7 +1,5 @@
 import { HomePageClient } from "./_components/home-page-client";
 import { createClient } from "@/lib/supabase/server";
-import type { LucideIcon } from "lucide-react";
-import { Crown, Sparkles, Zap } from "lucide-react";
 
 interface PlanData {
   name: string;
@@ -9,7 +7,7 @@ interface PlanData {
   price: string;
   period: string;
   description: string;
-  icon: LucideIcon;
+  iconName: string;
   iconColor: string;
   features: string[];
   cta: string;
@@ -18,11 +16,11 @@ interface PlanData {
   badge?: string;
 }
 
-// Icon mapping based on plan name
-const iconMap: Record<string, LucideIcon> = {
-  free: Zap,
-  pro: Sparkles,
-  pro_plus: Crown,
+// Icon name mapping based on plan name
+const iconMap: Record<string, string> = {
+  free: "Zap",
+  pro: "Sparkles",
+  pro_plus: "Crown",
 };
 
 // Icon color mapping
@@ -116,7 +114,7 @@ export default async function HomePage() {
         price: priceDisplay,
         period,
         description: plan.description || "",
-        icon: iconMap[planName] || Sparkles,
+        iconName: iconMap[planName] || "Sparkles",
         iconColor: iconColorMap[planName] || "from-emerald-500 to-teal-500",
         features: featureList,
         cta,

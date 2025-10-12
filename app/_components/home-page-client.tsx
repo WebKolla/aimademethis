@@ -19,10 +19,18 @@ import {
   Check,
   Mail,
   CheckCircle2,
+  Crown,
 } from "lucide-react";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 import { PricingSectionHomeClient } from "@/components/pricing/pricing-section-home-client";
 import type { LucideIcon } from "lucide-react";
+
+// Icon mapping for pricing plans
+const iconComponents: Record<string, LucideIcon> = {
+  Zap: Zap,
+  Sparkles: Sparkles,
+  Crown: Crown,
+};
 
 const container = {
   hidden: { opacity: 0 },
@@ -101,7 +109,7 @@ interface PlanData {
   price: string;
   period: string;
   description: string;
-  icon: LucideIcon;
+  iconName: string;
   iconColor: string;
   features: string[];
   cta: string;
@@ -115,6 +123,11 @@ interface HomePageClientProps {
 }
 
 export function HomePageClient({ plans }: HomePageClientProps) {
+  // Transform plans to include icon components
+  const plansWithIcons = plans.map(plan => ({
+    ...plan,
+    icon: iconComponents[plan.iconName] || Sparkles,
+  }));
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       <main className="flex-1">
@@ -384,7 +397,7 @@ export function HomePageClient({ plans }: HomePageClientProps) {
         </section>
 
         {/* Pricing Section */}
-        <PricingSectionHomeClient plans={plans} />
+        <PricingSectionHomeClient plans={plansWithIcons} />
 
         {/* Newsletter Section */}
         <section className="py-20 md:py-24 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 relative overflow-hidden">
