@@ -13,8 +13,8 @@ import { Button } from '@/components/ui/button'
  */
 export function UpgradePrompt() {
   return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <Card className="max-w-md text-center">
+    <div className="flex items-center justify-center min-h-[60vh] p-4 md:p-6 lg:p-8">
+      <Card className="max-w-md text-center w-full">
         <CardHeader>
           <Sparkles className="mx-auto h-12 w-12 text-primary" />
           <CardTitle className="text-2xl mt-4">Unlock Badge Generator</CardTitle>

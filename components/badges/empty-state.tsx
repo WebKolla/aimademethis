@@ -15,7 +15,7 @@ export function EmptyState() {
   const exampleBadgeUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'}/api/badge/example?variant=pro&size=medium&theme=light`
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] py-8">
+    <div className="flex items-center justify-center min-h-[60vh] p-4 md:p-6 lg:p-8">
       <div className="max-w-3xl w-full space-y-6">
         {/* Main Empty State Card */}
         <Card className="text-center border-dashed">
