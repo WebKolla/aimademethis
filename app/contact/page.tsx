@@ -76,14 +76,7 @@ const contactMethods = [
     description: "Updates and announcements",
     value: "@aimademethis",
     link: "https://twitter.com/aimademethis",
-  },
-  {
-    icon: Github,
-    title: "Open Source",
-    description: "Contribute to the project",
-    value: "github.com/aimademethis",
-    link: "https://github.com/aimademethis",
-  },
+  }
 ];
 
 export default function ContactPage() {

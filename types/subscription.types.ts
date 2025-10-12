@@ -244,6 +244,7 @@ export const PRICING_TIERS: PricingTier[] = [
     priceMonthly: 6.99,
     priceYearly: 70,
     features: [
+      "All from Basic, and",
       "Everything in Basic, plus:",
       "10 product submissions",
       "Advanced analytics dashboard",
@@ -267,6 +268,7 @@ export const PRICING_TIERS: PricingTier[] = [
     priceMonthly: 16.99,
     priceYearly: 170,
     features: [
+      "All from Pro, and",
       "Everything in Pro, plus:",
       "Unlimited product submissions",
       "1 featured product placement per month",
