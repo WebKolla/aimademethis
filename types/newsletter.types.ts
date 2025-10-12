@@ -36,7 +36,7 @@ export interface NewsletterSubscription {
   consent_ip: string | null;
   user_agent: string | null;
   unsubscribe_token: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   created_at: string | null;
   updated_at: string | null;
 }

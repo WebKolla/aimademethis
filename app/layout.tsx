@@ -3,8 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
+import { ConditionalLayout } from "@/components/layout/conditional-layout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -90,9 +89,9 @@ export default function RootLayout({
       <head />
       <body className={`${inter.variable} ${poppins.variable} antialiased`} suppressHydrationWarning>
         <Providers>
-          <Navbar />
-          {children}
-          <Footer />
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
         </Providers>
 
         {/* JSON-LD Structured Data - Website */}

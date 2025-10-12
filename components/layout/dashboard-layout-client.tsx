@@ -24,14 +24,14 @@ export function DashboardLayoutClient({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-950">
+    <div className="flex min-h-screen bg-gray-950">
       {/* Desktop Sidebar - Hidden on mobile/tablet */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:block sticky top-0 h-screen overflow-y-auto">
         <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col">
         {/* Mobile/Tablet Header with Hamburger */}
         <div className="lg:hidden flex items-center gap-4 border-b border-gray-800 bg-gray-900 p-4">
           <Sheet open={open} onOpenChange={setOpen}>
@@ -55,7 +55,7 @@ export function DashboardLayoutClient({
         </div>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

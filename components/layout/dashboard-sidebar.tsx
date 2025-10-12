@@ -88,7 +88,7 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
   const isProPlus = subscription?.planName === "pro_plus";
 
   return (
-    <div className="flex h-full w-64 flex-col border-r bg-gray-900">
+    <div className="flex min-h-screen w-64 flex-col border-r bg-gray-900">
       {/* Logo/Brand */}
       <div className="border-b border-gray-800 p-6">
         <Link href="/" className="flex items-center space-x-2">
