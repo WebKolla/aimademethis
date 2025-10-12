@@ -3,9 +3,10 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ChevronDown, ChevronRight, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Trash2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,6 +29,7 @@ import { DevelopmentProcessSection } from "./form/development-process-section";
 import { TechStackSection } from "./form/tech-stack-section";
 import { MetricsWorkflowSection } from "./form/metrics-workflow-section";
 import type { KeyPrompt } from "./form/key-prompts-input";
+import { useHasPlan } from "@/hooks/use-feature-access";
 
 interface Category {
   id: string;
@@ -87,6 +89,9 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(product.image_url || null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // Check if user has Pro Plus plan for video features
+  const hasProPlus = useHasPlan("pro_plus");
 
   // Collapsible section states
   const [showMediaSection, setShowMediaSection] = useState(!!product.video_url || !!product.demo_video_url);
@@ -550,8 +555,17 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
         </button>
         {showMediaSection && (
           <div className="p-4 border-t border-gray-700 space-y-4">
-            <div>
-              <Label htmlFor="video_url" className="text-gray-300">Product Video URL</Label>
+            {/* Product Video URL - Pro Plus Feature */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <Label htmlFor="video_url" className="text-gray-300">Product Video URL</Label>
+                {!hasProPlus && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold">
+                    <Crown className="h-3 w-3" />
+                    Pro Plus
+                  </span>
+                )}
+              </div>
               <Input
                 id="video_url"
                 type="url"
@@ -559,13 +573,34 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
                 onChange={(e) => setVideoUrl(e.target.value)}
                 placeholder="https://youtube.com/watch?v=..."
                 className="mt-1 bg-gray-800 border-gray-700 text-white"
+                disabled={!hasProPlus}
               />
-              <p className="text-xs text-gray-400 mt-1">
-                YouTube, Vimeo, or Loom URL
-              </p>
+              {hasProPlus ? (
+                <p className="text-xs text-gray-400 mt-1">
+                  YouTube, Vimeo, or Loom URL
+                </p>
+              ) : (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                  Upgrade to{" "}
+                  <Link href="/pricing" className="font-semibold hover:underline">
+                    Pro Plus
+                  </Link>{" "}
+                  to add product videos
+                </p>
+              )}
             </div>
-            <div>
-              <Label htmlFor="demo_video_url" className="text-gray-300">Demo Video URL</Label>
+
+            {/* Demo Video URL - Pro Plus Feature */}
+            <div className="relative">
+              <div className="flex items-center justify-between mb-1">
+                <Label htmlFor="demo_video_url" className="text-gray-300">Demo Video URL</Label>
+                {!hasProPlus && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold">
+                    <Crown className="h-3 w-3" />
+                    Pro Plus
+                  </span>
+                )}
+              </div>
               <Input
                 id="demo_video_url"
                 type="url"
@@ -573,10 +608,21 @@ export function ProductEditForm({ product, categories }: ProductEditFormProps) {
                 onChange={(e) => setDemoVideoUrl(e.target.value)}
                 placeholder="https://youtube.com/watch?v=..."
                 className="mt-1 bg-gray-800 border-gray-700 text-white"
+                disabled={!hasProPlus}
               />
-              <p className="text-xs text-gray-400 mt-1">
-                Demo or tutorial video
-              </p>
+              {hasProPlus ? (
+                <p className="text-xs text-gray-400 mt-1">
+                  Demo or tutorial video
+                </p>
+              ) : (
+                <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                  Upgrade to{" "}
+                  <Link href="/pricing" className="font-semibold hover:underline">
+                    Pro Plus
+                  </Link>{" "}
+                  to add demo videos
+                </p>
+              )}
             </div>
           </div>
         )}
