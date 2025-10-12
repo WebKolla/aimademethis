@@ -27,7 +27,8 @@ export function SubscriptionSuccessClient() {
     };
 
     verify();
-  }, [refetch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   if (!sessionId) {
     router.push("/pricing");

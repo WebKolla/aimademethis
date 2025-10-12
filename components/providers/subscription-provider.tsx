@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { UserSubscription } from "@/types/subscription.types";
 
@@ -18,7 +18,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscription = async () => {
+  const fetchSubscription = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -73,7 +73,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []); // Empty deps - function is stable
 
   useEffect(() => {
     fetchSubscription();
@@ -99,7 +99,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [fetchSubscription]);
 
   return (
     <SubscriptionContext.Provider
