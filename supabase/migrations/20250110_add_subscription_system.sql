@@ -400,22 +400,22 @@ VALUES
   (
     'pro',
     'Pro',
-    'For creators who want to showcase unlimited products with analytics',
-    9,
-    90,
-    '["unlimited_products", "analytics", "priority_ranking", "verified_badge", "early_access", "email_support", "remove_branding"]'::jsonb,
-    '{"product_highlights": 5}'::jsonb,
+    'For creators who want to showcase more products with advanced features',
+    6.99,
+    70,
+    '["analytics", "priority_ranking", "verified_badge", "early_access"]'::jsonb,
+    '{"products": 10, "product_highlights": 5}'::jsonb,
     2
   ),
   -- Pro Plus Plan
   (
     'pro_plus',
     'Pro Plus',
-    'Premium features for power users and teams',
-    29,
-    290,
-    '["featured_placement", "custom_url", "api_access", "team_collaboration", "white_label", "priority_support", "advanced_seo", "custom_badges"]'::jsonb,
-    '{"product_highlights": 999, "api_calls_daily": 1000, "team_members": 5, "featured_products_monthly": 1}'::jsonb,
+    'Premium features for serious creators and power users',
+    16.99,
+    170,
+    '["featured_placement", "priority_support", "advanced_seo", "custom_badges", "newsletter_featured"]'::jsonb,
+    '{"products": 999, "product_highlights": 999, "featured_products_monthly": 1}'::jsonb,
     3
   )
 ON CONFLICT (name) DO NOTHING;
