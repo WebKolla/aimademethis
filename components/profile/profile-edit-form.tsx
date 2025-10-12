@@ -32,16 +32,30 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
     github: profile.github || "",
   });
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setAvatarFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // Check file size (2MB limit)
+    if (file.size > 2 * 1024 * 1024) {
+      setError("Image must be less than 2MB");
+      e.target.value = "";
+      return;
     }
+
+    // Check file type
+    if (!file.type.match(/^image\/(jpeg|jpg|png|webp|gif)$/)) {
+      setError("Please upload a valid image file (JPEG, PNG, WebP, or GIF)");
+      e.target.value = "";
+      return;
+    }
+
+    setAvatarFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatarPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
