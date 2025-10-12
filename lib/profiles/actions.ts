@@ -38,7 +38,7 @@ export async function updateProfile(formData: ProfileUpdateData) {
       website: validatedData.website || null,
       twitter: validatedData.twitter || null,
       github: validatedData.github || null,
-    } as never)
+    })
     .eq("id", user.id);
 
   if (updateError) {
@@ -53,11 +53,12 @@ export async function updateProfile(formData: ProfileUpdateData) {
     .eq("id", user.id)
     .single();
 
-  // Revalidate profile page
+  // Revalidate profile pages
   if (profile) {
     revalidatePath(`/profile/${(profile as { username: string }).username}`);
   }
   revalidatePath("/profile/settings");
+  revalidatePath("/dashboard/profile");
 
   return { success: true };
 }
@@ -110,7 +111,7 @@ export async function uploadAvatar(file: File): Promise<{ url?: string; error?: 
   // Update profile with new avatar URL
   const { error: updateError } = await supabase
     .from("profiles")
-    .update({ avatar_url: publicUrl } as never)
+    .update({ avatar_url: publicUrl })
     .eq("id", user.id);
 
   if (updateError) {
@@ -125,11 +126,12 @@ export async function uploadAvatar(file: File): Promise<{ url?: string; error?: 
     .eq("id", user.id)
     .single();
 
-  // Revalidate profile page
+  // Revalidate profile pages
   if (profile) {
     revalidatePath(`/profile/${(profile as { username: string }).username}`);
   }
   revalidatePath("/profile/settings");
+  revalidatePath("/dashboard/profile");
 
   return { url: publicUrl };
 }
