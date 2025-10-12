@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Check, Sparkles, Zap, Crown, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,13 +15,21 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 export function PricingPageClient() {
+  const router = useRouter();
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
   const [isPending, startTransition] = useTransition();
-  const { subscription } = useSubscription();
+  const { subscription, isLoading } = useSubscription();
 
   const handleUpgrade = (planName: "free" | "pro" | "pro_plus") => {
     if (planName === "free") {
       toast.info("You're already on the free plan!");
+      return;
+    }
+
+    // Check if user is authenticated
+    if (!subscription && !isLoading) {
+      toast.error("Please sign in to upgrade your plan");
+      router.push("/login?redirect=/pricing");
       return;
     }
 
