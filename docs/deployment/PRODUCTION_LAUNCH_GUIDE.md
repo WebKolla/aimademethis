@@ -86,16 +86,36 @@ NEXT_PUBLIC_BYPASS_AUTH=false
 3. Add to `NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG`
 4. Deploy and verify tracking in Real-Time report
 
-### 6. Security Checklist
+### 6. Fix OAuth Redirects ⚠️ CRITICAL
+
+**Issue:** Google/GitHub OAuth currently redirects to test URL after login.
+
+**Fix:** Update redirect URIs in all OAuth providers:
+
+1. **Supabase:** Add production URLs to Redirect URLs
+2. **Google OAuth:** Add production redirect URIs and origins
+3. **GitHub OAuth:** Update callback URL to Supabase URL
+
+**Detailed instructions:** See `/docs/deployment/OAUTH_REDIRECT_FIX.md`
+
+Quick checklist:
+- [ ] Update Supabase Redirect URLs (add www.aimademethis.com/auth/callback)
+- [ ] Update Google OAuth authorized redirect URIs
+- [ ] Update GitHub OAuth callback URL
+- [ ] Set NEXT_PUBLIC_SITE_URL=https://www.aimademethis.com in Vercel
+- [ ] Test Google login redirects to production URL
+- [ ] Test GitHub login redirects to production URL
+
+### 7. Security Checklist
 
 - [ ] Test RLS policies (try editing others' products)
-- [ ] Verify auth redirects work
+- [ ] Verify auth redirects work correctly after OAuth fix
 - [ ] Test Pro features require subscription
 - [ ] Check Supabase using `anon` key (not service_role) in client
 - [ ] Remove `NEXT_PUBLIC_BYPASS_AUTH` or set to false
 - [ ] Enable email confirmations in Supabase Auth settings
 
-### 7. Testing Checklist
+### 8. Testing Checklist
 
 **Authentication:**
 - [ ] Email/password signup → email confirmation → login
@@ -118,20 +138,20 @@ NEXT_PUBLIC_BYPASS_AUTH=false
 - [ ] Verify hamburger menu works
 - [ ] Test image uploads from camera
 
-### 8. Error Pages
+### 9. Error Pages
 
 Create if missing:
 - `app/not-found.tsx` (404 page)
 - `app/error.tsx` (500 page)
 
-### 9. Legal Pages
+### 10. Legal Pages
 
 Required before launch:
 - [ ] Privacy Policy (`/privacy`)
 - [ ] Terms of Service (`/terms`)
 - [ ] Link from footer and signup form
 
-### 10. Final Build & Deploy
+### 11. Final Build & Deploy
 
 ```bash
 # Run locally first
