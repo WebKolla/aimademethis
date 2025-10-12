@@ -104,7 +104,7 @@ export function UpgradePrompt({ title, description, requiredPlan, compact = fals
               </p>
             </div>
 
-            {/* Features preview (if Pro Plus) */}
+            {/* Features preview */}
             {requiredPlan === "pro_plus" && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -112,7 +112,25 @@ export function UpgradePrompt({ title, description, requiredPlan, compact = fals
                 transition={{ delay: 0.3 }}
                 className="flex flex-wrap justify-center gap-2 pt-4"
               >
-                {["Featured Placement", "API Access", "Team Collaboration"].map((feature) => (
+                {["Featured Placement", "Advanced SEO", "Featured in Newsletter"].map((feature) => (
+                  <div
+                    key={feature}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    {feature}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+            {requiredPlan === "pro" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-wrap justify-center gap-2 pt-4"
+              >
+                {["Advanced Analytics", "Priority Ranking", "Verified Badge"].map((feature) => (
                   <div
                     key={feature}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300"

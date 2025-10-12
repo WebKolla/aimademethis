@@ -75,7 +75,7 @@ export default async function NewProductPage() {
               <AlertDescription className="text-amber-200 mt-2 space-y-4">
                 <p>
                   You&apos;ve reached the maximum of {productLimit} {productLimit === 1 ? "product" : "products"} on the Free plan.
-                  Upgrade to Pro to submit unlimited products and unlock premium features!
+                  Upgrade to Pro for 10 submissions or Pro Plus for unlimited products!
                 </p>
                 <div className="flex gap-3 mt-4">
                   <Button asChild className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500">
@@ -104,7 +104,7 @@ export default async function NewProductPage() {
                       Products Used: {currentProductCount} / {productLimit}
                     </span>
                     <Link href="/pricing" className="text-sm text-emerald-400 hover:text-emerald-300 font-medium">
-                      Upgrade for unlimited →
+                      Upgrade for more →
                     </Link>
                   </div>
                   <div className="w-full bg-slate-700 rounded-full h-2">
