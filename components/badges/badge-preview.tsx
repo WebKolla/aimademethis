@@ -70,33 +70,32 @@ export function BadgePreview({ productName, badgeUrl, productUrl }: BadgePreview
           </div>
 
           {/* Badge URL */}
-          {(
-            <div className="space-y-2">
-              <Label className="text-xs font-medium text-muted-foreground">
-                Badge URL
-              </Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  value={badgeUrl}
-                  readOnly
-                  className="font-mono text-xs"
-                  onClick={(e) => e.currentTarget.select()}
-                />
-                <Button
-                  size="icon"
-                  variant="outline"
-                  onClick={handleCopy}
-                  aria-label="Copy badge URL to clipboard"
-                >
-                  {copied ? (
-                    <Check className="h-4 w-4 text-emerald-600" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-muted-foreground">
+              Badge URL
+            </Label>
+            <div className="relative min-w-0">
+              <Input
+                value={badgeUrl}
+                readOnly
+                className="font-mono text-xs sm:text-sm break-all pr-14 min-w-0"
+                onClick={(e) => e.currentTarget.select()}
+              />
+              <Button
+                size="sm"
+                variant="ghost"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                onClick={handleCopy}
+                aria-label="Copy badge URL to clipboard"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-emerald-600" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
             </div>
-          )}
+          </div>
         </div>
       </CardContent>
     </Card>

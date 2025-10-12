@@ -86,9 +86,9 @@ export function BadgeGenerator({ products, userTier, initialProductSlug }: Badge
       />
 
       {/* Two-column layout: Controls + Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-6 lg:gap-8">
         {/* Left Column: Customization */}
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
           <BadgeControls
             variant={variant}
             size={size}
@@ -104,7 +104,7 @@ export function BadgeGenerator({ products, userTier, initialProductSlug }: Badge
         </div>
 
         {/* Right Column: Preview + Embed Codes */}
-        <div className="space-y-6">
+        <div className="space-y-6 min-w-0">
           <BadgePreview
             productName={selectedProduct.name}
             badgeUrl={badgeUrl}

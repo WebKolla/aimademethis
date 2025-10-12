@@ -59,7 +59,7 @@ export function EmbedCodeGenerator({
           Copy and paste this code to embed your badge
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="min-w-0">
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as CodeTab)} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="html">HTML</TabsTrigger>
@@ -67,8 +67,13 @@ export function EmbedCodeGenerator({
             <TabsTrigger value="react">React</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="html" className="mt-4">
-            <div className="relative">
+          <TabsContent value="html" className="mt-4 min-w-0">
+            <div className="relative rounded-lg border bg-muted/50 min-w-0">
+              <div className="overflow-x-auto max-w-full">
+                <pre className="p-4 pr-12 min-w-0">
+                  <code className="font-mono text-xs sm:text-sm break-all whitespace-pre-wrap text-foreground">{htmlCode}</code>
+                </pre>
+              </div>
               <Button
                 size="sm"
                 variant="ghost"
@@ -77,24 +82,26 @@ export function EmbedCodeGenerator({
               >
                 {copiedTab === 'html' ? (
                   <>
-                    <Check className="h-4 w-4 mr-2 text-emerald-600" />
-                    Copied!
+                    <Check className="h-3 w-3 mr-1 text-emerald-600" />
+                    <span className="text-xs">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-4 w-4 mr-2" />
-                    Copy
+                    <Copy className="h-3 w-3 mr-1" />
+                    <span className="text-xs">Copy</span>
                   </>
                 )}
               </Button>
-              <pre className="rounded-lg bg-muted p-4 pr-24 overflow-x-auto">
-                <code className="font-mono text-sm text-foreground">{htmlCode}</code>
-              </pre>
             </div>
           </TabsContent>
 
-          <TabsContent value="markdown" className="mt-4">
-            <div className="relative">
+          <TabsContent value="markdown" className="mt-4 min-w-0">
+            <div className="relative rounded-lg border bg-muted/50 min-w-0">
+              <div className="overflow-x-auto max-w-full">
+                <pre className="p-4 pr-12 min-w-0">
+                  <code className="font-mono text-xs sm:text-sm break-all whitespace-pre-wrap text-foreground">{markdownCode}</code>
+                </pre>
+              </div>
               <Button
                 size="sm"
                 variant="ghost"
@@ -103,24 +110,26 @@ export function EmbedCodeGenerator({
               >
                 {copiedTab === 'markdown' ? (
                   <>
-                    <Check className="h-4 w-4 mr-2 text-emerald-600" />
-                    Copied!
+                    <Check className="h-3 w-3 mr-1 text-emerald-600" />
+                    <span className="text-xs">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-4 w-4 mr-2" />
-                    Copy
+                    <Copy className="h-3 w-3 mr-1" />
+                    <span className="text-xs">Copy</span>
                   </>
                 )}
               </Button>
-              <pre className="rounded-lg bg-muted p-4 pr-24 overflow-x-auto">
-                <code className="font-mono text-sm text-foreground">{markdownCode}</code>
-              </pre>
             </div>
           </TabsContent>
 
-          <TabsContent value="react" className="mt-4">
-            <div className="relative">
+          <TabsContent value="react" className="mt-4 min-w-0">
+            <div className="relative rounded-lg border bg-muted/50 min-w-0">
+              <div className="overflow-x-auto max-w-full">
+                <pre className="p-4 pr-12 min-w-0">
+                  <code className="font-mono text-xs sm:text-sm break-all whitespace-pre-wrap text-foreground">{reactCode}</code>
+                </pre>
+              </div>
               <Button
                 size="sm"
                 variant="ghost"
@@ -129,19 +138,16 @@ export function EmbedCodeGenerator({
               >
                 {copiedTab === 'react' ? (
                   <>
-                    <Check className="h-4 w-4 mr-2 text-emerald-600" />
-                    Copied!
+                    <Check className="h-3 w-3 mr-1 text-emerald-600" />
+                    <span className="text-xs">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="h-4 w-4 mr-2" />
-                    Copy
+                    <Copy className="h-3 w-3 mr-1" />
+                    <span className="text-xs">Copy</span>
                   </>
                 )}
               </Button>
-              <pre className="rounded-lg bg-muted p-4 pr-24 overflow-x-auto">
-                <code className="font-mono text-sm text-foreground">{reactCode}</code>
-              </pre>
             </div>
           </TabsContent>
         </Tabs>
