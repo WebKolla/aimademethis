@@ -186,7 +186,7 @@ export function SubscriptionSuccessClient() {
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                     <Button
-                      onClick={() => router.push("/products/new")}
+                      onClick={() => router.push("/dashboard/products/new")}
                       variant="outline"
                       className="border-2"
                     >
