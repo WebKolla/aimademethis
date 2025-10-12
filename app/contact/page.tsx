@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     question: "Can I advertise on AIMMT?",
-    answer: "AIMMT is completely free and ad-free. We focus on organic, community-driven discovery.",
+    answer: "AIMMT offers a generous free tier with premium plans for advanced features. We remain ad-free and focus on organic, community-driven discovery.",
   },
 ];
 

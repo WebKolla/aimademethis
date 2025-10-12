@@ -76,8 +76,8 @@ const benefits = [
   },
   {
     icon: Zap,
-    title: "100% Free",
-    description: "No hidden costs, no premium tiers. Share your AI creations without spending a dime.",
+    title: "Free to Start",
+    description: "Begin with our free tier and upgrade as you grow. Flexible plans for every creator.",
   },
 ];
 
@@ -208,7 +208,7 @@ export function HomePageClient({ plans }: HomePageClientProps) {
                 <span className="text-emerald-600 dark:text-emerald-400 font-bold">
                   Get discovered. Get feedback. Get traction.
                 </span>{" "}
-                All for free.
+                Start free today.
               </motion.p>
 
               {/* CTA Buttons */}
@@ -241,7 +241,7 @@ export function HomePageClient({ plans }: HomePageClientProps) {
               >
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="font-medium">100% Free Forever</span>
+                  <span className="font-medium">Free Tier Available</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -249,7 +249,7 @@ export function HomePageClient({ plans }: HomePageClientProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="font-medium">Instant Publishing</span>
+                  <span className="font-medium">Upgrade Anytime</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -472,7 +472,7 @@ export function HomePageClient({ plans }: HomePageClientProps) {
                   <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-slate-500 dark:text-slate-400 pt-2">
                     <div className="flex items-center gap-1.5">
                       <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-                      <span>Free forever</span>
+                      <span>Always free</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />

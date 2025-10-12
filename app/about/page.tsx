@@ -53,8 +53,8 @@ const values = [
   },
   {
     icon: Globe,
-    title: "Open Access",
-    description: "100% free, forever. Everyone deserves a platform to showcase their AI creations without barriers.",
+    title: "Accessible Pricing",
+    description: "Free tier to get started, with premium plans as you scale. Everyone deserves a platform to showcase their AI creations.",
   },
 ];
 
@@ -95,7 +95,7 @@ const stats = [
   { value: "1,000+", label: "AI Products" },
   { value: "5,000+", label: "Active Users" },
   { value: "10,000+", label: "Monthly Visitors" },
-  { value: "100%", label: "Free Forever" },
+  { value: "3", label: "Flexible Plans" },
 ];
 
 export default function AboutPage() {
@@ -183,7 +183,7 @@ export default function AboutPage() {
                 Our Mission
               </h2>
               <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
-                To democratize AI product discovery by creating a free, transparent, and community-driven
+                To democratize AI product discovery by creating an accessible, transparent, and community-driven
                 platform where creators get the visibility they deserve and users find the AI tools they need.
               </p>
             </motion.div>
@@ -199,7 +199,7 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-1" />
                   <p className="text-slate-600 dark:text-slate-300">
-                    No pay-to-play schemes or premium tiers
+                    Fair pricing with generous free tier
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
