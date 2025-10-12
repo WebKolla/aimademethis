@@ -118,6 +118,18 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
   // Type assertion needed because Stripe types are complex
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sub = subscription as any;
+
+  // Helper function to safely convert Unix timestamp to ISO string
+  const toISOString = (timestamp: number | null | undefined): string | null => {
+    if (!timestamp || timestamp <= 0) return null;
+    try {
+      return new Date(timestamp * 1000).toISOString();
+    } catch (error) {
+      console.error("Error converting timestamp:", timestamp, error);
+      return null;
+    }
+  };
+
   const { error } = await supabaseAdmin.from("subscriptions").upsert(
     {
       user_id: userId,
@@ -126,15 +138,11 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
       stripe_subscription_id: subscription.id,
       status: subscription.status,
       billing_cycle: subscription.metadata?.billing_cycle || "monthly",
-      current_period_start: new Date(sub.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+      current_period_start: toISOString(sub.current_period_start) || new Date().toISOString(),
+      current_period_end: toISOString(sub.current_period_end) || new Date().toISOString(),
       cancel_at_period_end: subscription.cancel_at_period_end,
-      trial_start: sub.trial_start
-        ? new Date(sub.trial_start * 1000).toISOString()
-        : null,
-      trial_end: sub.trial_end
-        ? new Date(sub.trial_end * 1000).toISOString()
-        : null,
+      trial_start: toISOString(sub.trial_start),
+      trial_end: toISOString(sub.trial_end),
     },
     {
       onConflict: "user_id",
@@ -182,20 +190,28 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   // Type assertion needed because Stripe types are complex
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sub = subscription as any;
+
+  // Helper function to safely convert Unix timestamp to ISO string
+  const toISOString = (timestamp: number | null | undefined): string | null => {
+    if (!timestamp || timestamp <= 0) return null;
+    try {
+      return new Date(timestamp * 1000).toISOString();
+    } catch (error) {
+      console.error("Error converting timestamp:", timestamp, error);
+      return null;
+    }
+  };
+
   const { error } = await supabaseAdmin
     .from("subscriptions")
     .update({
       plan_id: planId,
       status: subscription.status,
-      current_period_start: new Date(sub.current_period_start * 1000).toISOString(),
-      current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+      current_period_start: toISOString(sub.current_period_start) || new Date().toISOString(),
+      current_period_end: toISOString(sub.current_period_end) || new Date().toISOString(),
       cancel_at_period_end: subscription.cancel_at_period_end,
-      canceled_at: sub.canceled_at
-        ? new Date(sub.canceled_at * 1000).toISOString()
-        : null,
-      trial_end: sub.trial_end
-        ? new Date(sub.trial_end * 1000).toISOString()
-        : null,
+      canceled_at: toISOString(sub.canceled_at),
+      trial_end: toISOString(sub.trial_end),
     })
     .eq("stripe_subscription_id", subscription.id);
 
