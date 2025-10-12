@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
+import { Flame } from "lucide-react";
 
 export function Footer() {
   return (
@@ -29,7 +30,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/trending" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                <Link href="/trending" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                  <Flame className="w-3.5 h-3.5 text-orange-500" />
                   Trending
                 </Link>
               </li>
@@ -55,7 +57,7 @@ export function Footer() {
                   About
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/blog" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   Blog
                 </Link>
@@ -64,7 +66,7 @@ export function Footer() {
                 <Link href="/api" className="text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                   API
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 

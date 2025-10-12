@@ -6,7 +6,7 @@ import { Logo } from "@/components/ui/logo";
 import { signOut } from "@/lib/auth/actions";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { LogOut, Search, User as UserIcon, Menu, X } from "lucide-react";
+import { LogOut, Search, User as UserIcon, Menu, X, Flame } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
@@ -98,8 +98,9 @@ export function Navbar() {
             </Link>
             <Link
               href="/trending"
-              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5"
             >
+              <Flame className="w-4 h-4 text-orange-500" />
               Trending
             </Link>
             <Link
@@ -179,8 +180,9 @@ export function Navbar() {
                   <Link
                     href="/trending"
                     onClick={closeMobileMenu}
-                    className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-2"
+                    className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-2 flex items-center gap-2"
                   >
+                    <Flame className="w-5 h-5 text-orange-500" />
                     Trending
                   </Link>
                   <Link
