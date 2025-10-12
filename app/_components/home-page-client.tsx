@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -106,8 +107,8 @@ const features = [
 interface PlanData {
   name: string;
   displayName: string;
-  price: string;
-  period: string;
+  priceMonthly: number;
+  priceYearly: number;
   description: string;
   iconName: string;
   iconColor: string;
@@ -123,6 +124,8 @@ interface HomePageClientProps {
 }
 
 export function HomePageClient({ plans }: HomePageClientProps) {
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+
   // Transform plans to include icon components
   const plansWithIcons = plans.map(plan => ({
     ...plan,
@@ -397,7 +400,11 @@ export function HomePageClient({ plans }: HomePageClientProps) {
         </section>
 
         {/* Pricing Section */}
-        <PricingSectionHomeClient plans={plansWithIcons} />
+        <PricingSectionHomeClient
+          plans={plansWithIcons}
+          billingCycle={billingCycle}
+          onBillingCycleChange={setBillingCycle}
+        />
 
         {/* Newsletter Section */}
         <section className="py-20 md:py-24 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 relative overflow-hidden">

@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Crown, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const container = {
   hidden: { opacity: 0 },
@@ -31,8 +33,8 @@ const iconComponents: Record<string, LucideIcon> = {
 interface PlanData {
   name: string;
   displayName: string;
-  price: string;
-  period: string;
+  priceMonthly: number;
+  priceYearly: number;
   description: string;
   iconName: string;
   iconColor: string;
@@ -45,18 +47,43 @@ interface PlanData {
 
 interface PricingSectionHomeClientProps {
   plans: PlanData[];
+  billingCycle: "monthly" | "yearly";
+  onBillingCycleChange: (cycle: "monthly" | "yearly") => void;
 }
 
-export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProps) {
+export function PricingSectionHomeClient({ plans, billingCycle, onBillingCycleChange }: PricingSectionHomeClientProps) {
   if (plans.length === 0) {
     return null;
   }
 
-  // Transform plans to include icon components
-  const plansWithIcons = plans.map(plan => ({
-    ...plan,
-    icon: iconComponents[plan.iconName] || Sparkles,
-  }));
+  // Calculate yearly discount
+  const yearlyDiscount = (monthly: number, yearly: number) => {
+    if (monthly === 0) return 0;
+    const monthlyCost = monthly * 12;
+    const savings = monthlyCost - yearly;
+    return Math.round((savings / monthlyCost) * 100);
+  };
+
+  // Calculate the maximum savings across all paid plans
+  const maxYearlySavings = Math.max(
+    ...plans.filter((plan) => plan.priceMonthly > 0).map((plan) =>
+      yearlyDiscount(plan.priceMonthly, plan.priceYearly)
+    )
+  );
+
+  // Transform plans to include icon components and pricing
+  const plansWithIcons = plans.map(plan => {
+    const price = billingCycle === "yearly" ? plan.priceYearly : plan.priceMonthly;
+    const savings = yearlyDiscount(plan.priceMonthly, plan.priceYearly);
+
+    return {
+      ...plan,
+      icon: iconComponents[plan.iconName] || Sparkles,
+      price,
+      period: price === 0 ? "forever" : billingCycle === "yearly" ? "/year" : "/month",
+      savings,
+    };
+  });
 
   return (
     <section id="pricing" className="py-24 md:py-32 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950 relative overflow-hidden">
@@ -104,6 +131,53 @@ export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProp
             <p className="text-xl text-slate-600 dark:text-slate-300 leading-relaxed">
               Start free, upgrade as you grow. No hidden fees, cancel anytime.
             </p>
+
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4 pt-8">
+              <span
+                className={cn(
+                  "text-sm font-medium transition-colors",
+                  billingCycle === "monthly"
+                    ? "text-slate-900 dark:text-white"
+                    : "text-slate-500 dark:text-slate-400"
+                )}
+              >
+                Monthly
+              </span>
+              <button
+                onClick={() => onBillingCycleChange(billingCycle === "monthly" ? "yearly" : "monthly")}
+                className={cn(
+                  "relative w-14 h-7 rounded-full transition-colors",
+                  billingCycle === "yearly"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-500"
+                    : "bg-slate-200 dark:bg-slate-700"
+                )}
+              >
+                <motion.div
+                  className="absolute top-1 w-5 h-5 bg-white rounded-full shadow-md"
+                  initial={false}
+                  animate={{
+                    left: billingCycle === "yearly" ? "calc(100% - 1.5rem)" : "0.25rem",
+                  }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              </button>
+              <span
+                className={cn(
+                  "text-sm font-medium transition-colors",
+                  billingCycle === "yearly"
+                    ? "text-slate-900 dark:text-white"
+                    : "text-slate-500 dark:text-slate-400"
+                )}
+              >
+                Yearly
+              </span>
+              {billingCycle === "yearly" && maxYearlySavings > 0 && (
+                <Badge className="bg-emerald-500 text-white">
+                  Save up to {maxYearlySavings}%
+                </Badge>
+              )}
+            </div>
           </motion.div>
 
           {/* Pricing Cards */}
@@ -152,13 +226,22 @@ export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProp
                   </div>
 
                   {/* Price */}
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-black text-slate-900 dark:text-white">
-                      {plan.price}
-                    </span>
-                    <span className="text-lg text-slate-600 dark:text-slate-400">
-                      {plan.period}
-                    </span>
+                  <div>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-5xl font-black text-slate-900 dark:text-white">
+                        ${plan.price}
+                      </span>
+                      {plan.price > 0 && (
+                        <span className="text-lg text-slate-600 dark:text-slate-400">
+                          {plan.period}
+                        </span>
+                      )}
+                    </div>
+                    {billingCycle === "yearly" && plan.savings > 0 && (
+                      <p className="text-sm text-emerald-600 dark:text-emerald-400 mt-2 font-medium">
+                        Save {plan.savings}% vs monthly
+                      </p>
+                    )}
                   </div>
 
                   {/* CTA Button */}
@@ -213,8 +296,4 @@ export function PricingSectionHomeClient({ plans }: PricingSectionHomeClientProp
       </div>
     </section>
   );
-}
-
-function cn(...classes: (string | boolean | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
 }

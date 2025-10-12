@@ -4,8 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 interface PlanData {
   name: string;
   displayName: string;
-  price: string;
-  period: string;
+  priceMonthly: number;
+  priceYearly: number;
   description: string;
   iconName: string;
   iconColor: string;
@@ -90,10 +90,9 @@ export default async function HomePage() {
         featureList.push(formatFeatureName(feature));
       });
 
-      // Determine pricing display
+      // Get pricing
       const priceMonthly = Number(plan.price_monthly);
-      const priceDisplay = priceMonthly === 0 ? "$0" : `$${priceMonthly}`;
-      const period = priceMonthly === 0 ? "forever" : "/month";
+      const priceYearly = Number(plan.price_yearly) || 0;
 
       // Determine CTA
       let cta = "Get Started";
@@ -111,8 +110,8 @@ export default async function HomePage() {
       return {
         name: plan.name,
         displayName: plan.display_name,
-        price: priceDisplay,
-        period,
+        priceMonthly,
+        priceYearly,
         description: plan.description || "",
         iconName: iconMap[planName] || "Sparkles",
         iconColor: iconColorMap[planName] || "from-emerald-500 to-teal-500",
