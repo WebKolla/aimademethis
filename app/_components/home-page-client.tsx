@@ -398,39 +398,6 @@ export function HomePageClient({ plans, featuredProduct }: HomePageClientProps) 
           </div>
         </section>
 
-        {/* Social Proof Section */}
-        <section className="py-24 bg-white dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={container}
-              className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto"
-            >
-              {[
-                { value: "1,000+", label: "AI Products" },
-                { value: "5,000+", label: "Active Users" },
-                { value: "10,000+", label: "Monthly Visitors" },
-                { value: "50+", label: "New This Week" },
-              ].map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  variants={item}
-                  className="text-center space-y-2"
-                >
-                  <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-teal-600 to-emerald-600 bg-clip-text text-transparent">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
         {/* Pricing Section */}
         <PricingSectionHomeClient
           plans={plansWithIcons}
