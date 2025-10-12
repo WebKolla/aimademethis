@@ -1,28 +1,28 @@
 "use client";
 
-import { useEffect, useState, useCallback, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { FeaturedProducts } from "@/components/products/featured-products";
+import { FilterBadges } from "@/components/products/filter-badges";
+import { FilterSidebar } from "@/components/products/filter-sidebar";
+import { HorizontalFilters } from "@/components/products/horizontal-filters";
 import { ProductList } from "@/components/products/product-list";
 import { SearchBar } from "@/components/products/search-bar";
-import { HorizontalFilters } from "@/components/products/horizontal-filters";
-import { FeaturedProducts } from "@/components/products/featured-products";
 import { SortDropdown } from "@/components/products/sort-dropdown";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Link from "next/link";
-import { Loader2, Filter, Sparkles, TrendingUp, Users } from "lucide-react";
-import { motion } from "framer-motion";
 import {
-  searchProducts,
-  getCategories,
-  getPopularTags,
   getAvailableAIModels,
   getAvailableAITools,
+  getCategories,
+  getPopularTags,
+  searchProducts,
   type SearchFilters,
 } from "@/lib/products/search-actions";
-import { FilterBadges } from "@/components/products/filter-badges";
-import { FilterSidebar } from "@/components/products/filter-sidebar";
 import type { Database } from "@/types/database.types";
+import { motion } from "framer-motion";
+import { Filter, Loader2, Sparkles, TrendingUp, Users } from "lucide-react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 type Product = Database["public"]["Tables"]["products"]["Row"] & {
   categories: { name: string; slug: string } | null;
@@ -275,7 +275,7 @@ function ProductsPageContent() {
               {/* CTA Button */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button asChild size="lg" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 text-lg px-8 h-14 rounded-full font-semibold">
-                  <Link href="/products/new">
+                  <Link href="dashboard/products/new">
                     <Sparkles className="mr-2 h-5 w-5" />
                     Submit Your Product
                   </Link>
