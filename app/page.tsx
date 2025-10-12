@@ -21,6 +21,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
+import { PricingSectionHome } from "@/components/pricing/pricing-section-home";
 
 const container = {
   hidden: { opacity: 0 },
@@ -361,6 +362,9 @@ export default function HomePage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Pricing Section */}
+        <PricingSectionHome />
 
         {/* Newsletter Section */}
         <section className="py-20 md:py-24 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 relative overflow-hidden">

@@ -110,6 +110,12 @@ export function Navbar() {
               Categories
             </Link>
             <Link
+              href="/pricing"
+              className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
               href="/about"
               className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
@@ -186,6 +192,13 @@ export function Navbar() {
                     className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-2"
                   >
                     Categories
+                  </Link>
+                  <Link
+                    href="/pricing"
+                    onClick={closeMobileMenu}
+                    className="text-lg font-medium text-gray-700 dark:text-gray-200 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors py-2"
+                  >
+                    Pricing
                   </Link>
                   <Link
                     href="/about"
