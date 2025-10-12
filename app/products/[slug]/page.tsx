@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductDescription } from "@/components/products/product-description";
@@ -10,13 +11,147 @@ import { DevelopmentDetailsTabs } from "@/components/products/display/developmen
 import { CommentsSection } from "@/components/comments/comments-section";
 import { ReviewsSection } from "@/components/reviews/reviews-section";
 import { ProductViewTracker } from "@/components/products/product-view-tracker";
+import { ProductBreadcrumbs } from "@/components/products/product-breadcrumbs";
 import { getAverageRating } from "@/lib/reviews/actions";
 import type { Metadata } from "next";
+import type { Database } from "@/types/database.types";
+
+type Product = Database["public"]["Tables"]["products"]["Row"] & {
+  categories: { id: string; name: string; slug: string } | null;
+  profiles: Database["public"]["Tables"]["profiles"]["Row"] | null;
+};
 
 interface ProductPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+// Generate Product JSON-LD schema for rich snippets
+function generateProductSchema(
+  product: Product,
+  averageRating?: number,
+  totalReviews?: number
+) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aimademethis.com";
+  const productUrl = `${siteUrl}/products/${product.slug}`;
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description || product.tagline || "",
+    image: product.image_url || undefined,
+    url: productUrl,
+    brand: {
+      "@type": "Brand",
+      name: product.profiles?.username || "Unknown Creator",
+    },
+    offers: {
+      "@type": "Offer",
+      price: product.pricing_type === "free" ? "0" : undefined,
+      priceCurrency: "USD",
+      availability: "https://schema.org/InStock",
+      url: product.website_url || productUrl,
+    },
+    category: product.categories?.name || undefined,
+  };
+
+  // Add aggregate rating if available
+  if (averageRating && totalReviews && totalReviews > 0) {
+    schema.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: averageRating.toFixed(1),
+      reviewCount: totalReviews,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
+
+  return schema;
+}
+
+// Generate BreadcrumbList JSON-LD schema for navigation
+function generateBreadcrumbSchema(product: Product) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aimademethis.com";
+
+  const items = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: siteUrl,
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Products",
+      item: `${siteUrl}/products`,
+    },
+  ];
+
+  // Add category if available
+  if (product.categories) {
+    items.push({
+      "@type": "ListItem",
+      position: 3,
+      name: product.categories.name,
+      item: `${siteUrl}/products?category=${product.categories.slug}`,
+    });
+  }
+
+  // Add current product
+  items.push({
+    "@type": "ListItem",
+    position: items.length + 1,
+    name: product.name,
+    item: `${siteUrl}/products/${product.slug}`,
+  });
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items,
+  };
+}
+
+// Generate Review schemas for individual reviews
+function generateReviewSchemas(
+  reviews: Array<{
+    id: string;
+    rating: number;
+    review: string | null;
+    created_at: string;
+    profiles: {
+      username: string;
+    } | null;
+  }>,
+  product: Product
+) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aimademethis.com";
+  const productUrl = `${siteUrl}/products/${product.slug}`;
+
+  return reviews.map((review) => ({
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: {
+      "@type": "Product",
+      name: product.name,
+      url: productUrl,
+    },
+    author: {
+      "@type": "Person",
+      name: review.profiles?.username || "Anonymous",
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: review.rating,
+      bestRating: 5,
+      worstRating: 1,
+    },
+    reviewBody: review.review || undefined,
+    datePublished: new Date(review.created_at).toISOString(),
+  }));
 }
 
 // Generate metadata for SEO
@@ -155,6 +290,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const followerCount = followersResult.count || 0;
   const { averageRating, totalReviews } = ratingData;
 
+  // Fetch recent reviews for schema markup (limit to top 5 for performance)
+  const { data: reviews } = await supabase
+    .from("reviews")
+    .select(
+      `
+      id,
+      rating,
+      review,
+      created_at,
+      profiles (username)
+    `
+    )
+    .eq("product_id", product.id)
+    .order("created_at", { ascending: false })
+    .limit(5);
+
   // Fetch creator's product count
   const { count: creatorProductCount } = await supabase
     .from("products")
@@ -209,10 +360,60 @@ export default async function ProductPage({ params }: ProductPageProps) {
     })
   );
 
+  // Generate schemas for rich snippets
+  const productSchema = generateProductSchema(product, averageRating, totalReviews);
+  const breadcrumbSchema = generateBreadcrumbSchema(product);
+  const reviewSchemas = reviews && reviews.length > 0
+    ? generateReviewSchemas(reviews as never[], product)
+    : [];
+
+  // Build breadcrumb items for visual navigation
+  const breadcrumbItems = [
+    { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
+  ];
+
+  if (product.categories) {
+    breadcrumbItems.push({
+      name: product.categories.name,
+      href: `/products?category=${product.categories.slug}`,
+    });
+  }
+
+  breadcrumbItems.push({
+    name: product.name,
+    href: `/products/${product.slug}`,
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+      {/* JSON-LD Schemas for SEO */}
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      {reviewSchemas.map((reviewSchema, index) => (
+        <Script
+          key={`review-schema-${index}`}
+          id={`review-schema-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
+        />
+      ))}
+
       {/* Track product view on client side */}
       <ProductViewTracker productId={product.id} />
+
+      {/* Breadcrumb Navigation */}
+      <div className="container mx-auto px-4">
+        <ProductBreadcrumbs items={breadcrumbItems} />
+      </div>
 
       {/* Hero Section */}
       <ProductHero
