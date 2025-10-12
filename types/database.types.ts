@@ -48,6 +48,35 @@ export type Database = {
           },
         ]
       }
+      badge_clicks: {
+        Row: {
+          clicked_at: string | null
+          id: string
+          product_id: string
+          referrer: string | null
+        }
+        Insert: {
+          clicked_at?: string | null
+          id?: string
+          product_id: string
+          referrer?: string | null
+        }
+        Update: {
+          clicked_at?: string | null
+          id?: string
+          product_id?: string
+          referrer?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "badge_clicks_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       categories: {
         Row: {
           created_at: string | null
