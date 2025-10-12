@@ -1,6 +1,45 @@
+import type { Metadata } from "next";
 import { HomePageClient } from "./_components/home-page-client";
 import { createClient } from "@/lib/supabase/server";
 import { getFeaturedProduct } from "@/lib/products/featured-actions";
+
+export const metadata: Metadata = {
+  title: "AIMMT - AI Made Me This | Discover the Best AI Products & Tools",
+  description: "Explore, share, and discover innovative AI products created by developers worldwide. Find trending AI tools, read reviews, and connect with the AI community.",
+  keywords: [
+    "AI products",
+    "AI tools",
+    "AI directory",
+    "discover AI",
+    "AI product discovery",
+    "trending AI tools",
+    "AI product reviews",
+    "best AI products 2025",
+    "AI tool marketplace",
+    "AI innovation",
+    "SAAS product directory",
+    "Product hunt",
+  ],
+  openGraph: {
+    title: "AIMMT - Discover the Best AI Products & Tools",
+    description: "Explore trending AI products, read authentic reviews, and connect with innovators building the future of AI.",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AIMMT - AI Product Discovery Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AIMMT - Discover the Best AI Products & Tools",
+    description: "Explore trending AI products, read authentic reviews, and connect with innovators.",
+    images: ["/og-image.png"],
+  },
+};
 
 interface PlanData {
   name: string;

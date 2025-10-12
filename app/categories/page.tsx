@@ -7,8 +7,28 @@ type Category = Database["public"]["Tables"]["categories"]["Row"] & {
 };
 
 export const metadata = {
-  title: "Categories | AIMMT - Browse AI Products by Category",
-  description: "Explore AI products organized by categories. Find the perfect AI tool for your needs.",
+  title: "AI Product Categories | AIMMT - Browse by Category",
+  description: "Explore AI products organized by categories including Productivity, Creative Tools, Development, Marketing, Data Analysis, and more. Find AI tools by use case.",
+  keywords: [
+    "AI categories",
+    "AI tools by category",
+    "productivity AI",
+    "creative AI tools",
+    "AI for developers",
+    "marketing AI tools",
+    "SaaS categories",
+    "SaaS tools by category",
+  ],
+  openGraph: {
+    title: "Browse AI Products by Category | AIMMT",
+    description: "Explore AI products organized by categories. Find the perfect AI tool for your use case.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Browse AI Products by Category | AIMMT",
+    description: "Explore AI products organized by categories. Find the perfect AI tool for your use case.",
+  },
 };
 
 export default async function CategoriesPage() {
