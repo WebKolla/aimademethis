@@ -1,10 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { BarChart3 } from 'lucide-react'
+import { useEffect, useState, useCallback } from 'react'
+import { BarChart3, RefreshCw } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getBadgeStats } from '@/lib/badges/actions'
+import { toast } from 'sonner'
 
 interface BadgeStatsProps {
   productId: string
@@ -27,37 +29,61 @@ export function BadgeStats({ productId }: BadgeStatsProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      setIsLoading(true)
-      setError(null)
+  const fetchStats = useCallback(async (showToast = false) => {
+    setIsLoading(true)
+    setError(null)
 
-      const result = await getBadgeStats(productId)
+    const result = await getBadgeStats(productId)
 
-      if ('error' in result) {
-        setError(result.error || 'Failed to load statistics')
-        setStats(null)
-      } else {
-        setStats({
-          totalClicks: result.totalClicks,
-          topReferrers: result.topReferrers,
-          period: result.period,
-        })
+    if ('error' in result) {
+      setError(result.error || 'Failed to load statistics')
+      setStats(null)
+      if (showToast) {
+        toast.error('Failed to refresh statistics')
       }
-
-      setIsLoading(false)
+    } else {
+      setStats({
+        totalClicks: result.totalClicks,
+        topReferrers: result.topReferrers,
+        period: result.period,
+      })
+      if (showToast) {
+        toast.success('Statistics refreshed successfully')
+      }
     }
 
-    fetchStats()
+    setIsLoading(false)
   }, [productId])
+
+  useEffect(() => {
+    fetchStats()
+  }, [fetchStats])
+
+  const handleRefresh = () => {
+    fetchStats(true)
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Badge Performance</CardTitle>
-        <CardDescription>
-          Track how your badge is being used
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-xl">Badge Performance</CardTitle>
+            <CardDescription>
+              Track how your badge is being used
+            </CardDescription>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleRefresh}
+            disabled={isLoading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (

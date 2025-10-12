@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Plus, Edit, Eye, ExternalLink } from "lucide-react";
+import { Plus, Edit, Eye, ExternalLink, Award, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
 export default async function MyProductsPage() {
@@ -12,6 +13,24 @@ export default async function MyProductsPage() {
   } = await supabase.auth.getUser();
 
   if (!user) return null;
+
+  // Get user subscription tier
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select(`
+      status,
+      plan_id,
+      subscription_plans!inner(name)
+    `)
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .single();
+
+  let userTier: "free" | "pro" | "pro_plus" = "free";
+  if (subscription?.subscription_plans) {
+    const planName = (subscription.subscription_plans as { name: string }).name;
+    userTier = planName === "pro_plus" ? "pro_plus" : planName === "pro" ? "pro" : "free";
+  }
 
   // Get all user's products with stats
   const { data: products } = await supabase
@@ -23,7 +42,7 @@ export default async function MyProductsPage() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  // Get vote counts for each product
+  // Get vote counts and badge clicks for each product
   const productsWithStats = await Promise.all(
     (products || []).map(async (product) => {
       const { count: voteCount } = await supabase
@@ -36,10 +55,16 @@ export default async function MyProductsPage() {
         .select("id", { count: "exact", head: true })
         .eq("product_id", product.id);
 
+      const { count: badgeClickCount } = await supabase
+        .from("badge_clicks")
+        .select("id", { count: "exact", head: true })
+        .eq("product_id", product.id);
+
       return {
         ...product,
         votes_count: voteCount || 0,
         comments_count: commentCount || 0,
+        badge_clicks_count: badgeClickCount || 0,
       };
     })
   );
@@ -121,28 +146,58 @@ export default async function MyProductsPage() {
                     </span>
                   </div>
 
+                  {/* Badge Status */}
+                  {product.status === "published" && userTier !== "free" && product.badge_clicks_count > 0 && (
+                    <div className="mb-3">
+                      <Badge variant="secondary" className="text-xs">
+                        <CheckCircle2 className="h-3 w-3 mr-1" />
+                        Badge Active ({product.badge_clicks_count} clicks)
+                      </Badge>
+                    </div>
+                  )}
+
                   {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
-                      asChild
-                    >
-                      <Link href={`/dashboard/products/${product.id}/edit`}>
-                        <Edit className="h-4 w-4 mr-1" />
-                        Edit
-                      </Link>
-                    </Button>
-                    {product.status === "published" && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2">
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                        className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
                         asChild
                       >
-                        <Link href={`/products/${product.slug}`} target="_blank">
-                          <ExternalLink className="h-4 w-4" />
+                        <Link href={`/dashboard/products/${product.id}/edit`}>
+                          <Edit className="h-4 w-4 mr-1" />
+                          Edit
+                        </Link>
+                      </Button>
+                      {product.status === "published" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                          asChild
+                        >
+                          <Link href={`/products/${product.slug}`} target="_blank">
+                            <ExternalLink className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
+                    {/* Get Badge Button */}
+                    {product.status === "published" && (
+                      <Button
+                        size="sm"
+                        variant={userTier === "free" ? "outline" : "default"}
+                        className={
+                          userTier === "free"
+                            ? "w-full border-gray-700 text-gray-300 hover:bg-gray-800"
+                            : "w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                        }
+                        asChild
+                      >
+                        <Link href={`/dashboard/badges?product=${product.slug}`}>
+                          <Award className="h-4 w-4 mr-1" />
+                          {userTier === "free" ? "Get Badge (Pro)" : "Get Badge"}
                         </Link>
                       </Button>
                     )}

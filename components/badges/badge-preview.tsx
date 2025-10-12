@@ -31,7 +31,7 @@ export function BadgePreview({ productName, badgeUrl, productUrl }: BadgePreview
       setCopied(true)
       toast.success('Badge URL copied to clipboard!')
       setTimeout(() => setCopied(false), 2000)
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy URL')
     }
   }

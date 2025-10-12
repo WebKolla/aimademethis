@@ -12,9 +12,15 @@ import { EmptyState } from '@/components/badges/empty-state'
  *
  * Pro/Pro Plus exclusive feature
  * Allows users to generate embeddable badges for their products
+ * Supports pre-selection via query parameter: ?product={slug}
  */
-export default async function BadgesPage() {
+export default async function BadgesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ product?: string }>
+}) {
   const supabase = await createClient()
+  const params = await searchParams
 
   // Check authentication
   const {
@@ -70,7 +76,11 @@ export default async function BadgesPage() {
       </div>
 
       {/* Badge Generator */}
-      <BadgeGenerator products={products} userTier={userTier} />
+      <BadgeGenerator
+        products={products}
+        userTier={userTier}
+        initialProductSlug={params.product}
+      />
     </div>
   )
 }

@@ -19,6 +19,7 @@ interface Product {
 interface BadgeGeneratorProps {
   products: Product[]
   userTier: 'pro' | 'pro_plus'
+  initialProductSlug?: string
 }
 
 /**
@@ -26,10 +27,14 @@ interface BadgeGeneratorProps {
  *
  * Main orchestrator for badge generation UI
  * Manages state and coordinates between child components
+ * Supports pre-selection via initialProductSlug prop
  */
-export function BadgeGenerator({ products, userTier }: BadgeGeneratorProps) {
-  // Select first product by default
-  const [selectedProduct, setSelectedProduct] = useState<Product>(products[0])
+export function BadgeGenerator({ products, userTier, initialProductSlug }: BadgeGeneratorProps) {
+  // Select product from query param or default to first product
+  const initialProduct = initialProductSlug
+    ? products.find((p) => p.slug === initialProductSlug) || products[0]
+    : products[0]
+  const [selectedProduct, setSelectedProduct] = useState<Product>(initialProduct)
 
   // Badge customization state
   const defaults = getDefaultBadgeConfig()
