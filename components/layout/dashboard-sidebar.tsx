@@ -132,23 +132,42 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
       {/* Navigation */}
       <nav className="flex-1 space-y-1 p-4">
         {navItems.map((item) => {
+          // Hide Badges link for free users
+          if (item.href === "/dashboard/badges" && isFree) {
+            return null;
+          }
+
           // Exact match for dashboard home, otherwise check if path starts with the href
           const isActive = item.href === "/dashboard"
             ? pathname === "/dashboard"
             : pathname === item.href || pathname.startsWith(item.href + "/");
+
+          const isBadgesLink = item.href === "/dashboard/badges";
+
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors relative",
                 isActive
                   ? "bg-teal-600 text-white"
+                  : isBadgesLink
+                  ? "text-gray-200 hover:bg-gradient-to-r hover:from-emerald-600/20 hover:to-teal-600/20 hover:text-white border border-emerald-600/30"
                   : "text-gray-400 hover:bg-gray-800 hover:text-white"
               )}
             >
               <item.icon className="h-5 w-5" />
               {item.title}
+              {isBadgesLink && !isActive && (
+                <span className="ml-auto">
+                  {isProPlus ? (
+                    <Crown className="h-3 w-3 text-amber-400" />
+                  ) : (
+                    <Sparkles className="h-3 w-3 text-emerald-400" />
+                  )}
+                </span>
+              )}
             </Link>
           );
         })}

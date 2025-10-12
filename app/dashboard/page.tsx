@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Package, TrendingUp, Eye, Plus } from "lucide-react";
+import { Package, TrendingUp, Eye, Plus, Award, Sparkles, ArrowRight } from "lucide-react";
 import { getActivityFeed } from "@/lib/activity/actions";
 import { ActivityFeed } from "@/components/activity/activity-feed";
 
@@ -13,6 +14,24 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) return null;
+
+  // Get user subscription tier
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select(`
+      status,
+      plan_id,
+      subscription_plans!inner(name)
+    `)
+    .eq("user_id", user.id)
+    .eq("status", "active")
+    .single();
+
+  let userTier: "free" | "pro" | "pro_plus" = "free";
+  if (subscription?.subscription_plans) {
+    const planName = (subscription.subscription_plans as { name: string }).name;
+    userTier = planName === "pro_plus" ? "pro_plus" : planName === "pro" ? "pro" : "free";
+  }
 
   // Get user's product statistics
   const { data: products } = await supabase
@@ -114,6 +133,37 @@ export default async function DashboardPage() {
             <p className="text-3xl font-bold text-white">{draftProducts || 0}</p>
           </div>
         </div>
+
+        {/* Badge Feature Callout - Pro/Pro Plus only */}
+        {userTier !== "free" && publishedProducts && publishedProducts > 0 && (
+          <div className="bg-gradient-to-r from-emerald-600/10 to-teal-600/10 border border-emerald-600/30 rounded-lg p-6 mb-8">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-emerald-600/20 rounded-lg">
+                  <Award className="h-6 w-6 text-emerald-400" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-semibold text-white">Generate Product Badges</h3>
+                    <Badge variant="secondary" className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      {userTier === "pro_plus" ? "Pro Plus" : "Pro"}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-300 max-w-2xl">
+                    Create beautiful, embeddable badges for your products. Share them on your website, README files, or anywhere you want to showcase your AI creations. Track clicks and see where your traffic comes from.
+                  </p>
+                </div>
+              </div>
+              <Button asChild className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 flex-shrink-0">
+                <Link href="/dashboard/badges">
+                  Create Badge
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Quick Actions */}
         <div className="bg-gray-900 border border-gray-800 rounded-lg p-4 md:p-6 mb-8">
