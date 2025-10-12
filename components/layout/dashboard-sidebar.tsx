@@ -153,7 +153,7 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
                 isActive
                   ? "bg-teal-600 text-white"
                   : isBadgesLink
-                  ? "text-gray-200 hover:bg-gradient-to-r hover:from-emerald-600/20 hover:to-teal-600/20 hover:text-white border border-emerald-600/30"
+                  ? "text-gray-200 hover:bg-gradient-to-r hover:from-emerald-600/20 hover:to-teal-600/20 hover:text-white"
                   : "text-gray-400 hover:bg-gray-800 hover:text-white"
               )}
             >
