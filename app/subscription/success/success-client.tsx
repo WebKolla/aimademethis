@@ -69,25 +69,26 @@ export function SubscriptionSuccessClient() {
               </AnimatePresence>
             </motion.div>
 
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={isActivating ? "loading-text" : "success-text"}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="space-y-2"
-              >
-                <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
-                  {isActivating ? "Activating Your Subscription" : "Welcome to Pro!"}
-                </CardTitle>
-                <p className="text-slate-600 dark:text-slate-400 text-lg">
-                  {isActivating
-                    ? "We're setting up your account with all the premium features..."
-                    : "Your subscription has been successfully activated"}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+            <div className="space-y-2">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isActivating ? "loading-text" : "success-text"}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                >
+                  <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                    {isActivating ? "Activating Your Subscription" : "Welcome to Pro!"}
+                  </CardTitle>
+                  <p className="text-slate-600 dark:text-slate-400 text-lg">
+                    {isActivating
+                      ? "We're setting up your account with all the premium features..."
+                      : "Your subscription has been successfully activated"}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
             <AnimatePresence>
               {!isActivating && subscription && (
