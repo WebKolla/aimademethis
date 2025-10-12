@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     template: "%s | AIMMT"
   },
   description: "Explore, share, and discover AI products created by innovators worldwide. A community-driven platform for AI tools, applications, and innovations.",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
   keywords: [
     "AI products",
     "artificial intelligence",
@@ -148,10 +151,10 @@ export default function RootLayout({
         />
 
         {/* Google Analytics */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG && (
           <>
             <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG}`}
               strategy="afterInteractive"
             />
             <Script id="google-analytics" strategy="afterInteractive">
@@ -159,7 +162,9 @@ export default function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+                gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_TAG}', {
+                  page_path: window.location.pathname,
+                });
               `}
             </Script>
           </>
