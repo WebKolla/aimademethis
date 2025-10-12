@@ -1,0 +1,69 @@
+interface LogoProps {
+  className?: string;
+  iconClassName?: string;
+  textClassName?: string;
+  showText?: boolean;
+  variant?: 'default' | 'gradient' | 'purple-gradient';
+}
+
+export function Logo({
+  className = '',
+  iconClassName = '',
+  textClassName = '',
+  showText = true,
+  variant = 'gradient',
+}: LogoProps) {
+  const getTextClassName = () => {
+    const baseClass = 'font-bold';
+
+    switch (variant) {
+      case 'gradient':
+        return `${baseClass} bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent`;
+      case 'purple-gradient':
+        return `${baseClass} bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent`;
+      default:
+        return `${baseClass} text-foreground`;
+    }
+  };
+
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      {/* Logo Icon */}
+      <div className={`relative flex items-center justify-center ${iconClassName}`}>
+        <svg
+          viewBox="0 0 64 64"
+          className="w-8 h-8"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#10b981', stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: '#14b8a6', stopOpacity: 1 }} />
+            </linearGradient>
+          </defs>
+
+          {/* Background circle */}
+          <circle cx="32" cy="32" r="32" fill="#0f172a" />
+
+          {/* Letter "A" with AI circuit aesthetic */}
+          <path
+            d="M 32 12 L 48 48 L 42 48 L 38.5 40 L 25.5 40 L 22 48 L 16 48 L 32 12 Z M 27.5 34 L 36.5 34 L 32 22 L 27.5 34 Z"
+            fill="url(#logo-grad)"
+          />
+
+          {/* AI spark/node accent */}
+          <circle cx="32" cy="18" r="2.5" fill="#14b8a6" opacity="0.8" />
+          <circle cx="46" cy="44" r="1.5" fill="#10b981" opacity="0.6" />
+          <circle cx="18" cy="44" r="1.5" fill="#10b981" opacity="0.6" />
+        </svg>
+      </div>
+
+      {/* Logo Text */}
+      {showText && (
+        <span className={`${getTextClassName()} ${textClassName}`}>
+          AIMMT
+        </span>
+      )}
+    </div>
+  );
+}

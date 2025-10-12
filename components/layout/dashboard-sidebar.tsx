@@ -18,6 +18,7 @@ import {
   Award
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth/actions";
 import { useSubscription } from "@/components/providers/subscription-provider";
@@ -92,9 +93,7 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
       {/* Logo/Brand */}
       <div className="border-b border-gray-800 p-6">
         <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            aimademethis
-          </span>
+          <Logo textClassName="text-2xl" variant="purple-gradient" />
         </Link>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Logo } from "@/components/ui/logo";
 import { signOut } from "@/lib/auth/actions";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
@@ -85,9 +86,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent tracking-tight">
-              AIMMT
-            </span>
+            <Logo textClassName="text-2xl tracking-tight" variant="gradient" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -150,9 +149,7 @@ export function Navbar() {
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <SheetHeader>
                 <SheetTitle>
-                  <span className="text-2xl font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                    AIMMT
-                  </span>
+                  <Logo textClassName="text-2xl" variant="gradient" />
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-6 mt-8">

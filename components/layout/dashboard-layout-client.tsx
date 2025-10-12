@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 import {
   Sheet,
   SheetContent,
@@ -49,9 +50,7 @@ export function DashboardLayoutClient({
               <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
             </SheetContent>
           </Sheet>
-          <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-            aimademethis
-          </span>
+          <Logo textClassName="text-xl" variant="purple-gradient" />
         </div>
 
         {/* Content Area */}

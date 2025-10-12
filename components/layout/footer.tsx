@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/ui/logo";
 
 export function Footer() {
   return (
@@ -7,9 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <h3 className="text-lg font-black bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent tracking-tight">
-              AIMMT
-            </h3>
+            <Logo textClassName="text-lg tracking-tight" variant="gradient" />
             <p className="text-sm text-muted-foreground dark:text-white">
               AI Made Me This - Discover and share AI products built by innovators worldwide.
             </p>
