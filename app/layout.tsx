@@ -77,6 +77,14 @@ export const metadata: Metadata = {
     canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com',
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'),
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-icon',
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({

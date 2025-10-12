@@ -1,0 +1,17 @@
+{
+  "name": "AIMMT - AI Made Me This",
+  "short_name": "AIMMT",
+  "description": "Discover AI products created by innovators worldwide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
