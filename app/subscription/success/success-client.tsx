@@ -45,75 +45,95 @@ export function SubscriptionSuccessClient() {
         className="w-full max-w-2xl"
       >
         <Card className="border-2 border-emerald-500/20 shadow-2xl">
-          <CardHeader className="text-center space-y-6 pt-12">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isActivating ? "loading" : "success"}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isActivating ? (
+          <AnimatePresence mode="wait">
+            {isActivating ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <CardHeader className="text-center space-y-6 pt-12">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
+                  >
                     <Loader2 className="h-10 w-10 text-white animate-spin" />
-                  ) : (
+                  </motion.div>
+
+                  <div className="space-y-2">
+                    <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                      Activating Your Subscription
+                    </CardTitle>
+                    <p className="text-slate-600 dark:text-slate-400 text-lg">
+                      We&apos;re setting up your account with all the premium features...
+                    </p>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="space-y-8 pb-12">
+                  <div className="text-center space-y-4">
+                    <div className="flex items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                      <div className="animate-pulse">Processing payment</div>
+                      <div className="flex gap-1">
+                        <span className="animate-bounce" style={{ animationDelay: "0ms" }}>
+                          .
+                        </span>
+                        <span className="animate-bounce" style={{ animationDelay: "150ms" }}>
+                          .
+                        </span>
+                        <span className="animate-bounce" style={{ animationDelay: "300ms" }}>
+                          .
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 dark:text-slate-500">
+                      This usually takes just a few seconds
+                    </p>
+                  </div>
+                </CardContent>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <CardHeader className="text-center space-y-6 pt-12">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                    className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center"
+                  >
                     <CheckCircle2 className="h-10 w-10 text-white" />
+                  </motion.div>
+
+                  <div className="space-y-2">
+                    <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+                      Welcome to Pro!
+                    </CardTitle>
+                    <p className="text-slate-600 dark:text-slate-400 text-lg">
+                      Your subscription has been successfully activated
+                    </p>
+                  </div>
+
+                  {subscription && (
+                    <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 text-base">
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      {subscription.planDisplayName} Plan Active
+                    </Badge>
                   )}
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
+                </CardHeader>
 
-            <div className="space-y-2">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isActivating ? "loading-text" : "success-text"}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                >
-                  <CardTitle className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
-                    {isActivating ? "Activating Your Subscription" : "Welcome to Pro!"}
-                  </CardTitle>
-                  <p className="text-slate-600 dark:text-slate-400 text-lg">
-                    {isActivating
-                      ? "We're setting up your account with all the premium features..."
-                      : "Your subscription has been successfully activated"}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <AnimatePresence>
-              {!isActivating && subscription && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1, duration: 0.3 }}
-                >
-                  <Badge className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2 text-base">
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    {subscription.planDisplayName} Plan Active
-                  </Badge>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </CardHeader>
-
-          <CardContent className="space-y-8 pb-12">
-            <AnimatePresence>
-              {!isActivating && subscription && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                >
+                <CardContent className="space-y-8 pb-12">
+                  {subscription && (
+                    <>
                 {/* Subscription Details */}
                 <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 space-y-4">
                   <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -186,32 +206,12 @@ export function SubscriptionSuccessClient() {
                     </a>
                   </p>
                 </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {isActivating && (
-              <div className="text-center space-y-4">
-                <div className="flex items-center justify-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                  <div className="animate-pulse">Processing payment</div>
-                  <div className="flex gap-1">
-                    <span className="animate-bounce" style={{ animationDelay: "0ms" }}>
-                      .
-                    </span>
-                    <span className="animate-bounce" style={{ animationDelay: "150ms" }}>
-                      .
-                    </span>
-                    <span className="animate-bounce" style={{ animationDelay: "300ms" }}>
-                      .
-                    </span>
-                  </div>
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-500">
-                  This usually takes just a few seconds
-                </p>
-              </div>
+                    </>
+                  )}
+                </CardContent>
+              </motion.div>
             )}
-          </CardContent>
+          </AnimatePresence>
         </Card>
 
         {/* Session ID for debugging */}
