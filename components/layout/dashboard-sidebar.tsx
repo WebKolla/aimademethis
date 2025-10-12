@@ -93,14 +93,14 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
       {/* Logo/Brand */}
       <div className="border-b border-gray-800 p-6">
         <Link href="/" className="flex items-center space-x-2">
-          <Logo textClassName="text-2xl" variant="purple-gradient" />
+          <Logo textClassName="text-2xl" variant="default" />
         </Link>
       </div>
 
       {/* User Info */}
       <div className="border-b border-gray-800 p-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-semibold">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-semibold">
             {username.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">

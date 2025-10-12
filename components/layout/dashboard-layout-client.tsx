@@ -50,7 +50,7 @@ export function DashboardLayoutClient({
               <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
             </SheetContent>
           </Sheet>
-          <Logo textClassName="text-xl" variant="purple-gradient" />
+          <Logo textClassName="text-xl" variant="default" />
         </div>
 
         {/* Content Area */}
