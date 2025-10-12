@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Bell, BellOff, Loader2 } from "lucide-react";
+import { Bell, BellOff, Loader2, Crown } from "lucide-react";
 import { followProduct, unfollowProduct } from "@/lib/follows/actions";
 import { useRouter } from "next/navigation";
+import { useHasPlan } from "@/hooks/use-feature-access";
+import { toast } from "sonner";
 
 interface FollowProductButtonProps {
   productId: string;
@@ -29,19 +32,40 @@ export function FollowProductButton({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
+  // Check if user has Pro or Pro Plus for following
+  const hasPro = useHasPlan("pro");
+
   const handleFollow = () => {
+    // Show upgrade prompt if user doesn't have Pro or Pro Plus
+    if (!hasPro && !isFollowing) {
+      toast.error("Following products requires Pro or Pro Plus subscription", {
+        description: "Upgrade to Pro to follow products and get notifications",
+        action: {
+          label: "Upgrade",
+          onClick: () => router.push("/pricing"),
+        },
+        duration: 5000,
+      });
+      return;
+    }
+
     startTransition(async () => {
       if (isFollowing) {
         const result = await unfollowProduct(productId);
         if (result.success) {
           setIsFollowing(false);
           router.refresh();
+        } else if (result.error) {
+          toast.error(result.error);
         }
       } else {
         const result = await followProduct(productId);
         if (result.success) {
           setIsFollowing(true);
           router.refresh();
+          toast.success("Following product!");
+        } else if (result.error) {
+          toast.error(result.error);
         }
       }
     });
@@ -69,12 +93,14 @@ export function FollowProductButton({
           {showIcon &&
             (isFollowing ? (
               <BellOff className="h-4 w-4" />
+            ) : !hasPro ? (
+              <Crown className="h-4 w-4" />
             ) : (
               <Bell className="h-4 w-4" />
             ))}
           {showText && (
             <span className={showIcon ? "ml-2" : ""}>
-              {isFollowing ? "Following" : "Follow"}
+              {isFollowing ? "Following" : !hasPro ? "Follow (Pro)" : "Follow"}
             </span>
           )}
         </>

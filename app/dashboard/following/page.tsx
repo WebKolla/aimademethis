@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { getFollowingFeed } from "@/lib/follows/actions";
 import { FollowingFeed } from "@/components/following/following-feed";
-import { Users, Sparkles } from "lucide-react";
+import { Users, Sparkles, Crown } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -22,7 +22,8 @@ export default async function FollowingPage({
   const sortBy = (params.sort === "trending" ? "trending" : "newest") as
     | "newest"
     | "trending";
-  const { products, error } = await getFollowingFeed(sortBy);
+  const result = await getFollowingFeed(sortBy);
+  const requiresUpgrade = "requiresUpgrade" in result && result.requiresUpgrade;
 
   // Get following count
   const { count: followingCount } = await supabase
@@ -57,11 +58,38 @@ export default async function FollowingPage({
         </div>
 
         {/* Content */}
-        {error ? (
-          <div className="bg-red-900/20 border border-red-800 rounded-lg p-6 text-center">
-            <p className="text-red-400">{error}</p>
+        {requiresUpgrade ? (
+          <div className="text-center py-16 rounded-lg border-2 border-amber-400 dark:border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 mb-6 shadow-lg">
+              <Crown className="h-10 w-10 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              Pro Feature: Following Feed
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto text-lg">
+              The following feed is available on Pro and Pro Plus plans. See products from creators you follow in one place!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg"
+              >
+                <Link href="/pricing">
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Upgrade to Pro
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/products">Browse Products</Link>
+              </Button>
+            </div>
           </div>
-        ) : products.length === 0 ? (
+        ) : result.error ? (
+          <div className="bg-red-900/20 border border-red-800 rounded-lg p-6 text-center">
+            <p className="text-red-400">{result.error}</p>
+          </div>
+        ) : result.products.length === 0 ? (
           <div className="bg-gray-900 border border-gray-800 rounded-lg p-12 text-center">
             <div className="max-w-md mx-auto">
               <div className="h-24 w-24 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -95,7 +123,7 @@ export default async function FollowingPage({
           </div>
         ) : (
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          <FollowingFeed products={products as any} initialSort={sortBy} />
+          <FollowingFeed products={result.products as any} initialSort={sortBy} />
         )}
       </div>
     </DashboardLayout>

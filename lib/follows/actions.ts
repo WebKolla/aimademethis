@@ -208,6 +208,20 @@ export async function getFollowingFeed(sortBy: "newest" | "trending" = "newest")
     return { products: [], error: "Not authenticated" };
   }
 
+  // Check subscription - following feed requires Pro or Pro Plus
+  const { data: subscriptionData } = await supabase.rpc("get_user_subscription", {
+    p_user_id: user.id,
+  });
+
+  const subscription = subscriptionData?.[0];
+  if (!subscription || subscription.plan_name === "free") {
+    return {
+      products: [],
+      error: "Following feed requires Pro or Pro Plus subscription",
+      requiresUpgrade: true
+    };
+  }
+
   // Get list of user IDs that the current user follows
   const { data: followingData, error: followError } = await supabase
     .from("follows")
@@ -303,6 +317,19 @@ export async function followProduct(productId: string) {
 
   if (!user) {
     return { error: "Not authenticated" };
+  }
+
+  // Check subscription - following products requires Pro or Pro Plus
+  const { data: subscriptionData } = await supabase.rpc("get_user_subscription", {
+    p_user_id: user.id,
+  });
+
+  const subscription = subscriptionData?.[0];
+  if (!subscription || subscription.plan_name === "free") {
+    return {
+      error: "Following products requires Pro or Pro Plus subscription",
+      requiresUpgrade: true
+    };
   }
 
   // Check if already following
@@ -403,6 +430,20 @@ export async function getUserFollowedProducts() {
 
   if (!user) {
     return { products: [], error: "Not authenticated" };
+  }
+
+  // Check subscription - following products requires Pro or Pro Plus
+  const { data: subscriptionData } = await supabase.rpc("get_user_subscription", {
+    p_user_id: user.id,
+  });
+
+  const subscription = subscriptionData?.[0];
+  if (!subscription || subscription.plan_name === "free") {
+    return {
+      products: [],
+      error: "Following products requires Pro or Pro Plus subscription",
+      requiresUpgrade: true
+    };
   }
 
   const { data: follows, error: followError } = await supabase

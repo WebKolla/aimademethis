@@ -2,7 +2,8 @@ import { getUserFollowedProducts } from "@/lib/follows/actions";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import Link from "next/link";
 import Image from "next/image";
-import { Bell } from "lucide-react";
+import { Bell, Crown, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Followed Products | AIMadeThis",
@@ -10,7 +11,8 @@ export const metadata = {
 };
 
 export default async function FollowedProductsPage() {
-  const { products } = await getUserFollowedProducts();
+  const result = await getUserFollowedProducts();
+  const requiresUpgrade = "requiresUpgrade" in result && result.requiresUpgrade;
 
   return (
     <DashboardLayout>
@@ -26,8 +28,35 @@ export default async function FollowedProductsPage() {
           </div>
         </div>
 
-        {/* Products List */}
-        {products.length === 0 ? (
+        {/* Upgrade Required */}
+        {requiresUpgrade ? (
+          <div className="text-center py-16 rounded-lg border-2 border-amber-400 dark:border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 mb-6 shadow-lg">
+              <Crown className="h-10 w-10 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+              Pro Feature: Follow Products
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-md mx-auto text-lg">
+              Following products is available on Pro and Pro Plus plans. Get notified about updates to your favorite products!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg"
+              >
+                <Link href="/pricing">
+                  <Sparkles className="h-5 w-5 mr-2" />
+                  Upgrade to Pro
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/products">Browse Products</Link>
+              </Button>
+            </div>
+          </div>
+        ) : result.products.length === 0 ? (
           <div className="text-center py-12 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
             <Bell className="h-16 w-16 mx-auto text-gray-400 mb-4" />
             <h3 className="text-xl font-semibold mb-2">No followed products yet</h3>
@@ -43,7 +72,7 @@ export default async function FollowedProductsPage() {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
+            {result.products.map((product) => (
               <Link
                 key={product.id}
                 href={`/products/${product.slug}`}
