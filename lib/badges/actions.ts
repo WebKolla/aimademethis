@@ -252,3 +252,33 @@ export async function getUserTier(
       ? 'pro'
       : 'free'
 }
+
+/**
+ * Gets user's published products for badge generation
+ * Returns products sorted by creation date (newest first)
+ *
+ * @returns User's published products or error
+ */
+export async function getUserProducts() {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Unauthorized', data: null }
+  }
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, slug, name, tagline')
+    .eq('user_id', user.id)
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    return { error: error.message, data: null }
+  }
+
+  return { error: null, data: data || [] }
+}

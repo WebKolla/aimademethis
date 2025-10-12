@@ -191,3 +191,29 @@ export function extractDomain(referrer: string | null | undefined): string | nul
     return null
   }
 }
+
+/**
+ * Gets the full product URL for a given slug
+ * Used in embed codes and badge click tracking
+ *
+ * @param slug - Product slug
+ * @returns Full product URL
+ */
+export function getProductUrl(slug: string): string {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'
+  return `${baseUrl}/products/${slug}`
+}
+
+/**
+ * Gets default badge configuration
+ * Used to reset badge customization
+ *
+ * @returns Default badge configuration
+ */
+export function getDefaultBadgeConfig() {
+  return {
+    variant: 'pro' as BadgeVariant,
+    size: 'medium' as BadgeSize,
+    theme: 'auto' as ('light' | 'dark' | 'auto'),
+  }
+}

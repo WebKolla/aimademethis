@@ -1,0 +1,119 @@
+'use client'
+
+import { useState, useMemo } from 'react'
+import { BadgeVariant, BadgeSize, BadgeTheme } from '@/lib/badges/types'
+import { getDefaultBadgeConfig } from '@/lib/badges/utils'
+import { ProductSelector } from './product-selector'
+import { BadgePreview } from './badge-preview'
+import { BadgeControls } from './badge-controls'
+import { EmbedCodeGenerator } from './embed-code-generator'
+import { BadgeStats } from './badge-stats'
+
+interface Product {
+  id: string
+  slug: string
+  name: string
+  tagline: string | null
+}
+
+interface BadgeGeneratorProps {
+  products: Product[]
+  userTier: 'pro' | 'pro_plus'
+}
+
+/**
+ * Badge Generator Component
+ *
+ * Main orchestrator for badge generation UI
+ * Manages state and coordinates between child components
+ */
+export function BadgeGenerator({ products, userTier }: BadgeGeneratorProps) {
+  // Select first product by default
+  const [selectedProduct, setSelectedProduct] = useState<Product>(products[0])
+
+  // Badge customization state
+  const defaults = getDefaultBadgeConfig()
+  const [variant, setVariant] = useState<BadgeVariant>(defaults.variant)
+  const [size, setSize] = useState<BadgeSize>(defaults.size)
+  const [theme, setTheme] = useState<BadgeTheme>(defaults.theme)
+
+  // Compute badge URL based on current settings
+  const badgeUrl = useMemo(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'
+    const params = new URLSearchParams({
+      variant,
+      size,
+      theme,
+    })
+    return `${baseUrl}/api/badge/${selectedProduct.slug}?${params.toString()}`
+  }, [selectedProduct.slug, variant, size, theme])
+
+  // Compute product URL
+  const productUrl = useMemo(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aimademethis.com'
+    return `${baseUrl}/products/${selectedProduct.slug}`
+  }, [selectedProduct.slug])
+
+  // Reset to defaults
+  const handleReset = () => {
+    setVariant(defaults.variant)
+    setSize(defaults.size)
+    setTheme(defaults.theme)
+  }
+
+  // Handle product change
+  const handleProductChange = (slug: string) => {
+    const product = products.find((p) => p.slug === slug)
+    if (product) {
+      setSelectedProduct(product)
+      // Reset customization when product changes
+      handleReset()
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Product Selector */}
+      <ProductSelector
+        products={products}
+        selectedSlug={selectedProduct.slug}
+        onSelect={handleProductChange}
+      />
+
+      {/* Two-column layout: Controls + Preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-6">
+        {/* Left Column: Customization */}
+        <div className="space-y-6">
+          <BadgeControls
+            variant={variant}
+            size={size}
+            theme={theme}
+            userTier={userTier}
+            onVariantChange={setVariant}
+            onSizeChange={setSize}
+            onThemeChange={setTheme}
+            onReset={handleReset}
+          />
+
+          <BadgeStats productId={selectedProduct.id} />
+        </div>
+
+        {/* Right Column: Preview + Embed Codes */}
+        <div className="space-y-6">
+          <BadgePreview
+            productName={selectedProduct.name}
+            badgeUrl={badgeUrl}
+            productUrl={productUrl}
+          />
+
+          <EmbedCodeGenerator
+            productName={selectedProduct.name}
+            productUrl={productUrl}
+            badgeUrl={badgeUrl}
+            size={size}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}

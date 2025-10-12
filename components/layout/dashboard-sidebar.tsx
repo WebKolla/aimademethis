@@ -14,7 +14,8 @@ import {
   Users,
   Bell,
   Crown,
-  Sparkles
+  Sparkles,
+  Award
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,11 @@ const navItems = [
     title: "Add Product",
     href: "/dashboard/products/new",
     icon: Plus,
+  },
+  {
+    title: "Badges",
+    href: "/dashboard/badges",
+    icon: Award,
   },
   {
     title: "Bookmarks",
