@@ -1,5 +1,6 @@
 import { HomePageClient } from "./_components/home-page-client";
 import { createClient } from "@/lib/supabase/server";
+import { getFeaturedProduct } from "@/lib/products/featured-actions";
 
 interface PlanData {
   name: string;
@@ -40,6 +41,9 @@ function formatFeatureName(feature: string): string {
 
 export default async function HomePage() {
   const supabase = await createClient();
+
+  // Fetch featured product
+  const featuredProduct = await getFeaturedProduct();
 
   // Fetch subscription plans from database
   const { data: dbPlans, error } = await supabase
@@ -124,5 +128,5 @@ export default async function HomePage() {
     });
   }
 
-  return <HomePageClient plans={plans} />;
+  return <HomePageClient plans={plans} featuredProduct={featuredProduct} />;
 }

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 import { PricingSectionHomeClient } from "@/components/pricing/pricing-section-home-client";
+import { FeaturedProductHero } from "@/components/featured/featured-product-hero";
 import type { LucideIcon } from "lucide-react";
 
 // Icon mapping for pricing plans
@@ -119,11 +120,39 @@ interface PlanData {
   badge?: string;
 }
 
-interface HomePageClientProps {
-  plans: PlanData[];
+interface FeaturedProduct {
+  id: string;
+  name: string;
+  slug: string;
+  tagline: string | null;
+  description: string | null;
+  image_url: string | null;
+  video_url: string | null;
+  demo_video_url: string | null;
+  website_url: string | null;
+  created_at: string | null;
+  views_count: number | null;
+  votes_count: number;
+  comments_count: number;
+  pricing_type: string | null;
+  categories: {
+    name: string;
+    slug: string;
+  } | null;
+  profiles: {
+    id: string;
+    username: string;
+    full_name: string | null;
+    avatar_url: string | null;
+  } | null;
 }
 
-export function HomePageClient({ plans }: HomePageClientProps) {
+interface HomePageClientProps {
+  plans: PlanData[];
+  featuredProduct: FeaturedProduct | null;
+}
+
+export function HomePageClient({ plans, featuredProduct }: HomePageClientProps) {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 
   // Transform plans to include icon components
@@ -270,6 +299,9 @@ export function HomePageClient({ plans }: HomePageClientProps) {
             </div>
           </motion.div>
         </section>
+
+        {/* Featured Product Hero Section */}
+        {featuredProduct && <FeaturedProductHero product={featuredProduct} />}
 
         {/* Why Showcase Section */}
         <section className="py-24 md:py-32 bg-white dark:bg-slate-900 relative overflow-hidden">
