@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ProfileHeader } from "@/components/profile/profile-header";
-import { ProfileNav } from "@/components/profile/profile-nav";
 import { UserProducts } from "@/components/profile/user-products";
 import { getFollowerCount, getFollowingCount, isFollowing } from "@/lib/follows/actions";
 import type { Metadata } from "next";
@@ -100,9 +99,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   return (
     <div className="min-h-screen">
-      {/* Profile Navigation */}
-      <ProfileNav username={username} isOwnProfile={isOwnProfile} />
-
       {/* Hero Section */}
       <div className="bg-gradient-to-b from-slate-50 to-white dark:from-gray-900 dark:to-gray-950 border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-12">

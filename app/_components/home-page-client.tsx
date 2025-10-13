@@ -21,6 +21,7 @@ import {
   Mail,
   CheckCircle2,
   Crown,
+  Search,
 } from "lucide-react";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 import { PricingSectionHomeClient } from "@/components/pricing/pricing-section-home-client";
@@ -304,93 +305,167 @@ export function HomePageClient({ plans, featuredProduct }: HomePageClientProps) 
         {featuredProduct && <FeaturedProductHero product={featuredProduct} />}
 
         {/* SEO Content Section */}
-        <section className="py-16 bg-white dark:bg-slate-900">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto space-y-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-                The Ultimate AI Product Discovery Platform
-              </h2>
+        <section className="py-24 md:py-32 bg-gradient-to-br from-slate-50 via-teal-50/30 to-emerald-50/30 dark:from-slate-950 dark:via-teal-950/20 dark:to-slate-950 relative overflow-hidden">
+          <div className="container mx-auto px-4 relative z-10">
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={container}
+              className="space-y-16"
+            >
+              {/* Section Header */}
+              <motion.div variants={item} className="text-center space-y-6 max-w-3xl mx-auto">
+                <h2 className="text-5xl md:text-6xl font-black tracking-tight text-gray-900 dark:text-white">
+                  The Ultimate AI Product Discovery Platform
+                </h2>
+                <div className="space-y-6 text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                  <p>
+                    <strong>AIMMT (AI Made Me This)</strong> is the premier platform for discovering,
+                    sharing, and reviewing <strong>AI products and SaaS tools</strong>. Whether you&apos;re searching for
+                    <strong> AI productivity tools</strong>, <strong>creative AI applications</strong>,
+                    or <strong>developer AI solutions</strong>, our community-driven <strong>SaaS product directory</strong> helps
+                    you find exactly what you need.
+                  </p>
 
-              <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300">
-                <p>
-                  <strong>AIMMT (AI Made Me This)</strong> is the premier platform for discovering,
-                  sharing, and reviewing <strong>AI products and SaaS tools</strong>. Whether you&apos;re searching for
-                  <strong> AI productivity tools</strong>, <strong>creative AI applications</strong>,
-                  or <strong>developer AI solutions</strong>, our community-driven <strong>SaaS product directory</strong> helps
-                  you find exactly what you need.
-                </p>
+                  <p>
+                    Explore thousands of <strong>AI and SaaS products</strong> curated by developers and innovators
+                    worldwide. Our transparent <strong>trending algorithm</strong> surfaces the best AI tools
+                    based on real community engagement—no paid promotions, just genuine user feedback.
+                    <strong> Submit your SaaS product to our directory</strong> for free and reach thousands of potential users.
+                  </p>
+                </div>
+              </motion.div>
 
-                <p>
-                  Explore thousands of <strong>AI and SaaS products</strong> curated by developers and innovators
-                  worldwide. Our transparent <strong>trending algorithm</strong> surfaces the best AI tools
-                  based on real community engagement—no paid promotions, just genuine user feedback.
-                  <strong> Submit your SaaS product to our directory</strong> for free and reach thousands of potential users.
-                </p>
-
-                <div className="grid md:grid-cols-3 gap-6 my-8">
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20">
-                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+              {/* Feature Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <motion.div
+                  variants={item}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="group p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-teal-500/10"
+                >
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white shadow-lg group-hover:shadow-teal-500/50 transition-all duration-300">
+                      <Search className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       Discover AI & SaaS Tools
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                       Search and filter through hundreds of AI and SaaS products by category, pricing,
                       and technology stack. Browse our comprehensive SaaS product directory.
                     </p>
                   </div>
+                </motion.div>
 
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
-                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                <motion.div
+                  variants={item}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="group p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-teal-500/10"
+                >
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white shadow-lg group-hover:shadow-teal-500/50 transition-all duration-300">
+                      <Star className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       Read Authentic Reviews
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                       Make informed decisions with genuine user reviews and 5-star ratings
                       from the AI community.
                     </p>
                   </div>
+                </motion.div>
 
-                  <div className="p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-rose-50 dark:from-orange-900/20 dark:to-rose-900/20">
-                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                <motion.div
+                  variants={item}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="group p-8 rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-slate-700 hover:border-teal-500 dark:hover:border-teal-500 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-teal-500/10"
+                >
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white shadow-lg group-hover:shadow-teal-500/50 transition-all duration-300">
+                      <Rocket className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       Showcase Your Product
                     </h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                       Submit your AI or SaaS product to our directory for free and reach thousands of potential users
                       actively searching for solutions. Easy SaaS product submission process.
                     </p>
                   </div>
-                </div>
+                </motion.div>
+              </div>
 
-                <h3 className="text-2xl font-bold mt-12 mb-4 text-gray-900 dark:text-white">
+              {/* Why Choose Section */}
+              <motion.div variants={item} className="max-w-3xl mx-auto space-y-8">
+                <h3 className="text-4xl md:text-5xl font-black tracking-tight text-center text-gray-900 dark:text-white">
                   Why Choose AIMMT for AI &amp; SaaS Product Discovery?
                 </h3>
 
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Free to start</strong> - Submit unlimited AI and SaaS products on our free tier</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Fair rankings</strong> - Algorithm-based trending, not pay-to-win, just like Product Hunt</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Active community</strong> - Thousands of AI enthusiasts and SaaS builders</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Advanced filtering</strong> - Find AI and SaaS tools by use case, pricing, and tech stack</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Detailed insights</strong> - See what AI models and technologies products use</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-600 dark:text-emerald-400 mt-1">✅</span>
-                    <span><strong>Alternative to Product Hunt</strong> - Focused specifically on AI and SaaS products</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Free to start</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Submit unlimited AI and SaaS products on our free tier
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Fair rankings</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Algorithm-based trending, not pay-to-win, just like Product Hunt
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Active community</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Thousands of AI enthusiasts and SaaS builders
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Advanced filtering</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Find AI and SaaS tools by use case, pricing, and tech stack
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Detailed insights</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        See what AI models and technologies products use
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md hover:shadow-lg transition-all duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-900 dark:text-white">Alternative to Product Hunt</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                        Focused specifically on AI and SaaS products
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
