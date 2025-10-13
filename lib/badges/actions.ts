@@ -44,11 +44,13 @@ export const getBadgeData = cache(
         `
         status,
         plan_id,
+        current_period_end,
         subscription_plans!inner(name)
       `
       )
       .eq('user_id', product.user_id)
       .eq('status', 'active')
+      .gt('current_period_end', new Date().toISOString())
       .single()
 
     let userTier: 'free' | 'pro' | 'pro_plus' = 'free'
@@ -202,11 +204,13 @@ export async function checkBadgeAccess(
     .select(
       `
       status,
+      current_period_end,
       subscription_plans!inner(name)
     `
     )
     .eq('user_id', userId)
     .eq('status', 'active')
+    .gt('current_period_end', new Date().toISOString())
     .single()
 
   if (!subscription?.subscription_plans) {
@@ -234,11 +238,13 @@ export async function getUserTier(
     .select(
       `
       status,
+      current_period_end,
       subscription_plans!inner(name)
     `
     )
     .eq('user_id', userId)
     .eq('status', 'active')
+    .gt('current_period_end', new Date().toISOString())
     .single()
 
   if (!subscription?.subscription_plans) {
