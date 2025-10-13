@@ -121,6 +121,21 @@ export function ProfileEditForm({ profile }: ProfileEditFormProps) {
         </div>
       )}
 
+      {/* Username (Read-Only Display) */}
+      <div>
+        <Label htmlFor="username_display" className="text-gray-300">Username</Label>
+        <Input
+          id="username_display"
+          type="text"
+          value={profile.username}
+          disabled
+          className="mt-1 bg-gray-900 border-gray-700 text-gray-400 cursor-not-allowed"
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          Username cannot be changed
+        </p>
+      </div>
+
       {/* Avatar Upload */}
       <div>
         <Label className="text-gray-300">Profile Picture</Label>
