@@ -44,10 +44,10 @@ export default function TermsPage() {
             Welcome to AIMMT (AI Made Me This). These Terms of Service
             (&quot;Terms&quot;) govern your access to and use of our platform at{" "}
             <Link
-              href="https://aimademethis.vercel.app"
+              href="https://www.aimademethis.com"
               className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
             >
-              aimademethis.vercel.app
+             www.aimademethis.com
             </Link>
             . By accessing or using our platform, you agree to be bound by these
             Terms. If you do not agree, please do not use our platform.

@@ -294,7 +294,7 @@ export function PricingPageClient() {
               href="mailto:support@aimademethis.com"
               className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium"
             >
-              <p>support@aimademethis.com</p>
+              <span className="pl-1">support@aimademethis.com</span>
             </a>
           </p>
         </motion.div>

@@ -45,10 +45,10 @@ export default function PrivacyPage() {
             Privacy Policy explains how we collect, use, disclose, and safeguard
             your information when you use our platform at{" "}
             <Link
-              href="https://aimademethis.vercel.app"
+              href="https://www.aimademethis.com"
               className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
             >
-              aimademethis.vercel.app
+              www.aimademethis.com
             </Link>
             .
           </p>

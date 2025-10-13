@@ -92,10 +92,10 @@ const features = [
 ];
 
 const stats = [
-  { value: "1,000+", label: "AI Products" },
-  { value: "5,000+", label: "Active Users" },
-  { value: "10,000+", label: "Monthly Visitors" },
+  { value: "Free", label: "To Get Started" },
   { value: "3", label: "Flexible Plans" },
+  { value: "Open", label: "To All Creators" },
+  { value: "Fair", label: "Trending Algorithm" },
 ];
 
 export default function AboutPage() {
@@ -345,10 +345,10 @@ export default function AboutPage() {
           >
             <motion.div variants={item} className="text-center space-y-4">
               <h2 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-                Growing Every Day
+                Built for Creators
               </h2>
               <p className="text-xl text-white/90">
-                Join thousands of creators and users in our community
+                Join our growing community of AI innovators and enthusiasts
               </p>
             </motion.div>
 
