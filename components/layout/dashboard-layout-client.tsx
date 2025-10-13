@@ -12,13 +12,13 @@ import {
 import { DashboardSidebar } from "./dashboard-sidebar";
 
 interface DashboardLayoutClientProps {
-  username: string;
+  displayName: string;
   avatarUrl: string | null;
   children: React.ReactNode;
 }
 
 export function DashboardLayoutClient({
-  username,
+  displayName,
   avatarUrl,
   children,
 }: DashboardLayoutClientProps) {
@@ -28,7 +28,7 @@ export function DashboardLayoutClient({
     <div className="flex min-h-screen bg-gray-950">
       {/* Desktop Sidebar - Hidden on mobile/tablet */}
       <div className="hidden lg:block sticky top-0 h-screen overflow-y-auto">
-        <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
+        <DashboardSidebar displayName={displayName} _avatarUrl={avatarUrl} />
       </div>
 
       {/* Main Content */}
@@ -47,7 +47,7 @@ export function DashboardLayoutClient({
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 w-64 bg-gray-900 border-gray-800">
-              <DashboardSidebar username={username} _avatarUrl={avatarUrl} />
+              <DashboardSidebar displayName={displayName} _avatarUrl={avatarUrl} />
             </SheetContent>
           </Sheet>
           <Logo textClassName="text-xl" variant="default" />

@@ -24,7 +24,7 @@ import { signOut } from "@/lib/auth/actions";
 import { useSubscription } from "@/components/providers/subscription-provider";
 
 interface DashboardSidebarProps {
-  username: string;
+  displayName: string;
   _avatarUrl?: string | null; // Reserved for future avatar display (prefixed with _ to suppress unused warning)
 }
 
@@ -76,7 +76,7 @@ const navItems = [
   },
 ];
 
-export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps) {
+export function DashboardSidebar({ displayName, _avatarUrl }: DashboardSidebarProps) {
   const pathname = usePathname();
   const { subscription } = useSubscription();
 
@@ -101,11 +101,11 @@ export function DashboardSidebar({ username, _avatarUrl }: DashboardSidebarProps
       <div className="border-b border-gray-800 p-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white font-semibold">
-            {username.charAt(0).toUpperCase()}
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">
-              {username}
+              {displayName}
             </p>
             <div className="flex items-center gap-1">
               {isProPlus && (

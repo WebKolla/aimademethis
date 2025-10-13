@@ -17,7 +17,7 @@ export async function DashboardLayout({ children }: { children: React.ReactNode 
   // Get user profile
   const { data: profile } = await supabase
     .from("profiles")
-    .select("username, avatar_url")
+    .select("username, full_name, avatar_url")
     .eq("id", user.id)
     .single();
 
@@ -25,9 +25,12 @@ export async function DashboardLayout({ children }: { children: React.ReactNode 
     redirect("/login");
   }
 
+  // Use full name if available, fallback to username
+  const displayName = profile.full_name || profile.username;
+
   return (
     <DashboardLayoutClient
-      username={profile.username}
+      displayName={displayName}
       avatarUrl={profile.avatar_url}
     >
       {children}

@@ -22,7 +22,7 @@ import {
 export function Navbar() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -33,14 +33,19 @@ export function Navbar() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
       if (user) {
-        // Fetch username from profiles
+        // Fetch full name and username from profiles
         supabase
           .from("profiles")
-          .select("username")
+          .select("full_name, username")
           .eq("id", user.id)
           .single()
           .then(({ data }) => {
-            if (data) setUsername((data as { username: string }).username);
+            if (data) {
+              // Use full name if available, fallback to username
+              const name = (data as { full_name: string | null; username: string }).full_name ||
+                           (data as { full_name: string | null; username: string }).username;
+              setDisplayName(name);
+            }
           });
       }
     });
@@ -53,14 +58,19 @@ export function Navbar() {
       if (session?.user) {
         supabase
           .from("profiles")
-          .select("username")
+          .select("full_name, username")
           .eq("id", session.user.id)
           .single()
           .then(({ data }) => {
-            if (data) setUsername((data as { username: string }).username);
+            if (data) {
+              // Use full name if available, fallback to username
+              const name = (data as { full_name: string | null; username: string }).full_name ||
+                           (data as { full_name: string | null; username: string }).username;
+              setDisplayName(name);
+            }
           });
       } else {
-        setUsername(null);
+        setDisplayName(null);
       }
     });
 
@@ -255,7 +265,7 @@ export function Navbar() {
               <Button variant="ghost" size="sm" asChild className="hidden md:flex">
                 <Link href="/dashboard">
                   <UserIcon className="w-4 h-4 mr-2" />
-                  {username || "Profile"}
+                  {displayName || "Profile"}
                 </Link>
               </Button>
               <Button asChild className="hidden md:flex">
