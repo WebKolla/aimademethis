@@ -36,18 +36,8 @@ export async function signUp(data: SignUpData) {
     return { error: signUpError.message };
   }
 
-  // Create profile
-  if (authData.user) {
-    const { error: profileError } = await supabase.from("profiles").insert({
-      id: authData.user.id,
-      username: validatedData.username,
-      full_name: "" as string,
-    } as never);
-
-    if (profileError) {
-      return { error: "Failed to create profile" };
-    }
-  }
+  // Profile is automatically created by database trigger (handle_new_user)
+  // No need to manually insert profile here
 
   return { success: true, data: authData };
 }

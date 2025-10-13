@@ -331,7 +331,7 @@ export function HomePageClient({ plans, featuredProduct }: HomePageClientProps) 
                   <p>
                     Explore thousands of <strong>AI and SaaS products</strong> curated by developers and innovators
                     worldwide. Our transparent <strong>trending algorithm</strong> surfaces the best AI tools
-                    based on real community engagement—no paid promotions, just genuine user feedback.
+                    based on real community engagement - no paid promotions, just genuine user feedback.
                     <strong> Submit your SaaS product to our directory</strong> for free and reach thousands of potential users.
                   </p>
                 </div>

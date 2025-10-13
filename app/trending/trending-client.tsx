@@ -159,7 +159,7 @@ function TrendingPageContent() {
                   Our trending algorithm combines <strong>recency</strong> (recently launched products),
                   <strong> community engagement</strong> (upvotes and reviews), and <strong>views</strong> to
                   surface the most exciting AI products. The algorithm is completely transparent and
-                  applies equally to all products—no paid promotions.
+                  applies equally to all products - no paid promotions.
                 </p>
               </div>
             </div>

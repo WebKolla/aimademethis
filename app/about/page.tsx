@@ -193,7 +193,7 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Why We Exist</h3>
                 <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                   The AI landscape is exploding with innovation, but great products often go unnoticed.
-                  We created AIMMT to solve this problem—giving every AI creator, regardless of budget or
+                  We created AIMMT to solve this problem - giving every AI creator, regardless of budget or
                   marketing resources, a platform to shine.
                 </p>
                 <div className="flex items-start gap-3">
@@ -226,7 +226,7 @@ export default function AboutPage() {
                 <div className="flex items-start gap-3">
                   <Zap className="w-6 h-6 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-1" />
                   <p className="text-slate-600 dark:text-slate-300">
-                    Instant publishing—no approval delays
+                    Instant publishing - no approval delays
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
