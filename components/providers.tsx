@@ -21,7 +21,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider
         attribute="class"
         defaultTheme="dark"
+        forcedTheme="dark"
         enableSystem={false}
+        enableColorScheme={false}
         disableTransitionOnChange
       >
         <SubscriptionProvider>

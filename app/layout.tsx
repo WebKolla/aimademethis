@@ -117,8 +117,18 @@ export default async function RootLayout({
   const footerProducts = productsResult.data || [];
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head />
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                document.documentElement.classList.add('dark');
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={`${inter.variable} ${poppins.variable} antialiased`} suppressHydrationWarning>
         <Providers>
           <ConditionalLayout
